@@ -2,9 +2,10 @@
 # модуль для работы непосредственнго с БД
 
 import sqlite3 
+import config
 
 def create_db():
-    with sqlite3.connect("normzad.db") as db:
+    with sqlite3.connect(config.dbFileName) as db:
         cursor = db.cursor()
 
 

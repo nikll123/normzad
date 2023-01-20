@@ -1,0 +1,1 @@
+dbFileName = "normzad.db"
