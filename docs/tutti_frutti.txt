@@ -1,0 +1,10 @@
+venv
+
+создание виртуального окружения
+python -m venv c:\tmp\vent_test
+
+сохранение списка модулей/пакетов
+pip freeze > requirements.txt
+
+инсталляция модулей/пакетов из списка
+pip install -r requirements
