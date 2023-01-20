@@ -1,11 +1,12 @@
 GIT - система контроля версий (репозиторий)
 GITHUB - облачный репозиотрий  https://github.com/
+repo url - https://github.com/nikll123/normzad
 
 
 venv
 
 создание виртуального окружения
-python -m venv c:\tmp\vent_test
+python -m venv venv_normzad
 
 сохранение списка модулей/пакетов
 pip freeze > requirements.txt
