@@ -5,8 +5,8 @@ import sqlite3
 import config
 
 def create_db():
-    with sqlite3.connect(config.dbFileName) as db:
-        cursor = db.cursor()
+    with sqlite3.connect(config.dbFileName) as conn:
+        cursor = conn.cursor()
 
 
         sql = """CREATE TABLE IF NOT EXISTS Departments(
@@ -43,6 +43,7 @@ def getLastId(cursor):
     res = res.fetchone()
     return res[0]
 
-# create_db()
 
+if __name__ == '__main__':
+    create_db()
 
