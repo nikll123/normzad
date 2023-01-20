@@ -37,4 +37,12 @@ def create_db():
             );"""
         cursor.execute(sql)
 
-create_db()
+
+def getLastId(cursor):
+    res = cursor.execute("Select last_insert_rowid()")
+    res = res.fetchone()
+    return res[0]
+
+# create_db()
+
+
