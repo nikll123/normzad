@@ -25,6 +25,7 @@ def new(name):
         err = "Нет данных"
     return err, newId
 
+
 def delete(id):
     err = config.dummyErr
     with sqlite3.connect(config.dbFileName) as conn:
@@ -38,9 +39,24 @@ def delete(id):
     return err
 
 
+def update(id, name):
+    err = config.dummyErr
+    with sqlite3.connect(config.dbFileName) as conn:
+        cursor = conn.cursor()
+        sql = f"""UPDATE {tableName} SET name=? WHERE ID=?"""
+        try:
+            cursor.execute(sql, [name, id])
+            err = ''
+        except Exception as ex: 
+            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}"
+    return err
+
+
 if __name__ == '__main__':
     print (new("ttt4"))
 
     print (delete(6))
+
+    print (update(2, "new name"))
 
     pass
