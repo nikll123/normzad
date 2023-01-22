@@ -1,5 +1,5 @@
 # database 
-# модуль для работы непосредственнго с БД
+# модуль для работы непосредственно с БД
 
 import sqlite3 
 import config
@@ -28,7 +28,7 @@ def create_db():
 
 
         sql = """CREATE TABLE IF NOT EXISTS workers(
-            id         integer PRIMARY KEY, 
+            TabelNom   integer PRIMARY KEY, 
             LastName   text    NOT NULL, 
             Name       text    NOT NULL, 
             SecondName text    NOT NULL,
