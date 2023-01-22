@@ -28,7 +28,7 @@ def create_db():
 
 
         sql = """CREATE TABLE IF NOT EXISTS workers(
-            id         integer NOT NULL PRIMARY KEY, 
+            id         integer PRIMARY KEY, 
             LastName   text    NOT NULL, 
             Name       text    NOT NULL, 
             SecondName text    NOT NULL,
