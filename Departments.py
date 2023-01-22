@@ -3,8 +3,6 @@ import sqlite3
 import config
 import db
 
-tableName = "Departments"
-
 def new(name):
     name = name.strip()
     err = config.dummyErr
@@ -53,10 +51,36 @@ def update(id, name):
 
 
 if __name__ == '__main__':
-    print (new("ttt4"))
+    while True:
+        print ("выбирайте таблицу. departments - d, positions - p")
+        x = input()
+        x = x.strip()
+        
+        if x == 'd':
+            while True:
+                tableName = "Departments"
+                print ('новая строка - n, удаленье - d, обновленье - u')
+                y = input()
+                y = y.strip()
+                if y == 'n':
+                    print (new("ttt"))
+                elif y == 'd':    
+                    print (delete(6))
+                elif y == 'u':    
+                    print (update(2, "new name"))
 
-    print (delete(6))
+                break
+        elif x == 'p':
+            while True:
+                tableName = "Positions"
+                print (new("llooo"))
 
-    print (update(2, "new name"))
+                print (delete(6))
 
-    pass
+                print (update(2, "new name"))
+
+                break
+        else:
+            print('неправильный ввод')
+            continue
+              

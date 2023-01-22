@@ -8,7 +8,6 @@ def create_db():
     with sqlite3.connect(config.dbFileName) as conn:
         cursor = conn.cursor()
 
-
         sql = """CREATE TABLE IF NOT EXISTS Departments(
             id   integer PRIMARY KEY AUTOINCREMENT, 
             Name text    NOT NULL
@@ -16,7 +15,6 @@ def create_db():
         cursor.execute(sql)
         sql = """CREATE UNIQUE INDEX IF NOT EXISTS indexUniqueDepartments ON Departments(Name);"""
         cursor.execute(sql)
-
 
         sql = """CREATE TABLE IF NOT EXISTS Positions(
             id   integer PRIMARY KEY AUTOINCREMENT, 
@@ -26,17 +24,33 @@ def create_db():
         sql = """CREATE UNIQUE INDEX IF NOT EXISTS indexUniquePositions ON Positions(Name);"""
         cursor.execute(sql)
 
-
         sql = """CREATE TABLE IF NOT EXISTS workers(
-            TabelNom   integer PRIMARY KEY, 
-            LastName   text    NOT NULL, 
-            Name       text    NOT NULL, 
-            SecondName text    NOT NULL,
-            PositionId integer NOT NULL,
-            Level      integer NOT NULL
+            TabelNom     integer PRIMARY KEY, 
+            LastName     text    NOT NULL, 
+            Name         text    NOT NULL, 
+            SecondName   text    NOT NULL,
+            PositionId   integer NOT NULL,
+            Level        integer NOT NULL,
+            DepartmentId integer NOT NULL
             );"""
         cursor.execute(sql)
 
+        sql = """CREATE TABLE IF NOT EXISTS Tasks(
+            id   integer PRIMARY KEY AUTOINCREMENT, 
+            Name text    NOT NULL
+            );"""
+        cursor.execute(sql)
+        sql = """CREATE UNIQUE INDEX IF NOT EXISTS indexUniquePositions ON Tasks(Name);"""
+        cursor.execute(sql)
+
+        sql = """CREATE TABLE IF NOT EXISTS jobs(
+            TabelNom     integer PRIMARY KEY, 
+            TaskId       integer NOT NULL, 
+            Data         date   NOT NULL, 
+            TimeJob      integer NOT NULL,
+            Coment       text NOT NULL
+            );"""
+        cursor.execute(sql)
 
 def getLastId(cursor):
     res = cursor.execute("Select last_insert_rowid()")
