@@ -76,6 +76,26 @@ def execute(sql, data=[]):
             err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {data}"
     return err, resData
 
+def executeTry(sql, data=[]):
+    err = config.dummyErr
+    resData = None
+    try:
+        conn = sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        cursor = conn.cursor()
+        cursor.execute(sql, data)
+        conn.commit()
+        err = ''
+        if 'INSERT' == sql[:6]:
+            resData = getLastId(cursor)
+        cursor.close()        
+    except Exception as ex: 
+        err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {data}"
+    finally:
+        if conn:
+            conn.close()
+    return err, resData
+
+
 if __name__ == '__main__':
     create_db()
 

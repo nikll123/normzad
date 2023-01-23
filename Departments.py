@@ -9,13 +9,13 @@ def new(name):
     name = name.strip()
     if name:
         sql = f"""INSERT INTO {tableName} (Name) VALUES (?)"""
-        err, newId = db.execute(sql, [name])
+        err, newId = db.executeTry(sql, [name])
     return err, newId
 
 
 def delete(id):
     sql = f"""DELETE FROM {tableName} WHERE ID=?"""
-    err, _notUsed = db.execute(sql, [id])
+    err, _notUsed = db.executeTry(sql, [id])
     return err
 
 
@@ -24,7 +24,7 @@ def update(id, name):
     name = name.strip()
     if name:
         sql = f"""UPDATE {tableName} SET name=? WHERE ID=?"""
-        err, _notUsed = db.execute(sql, [name, id])
+        err, _notUsed = db.executeTry(sql, [name, id])
     return err
 
 
