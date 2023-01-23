@@ -5,7 +5,7 @@ import sqlite3
 import config
 
 def create_db():
-    with sqlite3.connect(config.dbFileName) as conn:
+    with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
         cursor = conn.cursor()
 
         sql = """CREATE TABLE IF NOT EXISTS Departments(
@@ -31,7 +31,9 @@ def create_db():
             SecondName   text    NOT NULL,
             PositionId   integer NOT NULL,
             Level        integer NOT NULL,
-            DepartmentId integer NOT NULL
+            DepartmentId integer NOT NULL,
+            FOREIGN KEY(DepartmentId) REFERENCES Departments(id),
+            FOREIGN KEY(PositionId) REFERENCES Positions(id)
             );"""
         cursor.execute(sql)
 
@@ -44,11 +46,14 @@ def create_db():
         cursor.execute(sql)
 
         sql = """CREATE TABLE IF NOT EXISTS jobs(
-            TabelNom     integer PRIMARY KEY, 
-            TaskId       integer NOT NULL, 
-            Data         date   NOT NULL, 
-            TimeJob      integer NOT NULL,
-            Coment       text NOT NULL
+            id           integer   PRIMARY KEY AUTOINCREMENT,
+            TabelNom     integer   NOT NULL, 
+            TaskId       integer   NOT NULL, 
+            Date         timestamp NOT NULL, 
+            TimeJob      integer   NOT NULL,
+            Comment      text      NOT NULL,
+            FOREIGN KEY(TabelNom) REFERENCES Workers(TabelNom),
+            FOREIGN KEY(TaskId) REFERENCES Tasks(id)
             );"""
         cursor.execute(sql)
 
@@ -57,6 +62,19 @@ def getLastId(cursor):
     res = res.fetchone()
     return res[0]
 
+def execute(sql, data=[]):
+    err = config.dummyErr
+    resData = None
+    with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute(sql, data)
+            err = ''
+            if 'INSERT' == sql[:6]:
+                resData = getLastId(cursor)
+        except Exception as ex: 
+            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {data}"
+    return err, resData
 
 if __name__ == '__main__':
     create_db()

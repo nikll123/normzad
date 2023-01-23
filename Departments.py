@@ -1,86 +1,41 @@
 # deparments stuff
-import sqlite3
-import config
 import db
 
+tableName = 'Departments'
+
 def new(name):
-    name = name.strip()
-    err = config.dummyErr
     newId = None
+    err = "Нет данных"
+    name = name.strip()
     if name:
-        with sqlite3.connect(config.dbFileName) as conn:
-            cursor = conn.cursor()
-            sql = f"""INSERT INTO {tableName} (Name) VALUES (?)"""
-            try:
-                cursor.execute(sql, [name])
-                newId = db.getLastId(cursor)
-                err = ''
-            except sqlite3.IntegrityError:
-                err = f"Дублирование данных: '{name}'"
-            except Exception as ex: 
-                err = f"SQL eror:\n   {sql}\n   {ex.args[0]}"
-    else:
-        err = "Нет данных"
+        sql = f"""INSERT INTO {tableName} (Name) VALUES (?)"""
+        err, newId = db.execute(sql, [name])
     return err, newId
 
 
 def delete(id):
-    err = config.dummyErr
-    with sqlite3.connect(config.dbFileName) as conn:
-        cursor = conn.cursor()
-        sql = f"""DELETE FROM {tableName} WHERE ID=?"""
-        try:
-            cursor.execute(sql, [id])
-            err = ''
-        except Exception as ex: 
-            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}"
+    sql = f"""DELETE FROM {tableName} WHERE ID=?"""
+    err, _notUsed = db.execute(sql, [id])
     return err
 
 
 def update(id, name):
-    err = config.dummyErr
-    with sqlite3.connect(config.dbFileName) as conn:
-        cursor = conn.cursor()
+    err = "Нет данных"
+    name = name.strip()
+    if name:
         sql = f"""UPDATE {tableName} SET name=? WHERE ID=?"""
-        try:
-            cursor.execute(sql, [name, id])
-            err = ''
-        except Exception as ex: 
-            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}"
+        err, _notUsed = db.execute(sql, [name, id])
     return err
 
 
 if __name__ == '__main__':
-    while True:
-        print ("выбирайте таблицу. departments - d, positions - p")
-        x = input()
-        x = x.strip()
-        
-        if x == 'd':
-            while True:
-                tableName = "Departments"
-                print ('новая строка - n, удаленье - d, обновленье - u')
-                y = input()
-                y = y.strip()
-                if y == 'n':
-                    print (new("ttt"))
-                elif y == 'd':    
-                    print (delete(6))
-                elif y == 'u':    
-                    print (update(2, "new name"))
+    err, idTest = new("dept Test")
+    print (err, idTest)
 
-                break
-        elif x == 'p':
-            while True:
-                tableName = "Positions"
-                print (new("llooo"))
+    err = update(idTest, "dept Test new name")
+    print (err)
 
-                print (delete(6))
+    err = delete(idTest)
+    print (err)
 
-                print (update(2, "new name"))
 
-                break
-        else:
-            print('неправильный ввод')
-            continue
-              
