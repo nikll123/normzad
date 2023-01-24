@@ -188,8 +188,8 @@ if __name__ == '__main__':
     workerList.append([157, 'Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
     workerList.append([150, 'Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
     
-    for w in workerList:
-        err, newId = insert(tableName,fldList,w)
+    for wd in workerList:
+        err, newId = insert(tableName,fldList,wd)
         if err:
             print (err)
     
