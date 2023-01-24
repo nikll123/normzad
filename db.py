@@ -10,52 +10,52 @@ def create_db():
         cursor = conn.cursor()
 
         sql = """CREATE TABLE IF NOT EXISTS Departments(
-            id   integer PRIMARY KEY AUTOINCREMENT, 
-            Name text    NOT NULL
-            );"""
+                    id   integer PRIMARY KEY AUTOINCREMENT, 
+                    Name text    NOT NULL
+                    );"""
         cursor.execute(sql)
-        sql = """CREATE UNIQUE INDEX IF NOT EXISTS indexUniqueDepartments ON Departments(Name);"""
+        sql = "CREATE UNIQUE INDEX IF NOT EXISTS indexUniqueDepartments ON Departments(Name);"
         cursor.execute(sql)
 
         sql = """CREATE TABLE IF NOT EXISTS Positions(
-            id   integer PRIMARY KEY AUTOINCREMENT, 
-            Name text    NOT NULL
-            );"""
+                    id   integer PRIMARY KEY AUTOINCREMENT, 
+                    Name text    NOT NULL
+                    );"""
         cursor.execute(sql)
         sql = """CREATE UNIQUE INDEX IF NOT EXISTS indexUniquePositions ON Positions(Name);"""
         cursor.execute(sql)
 
         sql = """CREATE TABLE IF NOT EXISTS workers(
-            TabelNom     integer PRIMARY KEY, 
-            LastName     text    NOT NULL, 
-            Name         text    NOT NULL, 
-            SecondName   text    NOT NULL,
-            PositionId   integer NOT NULL,
-            Level        integer NOT NULL,
-            DepartmentId integer NOT NULL,
-            FOREIGN KEY(DepartmentId) REFERENCES Departments(id),
-            FOREIGN KEY(PositionId) REFERENCES Positions(id)
-            );"""
+                    TabelNom     integer PRIMARY KEY, 
+                    LastName     text    NOT NULL, 
+                    Name         text    NOT NULL, 
+                    SecondName   text    NOT NULL,
+                    PositionId   integer NOT NULL,
+                    Level        integer NOT NULL,
+                    DepartmentId integer NOT NULL,
+                    FOREIGN KEY(DepartmentId) REFERENCES Departments(id),
+                    FOREIGN KEY(PositionId) REFERENCES Positions(id)
+                    );"""
         cursor.execute(sql)
 
         sql = """CREATE TABLE IF NOT EXISTS Tasks(
-            id   integer PRIMARY KEY AUTOINCREMENT, 
-            Name text    NOT NULL
-            );"""
+                    id   integer PRIMARY KEY AUTOINCREMENT, 
+                    Name text    NOT NULL
+                    );"""
         cursor.execute(sql)
-        sql = """CREATE UNIQUE INDEX IF NOT EXISTS indexUniquePositions ON Tasks(Name);"""
+        sql = "CREATE UNIQUE INDEX IF NOT EXISTS indexUniqueTasks ON Tasks(Name);"
         cursor.execute(sql)
 
         sql = """CREATE TABLE IF NOT EXISTS jobs(
-            id           integer   PRIMARY KEY AUTOINCREMENT,
-            TabelNom     integer   NOT NULL, 
-            TaskId       integer   NOT NULL, 
-            Date         timestamp NOT NULL, 
-            TimeJob      integer   NOT NULL,
-            Comment      text      NOT NULL,
-            FOREIGN KEY(TabelNom) REFERENCES Workers(TabelNom),
-            FOREIGN KEY(TaskId) REFERENCES Tasks(id)
-            );"""
+                    id           integer   PRIMARY KEY AUTOINCREMENT,
+                    TabelNom     integer   NOT NULL, 
+                    TaskId       integer   NOT NULL, 
+                    Date         timestamp NOT NULL, 
+                    TimeJob      integer   NOT NULL,
+                    Comment      text      NOT NULL,
+                    FOREIGN KEY(TabelNom) REFERENCES Workers(TabelNom),
+                    FOREIGN KEY(TaskId) REFERENCES Tasks(id)
+                    );"""
         cursor.execute(sql)
 
 def getLastId(cursor):
@@ -140,56 +140,6 @@ if __name__ == '__main__':
     # Создание базы данных
     create_db()
 
-    # Внесение тестовых данных
-    tableName = 'Departments'
-    fldList = ['name']
-    for d in ['СТО цех эксплуатации'], ['ЧПМ']:
-        err, newId = insert(tableName,fldList,d)
-        if err:
-            print (err)
+    import dbTestData
     
-    tableName = 'Positions'
-    fldList = ['name']
-    for d in ['Дворник'], ['ЧПМ'], ['Кочегар'], ['Машинист'], ['Электрик'], ['Начальник']:
-        err, newId = insert(tableName,fldList,d)
-        if err:
-            print (err)
 
-    tableName = 'Tasks'
-    fldList = ['name']
-    for d in ['Снегоборьба'],['Репонт плат КТПЦ'],['Ремонт ПСС'],['Командировка'],['Отпуск'],['Больничный'],['Управление паровозом']:
-        err, newId = insert(tableName,fldList,d)
-        if err:
-            print (err)
-
-  
-    import random
-    def randomId(tableName):
-        fldList = ['id']
-        err, ids = select(tableName,fldList)
-        randomIx = random.randrange(0, len(ids))
-        rndId = ids[randomIx][0]
-        return rndId
-
-    def rndPosId():
-        return randomId('Positions')
-    def rndDepId():
-        return randomId('Departments')
-    def rndLev():
-        return random.randrange(1, 10)
-
-
-    tableName = 'Workers'
-    fldList = ['TabelNom','LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
-    workerList = []
-    workerList.append([121, 'Иванов',  'Иван',  'Иванович',    rndPosId(),rndLev(),rndDepId()])
-    workerList.append([125, 'Петров',  'Петр',  'Петрович',    rndPosId(),rndLev(),rndDepId()])
-    workerList.append([136, 'Сидоров', 'Сидор', 'Сидорович',   rndPosId(),rndLev(),rndDepId()])
-    workerList.append([157, 'Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
-    workerList.append([150, 'Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
-    
-    for wd in workerList:
-        err, newId = insert(tableName,fldList,wd)
-        if err:
-            print (err)
-    
