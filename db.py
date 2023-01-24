@@ -67,6 +67,7 @@ def execute(sql, data=[]):
     resData = None
     with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
         cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON")
         try:
             cursor.execute(sql, data)
             err = ''
@@ -82,6 +83,7 @@ def executeTry(sql, data=[]):
     try:
         conn = sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
         cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON")
         cursor.execute(sql, data)
         conn.commit()
         err = ''
