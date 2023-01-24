@@ -50,12 +50,23 @@ def create_db():
                     id           integer   PRIMARY KEY AUTOINCREMENT,
                     TabelNom     integer   NOT NULL, 
                     TaskId       integer   NOT NULL, 
-                    Date         timestamp NOT NULL, 
+                    Date         date      NOT NULL, 
                     TimeJob      integer   NOT NULL,
                     Comment      text      NOT NULL,
                     FOREIGN KEY(TabelNom) REFERENCES Workers(TabelNom),
                     FOREIGN KEY(TaskId) REFERENCES Tasks(id)
                     );"""
+        cursor.execute(sql)
+
+        sql = """CREATE VIEW IF NOT EXISTS jobList
+                    AS 
+                    SELECT j.id, j.Date, j.TabelNom, w.LastName, w.SecondName, w.Name, w.Level, p.Name AS Position, t.Name AS Task, j.TimeJob 
+                    FROM "jobs" AS j 
+                        join "Tasks" AS t on j.TaskId = t.id
+                        join "Workers" AS w on j.TabelNom = w.TabelNom
+                        join "Positions" AS p on w.Positionid = p.id
+                    ORDER by j.Date, j.TabelNom
+                    ;"""        
         cursor.execute(sql)
 
 def getLastId(cursor):
@@ -126,7 +137,7 @@ def update(tableName, fldsList, data, fldPK, id):
     err, _notUsed = execute(sql, data)
     return err
 
-def select(tableName, fldsList, cond=''):
+def select(tableName, fldsList=["*"], cond=''):
     substr = ','.join(fldsList)
     if cond:
         where = f"WHERE {cond}"
