@@ -4,6 +4,7 @@
 import sqlite3 
 import config
 
+
 def create_db():
     with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
         cursor = conn.cursor()
@@ -62,20 +63,22 @@ def getLastId(cursor):
     res = res.fetchone()
     return res[0]
 
-def execute(sql, data=[]):
+def execute(sql, params=[]):
     err = config.dummyErr
-    newId = None
+    data = None
     with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
         cursor = conn.cursor()
         cursor.execute("PRAGMA foreign_keys = ON")
         try:
-            cursor.execute(sql, data)
+            cursor.execute(sql, params)
             err = ''
             if 'INSERT' == sql[:6]:
-                newId = getLastId(cursor)
+                data = getLastId(cursor)
+            elif 'SELECT' == sql[:6]:
+                data = cursor.fetchall()
         except Exception as ex: 
-            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {data}"
-    return err, newId
+            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {params}"
+    return err, data
 
 # Эта функция (executeTry) - полный аналог функции execute, но без использования команды with 
 def executeTry(sql, data=[]):
@@ -104,12 +107,12 @@ def insert(tableName, fldsList, data):
     for f in fldsList:
         placeHolders.append('?')
     placeHoldersText = ','.join(placeHolders)
-    sql = f"""INSERT INTO {tableName} ({fldsText}) VALUES ({placeHoldersText});"""
+    sql = f"INSERT INTO {tableName} ({fldsText}) VALUES ({placeHoldersText});"
     err, newId = execute(sql, data)
     return err, newId 
 
 def delete(tableName, fldPK, id):
-    sql = f"""DELETE FROM {tableName} WHERE {fldPK}=?"""
+    sql = f"DELETE FROM {tableName} WHERE {fldPK}=?"
     err, _notUsed = execute(sql, [id])
     return err
 
@@ -118,11 +121,75 @@ def update(tableName, fldsList, data, fldPK, id):
     for f in fldsList:
         list.append(f'{f}=?')
     substr = ','.join(list)
-    sql = f"""UPDATE {tableName} SET {substr} WHERE {fldPK}=?"""
+    sql = f"UPDATE {tableName} SET {substr} WHERE {fldPK}=?"
     data.append(id)
     err, _notUsed = execute(sql, data)
     return err
 
+def select(tableName, fldsList, cond=''):
+    substr = ','.join(fldsList)
+    if cond:
+        where = f"WHERE {cond}"
+    else:
+        where = ''
+    sql = f"SELECT {substr} FROM {tableName} {where}"
+    err, data = execute(sql)
+    return err, data
+
 if __name__ == '__main__':
+    # Создание базы данных
     create_db()
 
+    # Внесение тестовых данных
+    tableName = 'Departments'
+    fldList = ['name']
+    for d in ['СТО цех эксплуатации'], ['ЧПМ']:
+        err, newId = insert(tableName,fldList,d)
+        if err:
+            print (err)
+    
+    tableName = 'Positions'
+    fldList = ['name']
+    for d in ['Дворник'], ['ЧПМ'], ['Кочегар'], ['Машинист'], ['Электрик'], ['Начальник']:
+        err, newId = insert(tableName,fldList,d)
+        if err:
+            print (err)
+
+    tableName = 'Tasks'
+    fldList = ['name']
+    for d in ['Снегоборьба'],['Репонт плат КТПЦ'],['Ремонт ПСС'],['Командировка'],['Отпуск'],['Больничный'],['Управление паровозом']:
+        err, newId = insert(tableName,fldList,d)
+        if err:
+            print (err)
+
+  
+    import random
+    def randomId(tableName):
+        fldList = ['id']
+        err, ids = select(tableName,fldList)
+        randomIx = random.randrange(0, len(ids))
+        rndId = ids[randomIx][0]
+        return rndId
+
+    def rndPosId():
+        return randomId('Positions')
+    def rndDepId():
+        return randomId('Departments')
+    def rndLev():
+        return random.randrange(1, 10)
+
+
+    tableName = 'Workers'
+    fldList = ['TabelNom','LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
+    workerList = []
+    workerList.append([121, 'Иванов',  'Иван',  'Иванович',    rndPosId(),rndLev(),rndDepId()])
+    workerList.append([125, 'Петров',  'Петр',  'Петрович',    rndPosId(),rndLev(),rndDepId()])
+    workerList.append([136, 'Сидоров', 'Сидор', 'Сидорович',   rndPosId(),rndLev(),rndDepId()])
+    workerList.append([157, 'Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
+    workerList.append([150, 'Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
+    
+    for w in workerList:
+        err, newId = insert(tableName,fldList,w)
+        if err:
+            print (err)
+    
