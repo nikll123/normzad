@@ -2,27 +2,27 @@
 import db
 
 tableName = 'Departments'
+pkField = 'id'
 
-def new(name):
-    newId = None
-    name = name.strip()
-    if name:
-        sql = f"""INSERT INTO {tableName} (Name) VALUES (?)"""
-        err, newId = db.executeTry(sql, [name])
+def new(newName):
+    newName = newName.strip()
+    if newName:
+        fldList = ['Name']
+        err, newId  = db.insert(tableName, fldList, [newName])
     else:
+        newId = None
         err = "Нет данных"
     return err, newId
 
 def delete(id):
-    sql = f"""DELETE FROM {tableName} WHERE ID=?"""
-    err, _notUsed = db.executeTry(sql, [id])
+    err = db.delete(tableName, pkField, id)
     return err
 
-def update(id, name):
-    name = name.strip()
-    if name:
-        sql = f"""UPDATE {tableName} SET name=? WHERE ID=?"""
-        err, _notUsed = db.executeTry(sql, [name, id])
+def update(id, newName):
+    newName = newName.strip()
+    if newName:
+        fldList = ['Name']
+        err = db.update(tableName, fldList, [newName], pkField, id)
     else:
         err = "Нет данных"
     return err
@@ -32,10 +32,11 @@ if __name__ == '__main__':
     err, idTest = new("dept Test")
     print (err, idTest)
 
-    err = update(idTest, "dept Test new name")
-    print (err)
+    if idTest != None:
+        err = update(idTest, "dept Test new name")
+        print (err)
 
-    err = delete(idTest)
-    print (err)
+        err = delete(idTest)
+        print (err)
 
 
