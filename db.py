@@ -64,7 +64,7 @@ def getLastId(cursor):
 
 def execute(sql, data=[]):
     err = config.dummyErr
-    resData = None
+    newId = None
     with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
         cursor = conn.cursor()
         cursor.execute("PRAGMA foreign_keys = ON")
@@ -72,14 +72,15 @@ def execute(sql, data=[]):
             cursor.execute(sql, data)
             err = ''
             if 'INSERT' == sql[:6]:
-                resData = getLastId(cursor)
+                newId = getLastId(cursor)
         except Exception as ex: 
             err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {data}"
-    return err, resData
+    return err, newId
 
+# Эта функция (executeTry) - полный аналог функции execute, но без использования команды with 
 def executeTry(sql, data=[]):
     err = config.dummyErr
-    resData = None
+    newId = None
     try:
         conn = sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
         cursor = conn.cursor()
@@ -88,15 +89,39 @@ def executeTry(sql, data=[]):
         conn.commit()
         err = ''
         if 'INSERT' == sql[:6]:
-            resData = getLastId(cursor)
+            newId = getLastId(cursor)
         cursor.close()        
     except Exception as ex: 
         err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {data}"
     finally:
         if conn:
             conn.close()
-    return err, resData
+    return err, newId
 
+def insert(tableName, fldsList, data):
+    fldsText = ','.join(fldsList)
+    placeHolders = []
+    for f in fldsList:
+        placeHolders.append('?')
+    placeHoldersText = ','.join(placeHolders)
+    sql = f"""INSERT INTO {tableName} ({fldsText}) VALUES ({placeHoldersText});"""
+    err, newId = execute(sql, data)
+    return err, newId 
+
+def delete(tableName, fldPK, id):
+    sql = f"""DELETE FROM {tableName} WHERE {fldPK}=?"""
+    err, _notUsed = execute(sql, [id])
+    return err
+
+def update(tableName, fldsList, data, fldPK, id):
+    list = []
+    for f in fldsList:
+        list.append(f'{f}=?')
+    substr = ','.join(list)
+    sql = f"""UPDATE {tableName} SET {substr} WHERE {fldPK}=?"""
+    data.append(id)
+    err, _notUsed = execute(sql, data)
+    return err
 
 if __name__ == '__main__':
     create_db()
