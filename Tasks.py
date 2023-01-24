@@ -1,7 +1,7 @@
-# deparments stuff
+# Tasks stuff
 import db
 
-tableName = 'Departments'
+tableName = 'Tasks'
 pkField = 'id'
 
 def new(newName):
@@ -29,11 +29,11 @@ def update(id, newName):
 
 
 if __name__ == '__main__':
-    err, idTest = new("dept Test")
+    err, idTest = new("Tasks Test")
     print (err, idTest)
 
     if idTest != None:
-        err = update(idTest, "dept Test new name")
+        err = update(idTest, "Tasks Test new name")
         print (err)
 
         err = delete(idTest)
