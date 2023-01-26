@@ -60,12 +60,21 @@ def create_db():
 
         sql = """CREATE VIEW IF NOT EXISTS jobList
                     AS 
-                    SELECT j.id, j.Date, j.TabelNom, w.LastName, w.SecondName, w.Name, w.Level, p.Name AS Position, t.Name AS Task, j.TimeJob 
-                    FROM "jobs" AS j 
-                        join "Tasks" AS t on j.TaskId = t.id
-                        join "Workers" AS w on j.TabelNom = w.TabelNom
-                        join "Positions" AS p on w.Positionid = p.id
-                    ORDER by j.Date, j.TabelNom
+                    SELECT j.id, 
+                            j.Date, 
+                            j.TabelNom, 
+                            w.LastName || ' ' || SUBSTR(w.Name,1,1) || '. ' || SUBSTR(w.SecondName,1,1) || '.' AS shortName,
+                            w.LastName, 
+                            w.Name, 
+                            w.SecondName, 
+                            w.Level, 
+                            p.Name AS Position, 
+                            t.Name AS Task, j.TimeJob
+                    FROM     jobs      AS j 
+                        JOIN Tasks     AS t  ON j.TaskId = t.id
+                        JOIN Workers   AS w  ON j.TabelNom = w.TabelNom
+                        JOIN Positions AS p  ON w.Positionid = p.id
+                    ORDER BY j.Date, j.TabelNom
                     ;"""        
         cursor.execute(sql)
 
