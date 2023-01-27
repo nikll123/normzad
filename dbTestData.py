@@ -39,7 +39,7 @@ def rndLev():
     return random.randrange(1, 10)
 
 tableName = 'Workers'
-fldList = ['TabelNom','LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
+fldList = ['id','LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
 workerList = []
 workerList.append([121, 'Иванов',  'Иван',  'Иванович',    rndPosId(),rndLev(),rndDepId()])
 workerList.append([125, 'Петров',  'Петр',  'Петрович',    rndPosId(),rndLev(),rndDepId()])
@@ -54,7 +54,7 @@ for wd in workerList:
 
 import datetime
 def rndTabNom():
-    return randomId('Workers', fldId='TabelNom')
+    return randomId('Workers', fldId='id')
 
 def rndTaskId():
     return randomId('Tasks')
@@ -63,7 +63,7 @@ def rndTime():
     return random.randrange(4, 9)
 
 tableName = 'Jobs'
-fldList = ['TabelNom', 'TaskId', 'Date', 'TimeJob', 'Comment']
+fldList = ['WorkerId', 'TaskId', 'Date', 'TimeJob', 'Comment']
 jobsList = []
 for i in range(5):
     jobsList.append([rndTabNom(), rndTaskId(), datetime.date(2023,1,22), rndTime(), f'comment {random.randrange(0, 1000)}'])
