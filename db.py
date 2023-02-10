@@ -64,9 +64,6 @@ def create_db():
                             j.Date, 
                             j.TabelNom, 
                             w.LastName || ' ' || SUBSTR(w.Name,1,1) || '. ' || SUBSTR(w.SecondName,1,1) || '.' AS shortName,
-                            w.LastName, 
-                            w.Name, 
-                            w.SecondName, 
                             w.Level, 
                             p.Name AS Position, 
                             t.Name AS Task, j.TimeJob
