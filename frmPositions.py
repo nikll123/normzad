@@ -1,7 +1,7 @@
 import frmDictionary
 
-def frmDepartments():
-    table = {'name':'Departments','title':'Подразделения'}
+def frmPositions():
+    table = {'name':'Positions','title':'Должнсти'}
     cols = []
     cols.append({'name':'Id',   'title':'Id',        'visible':False, 'width':10,  'readonly':True})
     cols.append({'name':'Name', 'title':'Название', 'visible':True,  'width':300, 'readonly':True})
@@ -10,5 +10,5 @@ def frmDepartments():
     return frm
 
 if __name__ == '__main__':
-    frm = frmDepartments()
+    frm = frmPositions()
     frm.Execute()
