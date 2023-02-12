@@ -1,71 +1,102 @@
-from tkinter import ttk
-import tkinter
-import reports
+import clr
+import FormDictionary
+import frmDepartments
+# from pythonnet import load
+# load()
+clr.AddReference("System.Windows.Forms")
+clr.AddReference("System.Windows")
 
-# import sqlite3
+# import FusionMacro as fm
+import System.Windows.Forms as WinForms
+import System.Windows
+from System.Drawing import Size, Point
 
-# def connect():
-
-#     con1 = sqlite3.connect("tmp.db")
-
-#     cur1 = con1.cursor()
-
-#     cur1.execute("CREATE TABLE IF NOT EXISTS table1(id INTEGER PRIMARY KEY, First TEXT, Surname TEXT)")
-
-#     con1.commit()
-
-#     con1.close()
-
-
-# def View():
-
-#     con1 = sqlite3.connect("tmp.db")
-
-#     cur1 = con1.cursor()
-
-#     cur1.execute("SELECT * FROM table1")
-
-#     rows = cur1.fetchall()    
-#     rows = reports.JobList()
-
-#     for row in rows:
-#         tree.insert("", tkinter.END, values=row)        
-
-#     con1.close()
+f = WinForms.Form()
+f.Text = "Нормированные задания"
+f.Size = Size(800,500)
+f.Visible = True
+f.IsMdiContainer = True
 
 
-# connect to the database
+# tspTop = WinForms.ToolStripPanel()
+# tspTop.Dock = WinForms.DockStyle.Top
+# tsTop = WinForms.ToolStrip()
+# tsTop.Items.Add("Top")
+# tspTop.Join(tsTop)
 
-# connect() 
+# f.Controls.Add(tspTop);
 
-def treeAddColumn(tree, title, width):
-    tree.colCount = tree.colCount + 1
-    cc = tree.colCount
-    tree.column(f"#{cc}", anchor=tkinter.W, width=width)
-    tree.heading(f"#{cc}", text=title)
-    return tree
+def frmDepartments_open(sender, e):
+    f1 = frmDepartments.frmDepartments()
+    f1.MdiParent = f
+    f1.Show()
 
-def jobList():
-    root = tkinter.Tk()
-    tree = ttk.Treeview(root, column=("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8"), show='headings')
-    tree.colCount = 0
-    tree = treeAddColumn(tree, "id", 40)
-    tree = treeAddColumn(tree, "Дата", 100)
-    tree = treeAddColumn(tree, "Таб. номер", 80)
-    tree = treeAddColumn(tree, "ФИО", 200)
-    tree = treeAddColumn(tree, "Разряд", 40)
-    tree = treeAddColumn(tree, "Специальность", 200)
-    tree = treeAddColumn(tree, "Задание", 200)
-    tree = treeAddColumn(tree, "Время", 80)
-    
-    tree.pack()
+def frmPositions_open(sender, e):
+    f1 = FormDictionary.frmPositions()
+    f1.MdiParent = f
+    f1.Show()
 
-    rows = reports.JobList()
-    for row in rows:
-        tree.insert("", tkinter.END, values=row)        
+def frmTasks_open(sender, e):
+    f1 = FormDictionary.frmTasks()
+    f1.MdiParent = f
+    f1.Show()
 
-    # button1 = tkinter.Button(text="Display data", command=View)
-    # button1.pack(pady=10)
-    root.mainloop()
 
-jobList()
+def frmJobList_open(sender, e):
+    f1 = FormDictionary.frmJobList()
+
+    f1.MdiParent = f
+    f1.Show()
+
+ms = WinForms.MenuStrip()
+menuFile = WinForms.ToolStripMenuItem("Справочники")
+menuItemDepartments = WinForms.ToolStripMenuItem("Подразделения", None, System.EventHandler(frmDepartments_open))
+menuItemPositions = WinForms.ToolStripMenuItem("Должности", None, System.EventHandler(frmPositions_open))
+menuItemTasks = WinForms.ToolStripMenuItem("Задания", None, System.EventHandler(frmTasks_open))
+menuItemTabel = WinForms.ToolStripMenuItem("Табель", None, System.EventHandler(frmJobList_open))
+
+menuFile.DropDownItems.Add(menuItemDepartments)
+menuFile.DropDownItems.Add(menuItemPositions)
+menuFile.DropDownItems.Add(menuItemTasks)
+menuFile.DropDownItems.Add(menuItemTabel)
+
+ms.MdiWindowListItem = menuFile
+ms.Items.Add(menuFile);
+ms.Dock = WinForms.DockStyle.Top
+f.MainStrip = ms
+f.Controls.Add(ms)
+
+# # Create a GroupBox and add a TextBox to it.
+# groupBox1 = WinForms.GroupBox()
+# textBox1 = WinForms.TextBox()
+# textBox1.Location = Point(100, 30)
+# groupBox1.Controls.Add(textBox1)
+
+# groupBox1.Text = " MyGroupBox ";
+# groupBox1.Dock = WinForms.DockStyle.Top;
+
+# # groupBox1.Enabled = False
+
+# tlp = WinForms.TableLayoutPanel()
+# tlp.Text = "tlp"
+# tlp.RowCount = 5
+# tlp.BackColor = tlp.BackColor.FromArgb(255,255,122)
+# tlp.Dock = tlp.Dock.Bottom
+# # tlp.Dock = tlp.Dock.Fill
+
+# # tlp.Rows.Add()
+
+# b = WinForms.Button()
+# b.Text = "bbb"
+# tlp.Controls.Add(b)
+# tlp.Controls.Add(groupBox1)
+# f.Controls.Add(tlp)
+
+# def button_Click(self, sender): # , args
+#     """Button click event handler"""
+#     WinForms.MessageBox.Show("Please do not press this button again.")
+
+# b.Click += button_Click
+
+WinForms.Application.Run(f)
+
