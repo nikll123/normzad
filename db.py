@@ -26,7 +26,7 @@ def create_db():
         cursor.execute(sql)
 
         sql = """CREATE TABLE IF NOT EXISTS workers(
-                    TabelNom     integer PRIMARY KEY, 
+                    id           integer PRIMARY KEY, 
                     LastName     text    NOT NULL, 
                     Name         text    NOT NULL, 
                     SecondName   text    NOT NULL,
@@ -48,30 +48,37 @@ def create_db():
 
         sql = """CREATE TABLE IF NOT EXISTS jobs(
                     id           integer   PRIMARY KEY AUTOINCREMENT,
-                    TabelNom     integer   NOT NULL, 
+                    WorkerId     integer   NOT NULL, 
                     TaskId       integer   NOT NULL, 
                     Date         date      NOT NULL, 
                     TimeJob      integer   NOT NULL,
                     Comment      text      NOT NULL,
-                    FOREIGN KEY(TabelNom) REFERENCES Workers(TabelNom),
+                    FOREIGN KEY(WorkerId) REFERENCES Workers(id),
                     FOREIGN KEY(TaskId) REFERENCES Tasks(id)
                     );"""
         cursor.execute(sql)
 
         sql = """CREATE VIEW IF NOT EXISTS jobList
                     AS 
-                    SELECT j.id, 
+                    SELECT  
+                            j.id, 
                             j.Date, 
-                            j.TabelNom, 
+                            j.WorkerId, 
                             w.LastName || ' ' || SUBSTR(w.Name,1,1) || '. ' || SUBSTR(w.SecondName,1,1) || '.' AS shortName,
                             w.Level, 
                             p.Name AS Position, 
                             t.Name AS Task, j.TimeJob
-                    FROM     jobs      AS j 
-                        JOIN Tasks     AS t  ON j.TaskId = t.id
-                        JOIN Workers   AS w  ON j.TabelNom = w.TabelNom
-                        JOIN Positions AS p  ON w.Positionid = p.id
-                    ORDER BY j.Date, j.TabelNom
+                    FROM    
+                            jobs      AS j, 
+                            Tasks     AS t,
+                            Workers   AS w,
+                            Positions AS p
+                    WHERE   
+                            j.TaskId = t.id    AND
+                            j.WorkerId = w.id  AND
+                            w.Positionid = p.id
+                    ORDER BY 
+                            j.Date, j.WorkerId
                     ;"""        
         cursor.execute(sql)
 
