@@ -1,9 +1,9 @@
-from win import WinForms, Size, Point
-import guiDictionary
+from common import WinForms, Size, Point
+import guiBaseForm
 
 tableArg = {'name':'JobList','title':'Задания'}
 
-class frmJobList(guiDictionary.frmTable):
+class frmJobList(guiBaseForm.frmTable):
     def __init__(self) -> None:
         fldsArg = []
         fldsArg.append({'fld_name':'Id',        'title':'Id',          'visible':False, 'width':10,  'readonly':True})

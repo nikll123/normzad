@@ -1,4 +1,4 @@
-from win import WinForms, Size, Point
+from common import WinForms, Size, Point
 import db
 
 yInterval = 30
@@ -92,7 +92,7 @@ class frmTable(WinForms.Form):
     def Execute(self):
         WinForms.Application.Run(self)
 
-# --------------------------------------------------
+# Контейнер содержащий Label и TextBox
 class cntLblText(WinForms.ContainerControl):
     def __init__(self, name, header, value='', readonly=False) -> None:
         super().__init__()

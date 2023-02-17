@@ -1,4 +1,4 @@
-from win import WinForms, Size, Point, System
+from common import WinForms, Size, Point, System
 import guiDepartments
 import guiPositions
 import guiTasks
