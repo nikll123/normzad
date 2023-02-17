@@ -2,28 +2,32 @@ import common
 import guiBaseForm
 import dbTasks
 
-tableArg = {'name':'Tasks','title':'Задания'}        
+tableArg = {'name':'Tasks','header':'Задания'}        
 
-class frmTasks(guiBaseForm.frmTable):
-    def __init__(self) -> None:
+class frmTasks(guiBaseForm.frmBaseTable):
+    def __init__(self):
         fldsArg = []
-        fldsArg.append({'fld_name':'Id',   'title':'Id',       'visible':False, 'width':10})
-        fldsArg.append({'fld_name':'Name', 'title':'Название', 'visible':True,  'width':300})
+        fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
+        fldsArg.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
         super().__init__(tableArg, fldsArg, readonly=True)
         self.btnNew.MouseClick += self.createNew
+        self.btnEdit.MouseClick += self.editItem
 
-    def doEdit(self, sender, e):
-        f1 = frmTask(guiBaseForm.dummyId, '')
-        f1.btnSave.MouseClick += self.doSaveNew
-        f1.ShowDialog()
+    def editItem(self, sender, e):
+        id = self.getSelectedRowFldValue('id')
+        name = self.getSelectedRowFldValue('Name')
+        frm = frmTask(id, name, self)
+        frm.ShowDialog()
     
     def createNew(self, sender, e):
-        f1 = frmTask(guiBaseForm.dummyId, '', self)
-        f1.ShowDialog()
+        positionId = guiBaseForm.dummyId
+        positionName = ''
+        frm = frmTask(positionId, positionName, self)
+        frm.ShowDialog()
 
-class frmTask(guiBaseForm.frmSimpleObject):
-    def __init__(self, argId, argName, parent) -> None:
-        super().__init__(tableArg['name'], argId, argName)
+class frmTask(guiBaseForm.frmSimpleEditData):
+    def __init__(self, argId, argName, parent):
+        super().__init__(tableArg, argId, argName)
         self.parent = parent
         self.btnSave.MouseClick += self.doSave
 
@@ -37,14 +41,6 @@ class frmTask(guiBaseForm.frmSimpleObject):
         if err:
             common.SowErrorMessage(err)
         else:
-            self.parent.getData()
+            self.parent.getDataFromDb()
             self.Close()
-
-
-if __name__ == '__main__':
-    # frm = frmDepartments() 
-    # frm.Execute()
-
-    f1 = frmTask(guiBaseForm.dummyId, '')
-    f1.ShowDialog()
 

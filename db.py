@@ -78,9 +78,36 @@ def create_db():
                             j.WorkerId = w.id  AND
                             w.Positionid = p.id
                     ORDER BY 
-                            j.Date, j.WorkerId
+                            j.Date,
+                            j.WorkerId
                     ;"""        
         cursor.execute(sql)
+
+
+        sql = """CREATE VIEW IF NOT EXISTS workerList
+                    AS 
+                    SELECT 
+                            w.id, 
+                            w.LastName, 
+                            w.Name, 
+                            w.SecondName, 
+                            w.Level, 
+                            d.Name as Department, 
+                            p.Name as position
+                    FROM 
+                            workers as w, 
+                            Departments as d, 
+                            Positions as p
+                    WHERE 
+                            w.DepartmentId = d.id 
+                            AND w.PositionId = p.id
+                    ORDER BY 
+                            w.LastName, 
+                            w.Name, 
+                            w.SecondName
+                    ;"""
+        cursor.execute(sql)
+
 
 def getLastId(cursor):
     res = cursor.execute("Select last_insert_rowid()")

@@ -2,27 +2,32 @@ import common
 import guiBaseForm
 import dbDepartments
 
-class frmDepartments(guiBaseForm.frmTable):
-    def __init__(self) -> None:
-        tableArg = {'name':'Departments','title':'Подразделения'}
+tableArg = {'name':'Departments','header':'Подразделения'}
+
+class frmDepartments(guiBaseForm.frmBaseTable):
+    def __init__(self):
         fldsArg = []
-        fldsArg.append({'fld_name':'Id',   'title':'Id',       'visible':False, 'width':10})
-        fldsArg.append({'fld_name':'Name', 'title':'Название', 'visible':True,  'width':300})
+        fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
+        fldsArg.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
         super().__init__(tableArg, fldsArg, readonly=True)
         self.btnNew.MouseClick += self.createNew
+        self.btnEdit.MouseClick += self.editItem
 
-    def doEdit(self, sender, e):
-        f1 = frmDepartment(guiBaseForm.dummyId, '')
-        f1.btnSave.MouseClick += self.doSaveNew
-        f1.ShowDialog()
+    def editItem(self, sender, e):
+        id = self.getSelectedRowFldValue('id')
+        name = self.getSelectedRowFldValue('Name')
+        frm = frmDepartment(id, name, self)
+        frm.ShowDialog()
     
     def createNew(self, sender, e):
-        f1 = frmDepartment(guiBaseForm.dummyId, '', self)
-        f1.ShowDialog()
+        positionId = guiBaseForm.dummyId
+        positionName = ''
+        frm = frmDepartment(positionId, positionName, self)
+        frm.ShowDialog()
 
-class frmDepartment(guiBaseForm.frmSimpleObject):
-    def __init__(self, argId, argName, parent) -> None:
-        super().__init__('Departments', argId, argName)
+class frmDepartment(guiBaseForm.frmSimpleEditData):
+    def __init__(self, argId, argName, parent):
+        super().__init__(tableArg, argId, argName)
         self.parent = parent
         self.btnSave.MouseClick += self.doSave
 
@@ -36,14 +41,9 @@ class frmDepartment(guiBaseForm.frmSimpleObject):
         if err:
             common.SowErrorMessage(err)
         else:
-            self.parent.getData()
+            self.parent.getDataFromDb()
             self.Close()
 
 
-if __name__ == '__main__':
-    # frm = frmDepartments() 
-    # frm.Execute()
 
-    f1 = frmDepartment(guiBaseForm.dummyId, '')
-    f1.ShowDialog()
 

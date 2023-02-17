@@ -1,14 +1,19 @@
 import common
 import guiBaseForm
-import dbPositions
+import dbWorkers
 
-tableArg = {'name':'Positions','header':'Должности'}
+tableArg = {'name':'workerList','header':'Сотрудники'}
 
 class frmPositions(guiBaseForm.frmBaseTable):
     def __init__(self):
         fldsArg = []
-        fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
-        fldsArg.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
+        fldsArg.append({'fld_name':'Id',         'header':'Id',            'visible':False, 'width':10})
+        fldsArg.append({'fld_name':'LastName',   'header':'Фамилия',       'visible':True,  'width':200})
+        fldsArg.append({'fld_name':'Name',       'header':'Имя',           'visible':True,  'width':200})
+        fldsArg.append({'fld_name':'SecondName', 'header':'Отчество',      'visible':True,  'width':200})
+        fldsArg.append({'fld_name':'Level',      'header':'Разряд',        'visible':True,  'width':200})
+        fldsArg.append({'fld_name':'Department', 'header':'Подразделение', 'visible':True,  'width':200})
+        fldsArg.append({'fld_name':'Position',   'header':'Должность',     'visible':True,  'width':200})
         super().__init__(tableArg, fldsArg, readonly=True)
         self.btnNew.MouseClick += self.createItem
         self.btnEdit.MouseClick += self.editItem
