@@ -39,7 +39,7 @@ class frmDepartment(guiBaseForm.frmSimpleEditData):
         else:
             err = dbDepartments.update(id, name)
         if err:
-            common.SowErrorMessage(err)
+            common.ShowErrorIfNotEmpty(err)
         else:
             self.parent.getDataFromDb()
             self.Close()

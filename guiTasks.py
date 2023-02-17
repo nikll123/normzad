@@ -39,7 +39,7 @@ class frmTask(guiBaseForm.frmSimpleEditData):
         else:
             err = dbTasks.update(id, name)
         if err:
-            common.SowErrorMessage(err)
+            common.ShowErrorIfNotEmpty(err)
         else:
             self.parent.getDataFromDb()
             self.Close()

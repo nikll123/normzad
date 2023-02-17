@@ -12,6 +12,7 @@ class frmPositions(guiBaseForm.frmBaseTable):
         super().__init__(tableArg, fldsArg, readonly=True)
         self.btnNew.MouseClick += self.createItem
         self.btnEdit.MouseClick += self.editItem
+        self.btnDelete.MouseClick += self.deleteItem
 
     def editItem(self, sender, e):
         id = self.getSelectedRowFldValue('id')
@@ -24,6 +25,16 @@ class frmPositions(guiBaseForm.frmBaseTable):
         name = ''
         frm = frmPosition(id, name, self)
         frm.ShowDialog()
+
+    def deleteItem(self, sender, e):
+        id = self.getSelectedRowFldValue('id')
+        if id is not None:
+            name = self.getSelectedRowFldValue('Name')
+            if common.ShowQuestionMessage(f"Удалить должность: {name}?"):
+                err = dbPositions.delete(id)
+                isError = common.ShowErrorIfNotEmpty(err)
+                if not isError:
+                    self.getDataFromDb()
         
 class frmPosition(guiBaseForm.frmSimpleEditData):
     def __init__(self, positionId, positionName, parent):
@@ -39,7 +50,7 @@ class frmPosition(guiBaseForm.frmSimpleEditData):
         else:
             err = dbPositions.update(id, name)
         if err:
-            common.SowErrorMessage(err)
+            common.ShowErrorIfNotEmpty(err)
         else:
             self.parent.getDataFromDb()
             self.Close()

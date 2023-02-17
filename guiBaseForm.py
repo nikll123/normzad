@@ -40,7 +40,7 @@ class frmBaseTable(WinForms.Form):
         self.btnEdit.Text = 'Изменить'
 
         self.btnDelete = WinForms.Button()
-        self.btnDelete.MouseClick += self.doDelete
+        # self.btnDelete.MouseClick += self.doDelete
         self.btnDelete.Text = 'Удалить' 
 
         self.Controls.Add(self.btnNew)
@@ -50,16 +50,16 @@ class frmBaseTable(WinForms.Form):
         self.Resize += self.myResized
         self.Size = Size(500,300)
 
-    def doDelete(self, sender, e):
-        id = self.getSelectedRowFldValue('id')
-        if id is not None:
-            if WinForms.DialogResult.Yes == WinForms.MessageBox.Show(f"Удалить", "Вопрос", WinForms.MessageBoxButtons.YesNo):
-                err = db.delete(self.tableName,'id', id)
-                if err:
-                    WinForms.MessageBox.Show(err)
-                else:
-                    self.getDataFromDb()
-        pass
+    # def doDelete(self, sender, e):
+    #     id = self.getSelectedRowFldValue('id')
+    #     if id is not None:
+    #         if WinForms.DialogResult.Yes == WinForms.MessageBox.Show(f"Удалить", "Вопрос", WinForms.MessageBoxButtons.YesNo):
+    #             err = db.delete(self.tableName,'id', id)
+    #             if err:
+    #                 WinForms.MessageBox.Show(err)
+    #             else:
+    #                 self.getDataFromDb()
+    #     pass
 
     def myResized(self, sender, e):
         w, h = self.ClientSize.Width, self.ClientSize.Height

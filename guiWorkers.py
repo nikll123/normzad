@@ -17,6 +17,7 @@ class frmWorkers(guiBaseForm.frmBaseTable):
         super().__init__(tableArg, fldsArg, readonly=True)
     #     self.btnNew.MouseClick += self.createItem
     #     self.btnEdit.MouseClick += self.editItem
+        self.btnDelete.MouseClick += self.deleteItem
 
     # def editItem(self, sender, e):
     #     id = self.getSelectedRowFldValue('id')
@@ -29,6 +30,9 @@ class frmWorkers(guiBaseForm.frmBaseTable):
     #     name = ''
     #     frm = frmPosition(id, name, self)
     #     frm.ShowDialog()
+
+    def deleteItem(self, sender, e):
+        pass
         
 # class frmPosition(guiBaseForm.frmSimpleEditData):
 #     def __init__(self, positionId, positionName, parent):

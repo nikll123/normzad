@@ -8,6 +8,13 @@ import System.Windows.Forms as WinForms
 from System.Drawing import Size, Point
 import System.Windows
 
-def SowErrorMessage(err):
-    WinForms.MessageBox.Show(err)
+def ShowErrorIfNotEmpty(err):
+    isError = err != ''
+    if isError:
+        WinForms.MessageBox.Show(err, "Ошибка")
+    return isError
 
+def ShowQuestionMessage(msg):
+    answer = WinForms.MessageBox.Show(msg, "Вопрос", WinForms.MessageBoxButtons.YesNo)
+    return answer == WinForms.DialogResult.Yes
+    
