@@ -1,8 +1,8 @@
 import win
-import frmDictionary
+import guiDictionary
 import dbDepartments
 
-class frmDepartments(frmDictionary.frmTable):
+class frmDepartments(guiDictionary.frmTable):
     def __init__(self) -> None:
         tableArg = {'name':'Departments','title':'Подразделения'}
         fldsArg = []
@@ -12,15 +12,15 @@ class frmDepartments(frmDictionary.frmTable):
         self.btnNew.MouseClick += self.createNew
 
     def doEdit(self, sender, e):
-        f1 = frmDepartment(frmDictionary.dummyId, '')
+        f1 = frmDepartment(guiDictionary.dummyId, '')
         f1.btnSave.MouseClick += self.doSaveNew
         f1.ShowDialog()
     
     def createNew(self, sender, e):
-        f1 = frmDepartment(frmDictionary.dummyId, '', self)
+        f1 = frmDepartment(guiDictionary.dummyId, '', self)
         f1.ShowDialog()
 
-class frmDepartment(frmDictionary.frmSimpleObject):
+class frmDepartment(guiDictionary.frmSimpleObject):
     def __init__(self, argId, argName, parent) -> None:
         super().__init__('Departments', argId, argName)
         self.parent = parent
@@ -29,7 +29,7 @@ class frmDepartment(frmDictionary.frmSimpleObject):
     def doSave(self, sender, e):
         id = int(self.cntLblTxtId.txt_value.Text)
         name = self.cntLblTxtName.txt_value.Text
-        if id == frmDictionary.dummyId:
+        if id == guiDictionary.dummyId:
             err, newId = dbDepartments.new(name)
         else:
             err = dbDepartments.update(id, name)
@@ -44,6 +44,6 @@ if __name__ == '__main__':
     # frm = frmDepartments() 
     # frm.Execute()
 
-    f1 = frmDepartment(frmDictionary.dummyId, '')
+    f1 = frmDepartment(guiDictionary.dummyId, '')
     f1.ShowDialog()
 

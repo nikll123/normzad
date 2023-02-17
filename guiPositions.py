@@ -1,10 +1,10 @@
 import win
-import frmDictionary
+import guiDictionary
 import dbPositions
 
 tableArg = {'name':'Positions','title':'Должнсти'}
 
-class frmPositions(frmDictionary.frmTable):
+class frmPositions(guiDictionary.frmTable):
     def __init__(self) -> None:
         fldsArg = []
         fldsArg.append({'fld_name':'Id',   'title':'Id',       'visible':False, 'width':10})
@@ -13,15 +13,15 @@ class frmPositions(frmDictionary.frmTable):
         self.btnNew.MouseClick += self.createNew
 
     def doEdit(self, sender, e):
-        f1 = frmPosition(frmDictionary.dummyId, '')
+        f1 = frmPosition(guiDictionary.dummyId, '')
         f1.btnSave.MouseClick += self.doSaveNew
         f1.ShowDialog()
     
     def createNew(self, sender, e):
-        f1 = frmPosition(frmDictionary.dummyId, '', self)
+        f1 = frmPosition(guiDictionary.dummyId, '', self)
         f1.ShowDialog()
 
-class frmPosition(frmDictionary.frmSimpleObject):
+class frmPosition(guiDictionary.frmSimpleObject):
     def __init__(self, argId, argName, parent) -> None:
         super().__init__(tableArg['name'], argId, argName)
         self.parent = parent
@@ -30,7 +30,7 @@ class frmPosition(frmDictionary.frmSimpleObject):
     def doSave(self, sender, e):
         id = int(self.cntLblTxtId.txt_value.Text)
         name = self.cntLblTxtName.txt_value.Text
-        if id == frmDictionary.dummyId:
+        if id == guiDictionary.dummyId:
             err, newId = dbPositions.new(name)
         else:
             err = dbPositions.update(id, name)
@@ -42,5 +42,5 @@ class frmPosition(frmDictionary.frmSimpleObject):
 
 
 if __name__ == '__main__':
-    f1 = frmPosition(frmDictionary.dummyId, '')
+    f1 = frmPosition(guiDictionary.dummyId, '')
     f1.ShowDialog()

@@ -1,19 +1,13 @@
-import clr
+from win import WinForms, Size, Point
 import db
-# from pythonnet import load
-# load()
-clr.AddReference("System.Windows.Forms")
-clr.AddReference("System.Windows")
-
-import System.Windows.Forms as WinForms
-# import System.Windows
-from System.Drawing import Size, Point, Color, Font
 
 yInterval = 30
 dummyId = 0
 
 # DataGridViewComboBoxColumn 
 # https://learn.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-host-controls-in-windows-forms-datagridview-cells?view=netframeworkdesktop-4.8
+# col.CellTemplate.ValueType = int
+
 class frmTable(WinForms.Form):
     def __init__(self, tableArg, fldsArg, readonly=False) -> None:
         super().__init__()
@@ -25,7 +19,6 @@ class frmTable(WinForms.Form):
         for f in self.flds:
             col = WinForms.DataGridViewColumn()
             col.CellTemplate = WinForms.DataGridViewTextBoxCell()
-            # col.CellTemplate.ValueType = int
             if 'title' in f.keys():
                 col.Name = f['title']
             if 'visible' in f.keys():
@@ -40,7 +33,7 @@ class frmTable(WinForms.Form):
         self.grd.ReadOnly = readonly
         self.grd.BackgroundColor = self.BackColor
         self.grd.SelectionMode = WinForms.DataGridViewSelectionMode.FullRowSelect
-        self.grd.MultiSelect = False
+        # self.grd.MultiSelect = False
 
         self.btnNew = WinForms.Button()
         self.btnNew.Text = 'Добавить'

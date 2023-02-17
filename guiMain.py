@@ -1,8 +1,8 @@
 from win import WinForms, Size, Point, System
 import guiDepartments
-import frmPositions
-import frmTasks
-import frmJobList
+import guiPositions
+import guiTasks
+import guiJobList
 
 mainForm = WinForms.Form()
 mainForm.Text = "Нормированные задания"
@@ -28,9 +28,9 @@ def openFrmDepartments(sender, e):
         frm.Show()
 
 def openFrmPositions(sender, e):
-    frmName = 'frmPoss'
+    frmName = 'frmPositions'
     if activateIfOpened(frmName) == False:
-        frm = frmPositions.frmPositions()
+        frm = guiPositions.frmPositions()
         frm.Name = frmName
         frm.MdiParent = mainForm
         frm.Show()
@@ -38,7 +38,7 @@ def openFrmPositions(sender, e):
 def openFrmTasks(sender, e):
     frmName = 'frmTasks'
     if activateIfOpened(frmName) == False:
-        frm = frmTasks.frmTasks()
+        frm = guiTasks.frmTasks()
         frm.Name = frmName
         frm.MdiParent = mainForm
         frm.Show()
@@ -46,7 +46,7 @@ def openFrmTasks(sender, e):
 def openFrmJobList(sender, e):
     frmName = 'frmJobList'
     if activateIfOpened(frmName) == False:
-        frm = frmJobList.frmJobList()
+        frm = guiJobList.frmJobList()
         frm.Name = frmName
         frm.MdiParent = mainForm
         frm.Show()
