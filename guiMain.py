@@ -3,6 +3,7 @@ import guiDepartments
 import guiPositions
 import guiTasks
 import guiJobList
+import guiWorkers
 
 mainForm = WinForms.Form()
 mainForm.Text = "Нормированные задания"
@@ -51,16 +52,26 @@ def openFrmJobList(sender, e):
         frm.MdiParent = mainForm
         frm.Show()
 
+def openFrmWorkerList(sender, e):
+    frmName = 'frmWorkerList'
+    if activateIfOpened(frmName) == False:
+        frm = guiWorkers.frmWorkers()
+        frm.Name = frmName
+        frm.MdiParent = mainForm
+        frm.Show()
+
 ms = WinForms.MenuStrip()
 menuDicts = WinForms.ToolStripMenuItem("Справочники")
 
 menuItemDepartments = WinForms.ToolStripMenuItem("Подразделения", None, System.EventHandler(openFrmDepartments))
 menuItemPositions = WinForms.ToolStripMenuItem("Должности", None, System.EventHandler(openFrmPositions))
 menuItemTasks = WinForms.ToolStripMenuItem("Задания", None, System.EventHandler(openFrmTasks))
+menuItemWorkers = WinForms.ToolStripMenuItem("Сотрудники", None, System.EventHandler(openFrmWorkerList))
 
 menuDicts.DropDownItems.Add(menuItemDepartments)
 menuDicts.DropDownItems.Add(menuItemPositions)
 menuDicts.DropDownItems.Add(menuItemTasks)
+menuDicts.DropDownItems.Add(menuItemWorkers)
 
 menuTabel = WinForms.ToolStripMenuItem("Табель", None, System.EventHandler(openFrmJobList))
 
