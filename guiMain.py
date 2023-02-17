@@ -1,17 +1,8 @@
-import clr
-import frmDictionary
-import frmDepartments
+from win import WinForms, Size, Point, System
+import guiDepartments
 import frmPositions
 import frmTasks
 import frmJobList
-
-# from pythonnet import load
-# load()
-clr.AddReference("System.Windows.Forms")
-clr.AddReference("System.Windows")
-import System.Windows.Forms as WinForms
-import System.Windows
-from System.Drawing import Size, Point
 
 mainForm = WinForms.Form()
 mainForm.Text = "Нормированные задания"
@@ -31,7 +22,7 @@ def activateIfOpened(name):
 def openFrmDepartments(sender, e):
     frmName = 'frmDeps'
     if activateIfOpened(frmName) == False:
-        frm = frmDepartments.frmDepartments()
+        frm = guiDepartments.frmDepartments()
         frm.Name = frmName
         frm.MdiParent = mainForm
         frm.Show()

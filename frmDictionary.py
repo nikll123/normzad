@@ -10,7 +10,10 @@ import System.Windows.Forms as WinForms
 from System.Drawing import Size, Point, Color, Font
 
 yInterval = 30
+dummyId = 0
 
+# DataGridViewComboBoxColumn 
+# https://learn.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-host-controls-in-windows-forms-datagridview-cells?view=netframeworkdesktop-4.8
 class frmTable(WinForms.Form):
     def __init__(self, tableArg, fldsArg, readonly=False) -> None:
         super().__init__()
@@ -22,6 +25,7 @@ class frmTable(WinForms.Form):
         for f in self.flds:
             col = WinForms.DataGridViewColumn()
             col.CellTemplate = WinForms.DataGridViewTextBoxCell()
+            # col.CellTemplate.ValueType = int
             if 'title' in f.keys():
                 col.Name = f['title']
             if 'visible' in f.keys():
@@ -84,7 +88,7 @@ class frmTable(WinForms.Form):
     def getData(self):
         self.grd.Rows.Clear()
         tableName = self.table['name']
-        flds = [f['name'] for f in self.flds]
+        flds = [f['fld_name'] for f in self.flds]
         err, data = db.select(tableName, flds)
         if err:
             WinForms.MessageBox.Show(err)
@@ -127,7 +131,7 @@ class frmSimpleObject(WinForms.Form):
         y = 10
 
         y = y + yInterval
-        self.cntLblTxtId = cntLblText(name='lbl', header='Id')
+        self.cntLblTxtId = cntLblText(name='lbl', header='Id', readonly = True)
         self.cntLblTxtId.Location = Point(x, y)
         self.cntLblTxtId.txt_value.Text = str(argId)
         self.Controls.Add(self.cntLblTxtId)
@@ -139,17 +143,21 @@ class frmSimpleObject(WinForms.Form):
         self.cntLblTxtName.txt_value.Text = argName
         self.Controls.Add(self.cntLblTxtName)
 
-        btnSave = WinForms.Button()
-        btnSave.Text = 'Save'
-        x = int((self.ClientSize.Width - btnSave.Size.Width)/ 2) 
+        self.btnSave = WinForms.Button()
+        self.btnSave.Text = 'Save'
+        x = int((self.ClientSize.Width - self.btnSave.Size.Width)/ 2) 
         y = y + yInterval
-        btnSave.Location = Point(x, y)
-        btnSave.MouseClick += self.saveData
-        self.Controls.Add(btnSave)
+        self.btnSave.Location = Point(x, y)
+        self.btnSave.MouseClick += self.saveData
+        self.Controls.Add(self.btnSave)
         pass
     
     def saveData(self, sender, e):
-        WinForms.MessageBox.Show('Dummy method Save')
+        if __name__ == '__main__':
+            if int(self.cntLblTxtId.txt_value.Text) == dummyId:
+                WinForms.MessageBox.Show('New')
+            else: 
+                WinForms.MessageBox.Show(f'save {self.cntLblTxtId.txt_value.Text}')
 
 
     def Execute(self):
@@ -157,13 +165,13 @@ class frmSimpleObject(WinForms.Form):
 
 
 if __name__ == '__main__':
-    # table = {'name':'Departments','title':'Справочник'}
-    # cols = []
-    # cols.append({'dbname':'Id',   'title':'Id',       'visible':True, 'readonly':True,   'width':50})
-    # cols.append({'dbname':'Name', 'title':'Название', 'visible':True, 'readonly':False,  'width':300})
+    table = {'name':'Departments','title':'Справочник', 'readonly':True}
+    cols = []
+    cols.append({'fld_name':'Id',   'title':'Id',       'visible':True, 'readonly':True,   'width':50})
+    cols.append({'fld_name':'Name', 'title':'Название', 'visible':True, 'readonly':False,  'width':300})
 
-    # frm = frmTable(table, cols)
-    # frm.Execute()
+    frm = frmTable(table, cols, readonly=True)
+    frm.Execute()
 
-    frm = frmSimpleObject(tableArg='Справочник', argId=1, argName='testData')
-    frm.ShowDialog()
+    # frm = frmSimpleObject(tableArg='Справочник', argId=dummyId, argName='testData')
+    # frm.ShowDialog()
