@@ -4,32 +4,38 @@ import dbDepartments
 
 tableArg = {'name':'Departments','header':'Подразделения'}
 
-class frmDepartments(guiBaseForm.frmBaseTable):
+class frmDepartmentTable(guiBaseForm.frmDictionary):
     def __init__(self):
         fldsArg = []
         fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
         fldsArg.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
         super().__init__(tableArg, fldsArg, readonly=True)
-        self.btnNew.MouseClick += self.createNew
-        self.btnEdit.MouseClick += self.editItem
 
     def editItem(self, sender, e):
-        id = self.getSelectedRowFldValue('id')
-        name = self.getSelectedRowFldValue('Name')
+        id = self.getSelectedFldValue('id')
+        name = self.getSelectedFldValue('Name')
         frm = frmDepartment(id, name, self)
         frm.ShowDialog()
     
-    def createNew(self, sender, e):
-        positionId = guiBaseForm.dummyId
-        positionName = ''
-        frm = frmDepartment(positionId, positionName, self)
+    def createItem(self, sender, e):
+        id = guiBaseForm.dummyId
+        name = ''
+        frm = frmDepartment(id, name, self)
         frm.ShowDialog()
 
-class frmDepartment(guiBaseForm.frmSimpleEditData):
+    def deleteItem(self, sender, e):
+        id = self.getSelectedFldValue('id')
+        name = self.getSelectedFldValue('Name')
+        if id != None:
+            if common.ShowQuestionMessage(f'Удалить подразделение: {name}?'):
+                err = dbDepartments.delete(id)
+                if not common.checkIfError(err):
+                    self.getDataFromDb()
+
+class frmDepartment(guiBaseForm.frmDictionaryItem):
     def __init__(self, argId, argName, parent):
         super().__init__(tableArg, argId, argName)
         self.parent = parent
-        self.btnSave.MouseClick += self.doSave
 
     def doSave(self, sender, e):
         id = int(self.cntLblTxtId.txt_value.Text)
@@ -39,11 +45,7 @@ class frmDepartment(guiBaseForm.frmSimpleEditData):
         else:
             err = dbDepartments.update(id, name)
         if err:
-            common.ShowErrorIfNotEmpty(err)
+            common.checkIfError(err)
         else:
             self.parent.getDataFromDb()
             self.Close()
-
-
-
-

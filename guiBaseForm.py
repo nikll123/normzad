@@ -9,7 +9,7 @@ dummyId = 0
 # col.CellTemplate.ValueType = int
 
 # Форма для работы с табличными данными
-class frmBaseTable(WinForms.Form):
+class frmDictionary(WinForms.Form):
     def __init__(self, tableArg, fldsArg, readonly=False):
         super().__init__()
         self.Text = tableArg['header']
@@ -32,34 +32,32 @@ class frmBaseTable(WinForms.Form):
         self.grd.ReadOnly = readonly
         self.grd.BackgroundColor = self.BackColor
         self.grd.SelectionMode = WinForms.DataGridViewSelectionMode.FullRowSelect
+        self.grd.CellDoubleClick += self.dblClick
 
         self.btnNew = WinForms.Button()
         self.btnNew.Text = 'Добавить'
+        self.btnNew.MouseClick += self.createItem
+        self.Controls.Add(self.btnNew)
 
         self.btnEdit = WinForms.Button()
         self.btnEdit.Text = 'Изменить'
+        self.btnEdit.MouseClick += self.editItem
+        self.Controls.Add(self.btnEdit)
 
         self.btnDelete = WinForms.Button()
-        # self.btnDelete.MouseClick += self.doDelete
         self.btnDelete.Text = 'Удалить' 
-
-        self.Controls.Add(self.btnNew)
-        self.Controls.Add(self.btnEdit)
+        self.btnDelete.MouseClick += self.deleteItem
         self.Controls.Add(self.btnDelete)
         
         self.Resize += self.myResized
         self.Size = Size(500,300)
 
-    # def doDelete(self, sender, e):
-    #     id = self.getSelectedRowFldValue('id')
-    #     if id is not None:
-    #         if WinForms.DialogResult.Yes == WinForms.MessageBox.Show(f"Удалить", "Вопрос", WinForms.MessageBoxButtons.YesNo):
-    #             err = db.delete(self.tableName,'id', id)
-    #             if err:
-    #                 WinForms.MessageBox.Show(err)
-    #             else:
-    #                 self.getDataFromDb()
-    #     pass
+    def dblClick(self, sender, e):
+        id = self.getSelectedFldValue('id')
+        if id == None:
+            self.createItem(sender, e)
+        else:
+            self.editItem(sender, e)
 
     def myResized(self, sender, e):
         w, h = self.ClientSize.Width, self.ClientSize.Height
@@ -70,7 +68,7 @@ class frmBaseTable(WinForms.Form):
         self.btnEdit.Location = Point(150, y)
         self.btnDelete.Location = Point(250, y)
     
-    def getSelectedRowFldValue(self, fldName):
+    def getSelectedFldValue(self, fldName):
         value = self.grd.SelectedRows[0].Cells[fldName].Value
         return value
 
@@ -108,7 +106,7 @@ class cntLblText(WinForms.ContainerControl):
         self.Controls.Add(self.txt_value)
 
 # Базовая (шаблон) форма для редактирования элемента справочника
-class frmSimpleEditData(WinForms.Form):
+class frmDictionaryItem(WinForms.Form):
     def __init__(self, tableArg, argId, argValue, size=Size(500,300)):
         super().__init__()
         self.Size = size
@@ -135,6 +133,8 @@ class frmSimpleEditData(WinForms.Form):
         x = int((self.ClientSize.Width - self.btnSave.Size.Width)/ 2) 
         y = self.cntLblTxtName.Bottom + yInterval
         self.btnSave.Location = Point(x, y)
+        self.btnSave.MouseClick += self.doSave
+
         self.Controls.Add(self.btnSave)
 
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     cols.append({'fld_name':'Id',   'header':'Id',       'visible':True, 'readonly':True,   'width':50})
     cols.append({'fld_name':'Name', 'header':'Название', 'visible':True, 'readonly':False,  'width':300})
 
-    frm = frmBaseTable(table, cols, readonly=True)
+    frm = frmDictionary(table, cols, readonly=True)
     frm.Execute()
 
     # frm = frmSimpleObject(tableArg='Справочник', argId=dummyId, argName='testData')

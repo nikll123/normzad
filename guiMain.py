@@ -20,15 +20,15 @@ def activateIfOpened(name):
             break
     return res
 
-def openFrmDepartments(sender, e):
+def openFormDepartments(sender, e):
     frmName = 'frmDeps'
     if activateIfOpened(frmName) == False:
-        frm = guiDepartments.frmDepartments()
+        frm = guiDepartments.frmDepartmentTable()
         frm.Name = frmName
         frm.MdiParent = mainForm
         frm.Show()
 
-def openFrmPositions(sender, e):
+def openFormPositions(sender, e):
     frmName = 'frmPositions'
     if activateIfOpened(frmName) == False:
         frm = guiPositions.frmPositions()
@@ -36,7 +36,7 @@ def openFrmPositions(sender, e):
         frm.MdiParent = mainForm
         frm.Show()
 
-def openFrmTasks(sender, e):
+def openFormTasks(sender, e):
     frmName = 'frmTasks'
     if activateIfOpened(frmName) == False:
         frm = guiTasks.frmTasks()
@@ -44,7 +44,7 @@ def openFrmTasks(sender, e):
         frm.MdiParent = mainForm
         frm.Show()
 
-def openFrmJobList(sender, e):
+def openFormJobList(sender, e):
     frmName = 'frmJobList'
     if activateIfOpened(frmName) == False:
         frm = guiJobList.frmJobList()
@@ -52,7 +52,7 @@ def openFrmJobList(sender, e):
         frm.MdiParent = mainForm
         frm.Show()
 
-def openFrmWorkerList(sender, e):
+def openFormWorkerList(sender, e):
     frmName = 'frmWorkerList'
     if activateIfOpened(frmName) == False:
         frm = guiWorkers.frmWorkers()
@@ -63,17 +63,17 @@ def openFrmWorkerList(sender, e):
 ms = WinForms.MenuStrip()
 menuDicts = WinForms.ToolStripMenuItem("Справочники")
 
-menuItemDepartments = WinForms.ToolStripMenuItem("Подразделения", None, System.EventHandler(openFrmDepartments))
-menuItemPositions = WinForms.ToolStripMenuItem("Должности", None, System.EventHandler(openFrmPositions))
-menuItemTasks = WinForms.ToolStripMenuItem("Задания", None, System.EventHandler(openFrmTasks))
-menuItemWorkers = WinForms.ToolStripMenuItem("Сотрудники", None, System.EventHandler(openFrmWorkerList))
+menuItemDepartments = WinForms.ToolStripMenuItem("Подразделения", None, System.EventHandler(openFormDepartments))
+menuItemPositions = WinForms.ToolStripMenuItem("Должности", None, System.EventHandler(openFormPositions))
+menuItemTasks = WinForms.ToolStripMenuItem("Задания", None, System.EventHandler(openFormTasks))
+menuItemWorkers = WinForms.ToolStripMenuItem("Сотрудники", None, System.EventHandler(openFormWorkerList))
 
 menuDicts.DropDownItems.Add(menuItemDepartments)
 menuDicts.DropDownItems.Add(menuItemPositions)
 menuDicts.DropDownItems.Add(menuItemTasks)
 menuDicts.DropDownItems.Add(menuItemWorkers)
 
-menuTabel = WinForms.ToolStripMenuItem("Табель", None, System.EventHandler(openFrmJobList))
+menuTabel = WinForms.ToolStripMenuItem("Табель", None, System.EventHandler(openFormJobList))
 
 ms.MdiWindowListItem = menuDicts
 

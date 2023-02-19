@@ -8,7 +8,7 @@ import System.Windows.Forms as WinForms
 from System.Drawing import Size, Point
 import System.Windows
 
-def ShowErrorIfNotEmpty(err):
+def checkIfError(err):
     isError = err != ''
     if isError:
         WinForms.MessageBox.Show(err, "Ошибка")

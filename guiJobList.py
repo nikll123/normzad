@@ -3,7 +3,7 @@ import guiBaseForm
 
 tableArg = {'name':'JobList','header':'Табель'}
 
-class frmJobList(guiBaseForm.frmBaseTable):
+class frmJobList(guiBaseForm.frmDictionary):
     def __init__(self):
         fldsArg = []
         fldsArg.append({'fld_name':'Id',        'header':'Id',          'visible':False, 'width':10,  'readonly':True})

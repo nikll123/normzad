@@ -4,7 +4,7 @@ import dbPositions
 
 tableArg = {'name':'Positions','header':'Должности'}
 
-class frmPositions(guiBaseForm.frmBaseTable):
+class frmPositions(guiBaseForm.frmDictionary):
     def __init__(self):
         fldsArg = []
         fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
@@ -15,8 +15,8 @@ class frmPositions(guiBaseForm.frmBaseTable):
         self.btnDelete.MouseClick += self.deleteItem
 
     def editItem(self, sender, e):
-        id = self.getSelectedRowFldValue('id')
-        name = self.getSelectedRowFldValue('Name')
+        id = self.getSelectedFldValue('id')
+        name = self.getSelectedFldValue('Name')
         frm = frmPosition(id, name, self)
         frm.ShowDialog()
     
@@ -27,16 +27,16 @@ class frmPositions(guiBaseForm.frmBaseTable):
         frm.ShowDialog()
 
     def deleteItem(self, sender, e):
-        id = self.getSelectedRowFldValue('id')
+        id = self.getSelectedFldValue('id')
         if id is not None:
-            name = self.getSelectedRowFldValue('Name')
+            name = self.getSelectedFldValue('Name')
             if common.ShowQuestionMessage(f"Удалить должность: {name}?"):
                 err = dbPositions.delete(id)
-                isError = common.ShowErrorIfNotEmpty(err)
+                isError = common.checkIfError(err)
                 if not isError:
                     self.getDataFromDb()
         
-class frmPosition(guiBaseForm.frmSimpleEditData):
+class frmPosition(guiBaseForm.frmDictionaryItem):
     def __init__(self, positionId, positionName, parent):
         super().__init__(tableArg, positionId, positionName)
         self.parent = parent
@@ -50,7 +50,7 @@ class frmPosition(guiBaseForm.frmSimpleEditData):
         else:
             err = dbPositions.update(id, name)
         if err:
-            common.ShowErrorIfNotEmpty(err)
+            common.checkIfError(err)
         else:
             self.parent.getDataFromDb()
             self.Close()
