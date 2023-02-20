@@ -93,7 +93,9 @@ def create_db():
                             w.SecondName, 
                             w.Level, 
                             d.Name as Department, 
-                            p.Name as position
+                            p.Name as position,
+                            DepartmentId, 
+                            PositionId
                     FROM 
                             workers as w, 
                             Departments as d, 

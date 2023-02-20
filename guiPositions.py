@@ -21,7 +21,7 @@ class frmPositions(guiBaseForm.frmDictionary):
         frm.ShowDialog()
     
     def createItem(self, sender, e):
-        id = guiBaseForm.dummyId
+        id = guiBaseForm.newId
         name = ''
         frm = frmPosition(id, name, self)
         frm.ShowDialog()
@@ -45,7 +45,7 @@ class frmPosition(guiBaseForm.frmDictionaryItem):
     def doSave(self, sender, e):
         id = int(self.cntLblTxtId.txt_value.Text)
         name = self.cntLblTxtName.txt_value.Text
-        if id == guiBaseForm.dummyId:
+        if id == guiBaseForm.newId:
             err, newId = dbPositions.new(name)
         else:
             err = dbPositions.update(id, name)
