@@ -38,8 +38,8 @@ class frmTask(guiBaseForm.frmDictionaryItem):
         self.parent = parent
 
     def doSave(self, sender, e):
-        id = int(self.cntLblTxtId.txt_value.Text)
-        name = self.cntLblTxtName.txt_value.Text
+        id = int(self.cntLblTxtId.txt.Text)
+        name = self.cntLblTxtName.txt.Text
         if id == guiBaseForm.newId:
             err, newId = dbTasks.new(name)
         else:

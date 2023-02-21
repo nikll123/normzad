@@ -24,10 +24,10 @@ def showQuestionMessage(msg):
 def isArray(var):
     return hasattr(var,'__iter__')
 
-# класс - Контейнер содержащий Label и TextBox
+# класс - Контейнер содержащий Label 
 # родительский класс WinForms.ContainerControl
-class cntLblText(WinForms.ContainerControl):
-    def __init__(self, name, header, value='', readonly=False):
+class _baseControl(WinForms.ContainerControl):
+    def __init__(self, name, header, readonly=False):
         super().__init__()
         self.Name=name
         self.Size = Size(300, 24)
@@ -38,31 +38,29 @@ class cntLblText(WinForms.ContainerControl):
         self.lbl_header.Location = Point(0,0)
         self.Controls.Add(self.lbl_header)
 
-        self.txt_value = WinForms.TextBox()
-        self.txt_value.Size = Size(150, 24)
-        self.txt_value.Location = Point(150,0)
-        self.txt_value.ReadOnly = readonly
-        self.txt_value.Text = value
-        self.Controls.Add(self.txt_value)
+# класс - Контейнер содержащий Label и TextBox
+# родительский класс _baseControl
+class cntText(_baseControl):
+    def __init__(self, name, header, value='', readonly=False):
+        super().__init__(name, header)
+
+        self.txt = WinForms.TextBox()
+        self.txt.Size = Size(150, 24)
+        self.txt.Location = Point(150,0)
+        self.txt.ReadOnly = readonly
+        self.txt.Text = value
+        self.Controls.Add(self.txt)
 
 # класс - Контейнер содержащий Label и комбобокс
-# родительский класс WinForms.ContainerControl
-class cntLblText(WinForms.ContainerControl):
+# родительский класс _baseControl
+class cntCombobx(_baseControl):
     def __init__(self, name, header, value='', readonly=False):
-        super().__init__()
-        self.Name=name
-        self.Size = Size(300, 24)
+        super().__init__(name, header)
 
-        self.lbl_header = WinForms.Label()
-        self.lbl_header.Text = header
-        self.lbl_header.Size = Size(150, 24)
-        self.lbl_header.Location = Point(0,0)
-        self.Controls.Add(self.lbl_header)
-
-        self.txt_value = WinForms.ComboBox()
-        self.txt_value.Size = Size(150, 24)
-        self.txt_value.Location = Point(150,0)
-        self.txt_value.ReadOnly = readonly
-        self.txt_value.Text = value
-        self.Controls.Add(self.txt_value)
+        self.cmbBox = WinForms.ComboBox()
+        self.cmbBox.Size = Size(150, 24)
+        self.cmbBox.Location = Point(150,0)
+        self.cmbBox.ReadOnly = readonly
+        self.cmbBox.Text = value
+        self.Controls.Add(self.cmbBox)
 

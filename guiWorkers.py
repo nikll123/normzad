@@ -41,34 +41,34 @@ class frmWorker(WinForms.Form):
         self.Size = Size(500,600)
         x = 20  # координата X для выстраивания контролов
         # создаем контейнер с Label и TextBox для Id
-        self.cntLblTxt_Id = cntLblText(name='lbl', header='Id', readonly=True)
+        self.cntLblTxt_Id = cntText(name='lbl', header='Id', readonly=True)
         y = vertInterval                                        # координата Y для первого контейнера
         self.cntLblTxt_Id.Location = Point(x, y)                 # положения контейнера
-        self.cntLblTxt_Id.txt_value.Text = str(id)
+        self.cntLblTxt_Id.txt.Text = str(id)
         self.Controls.Add(self.cntLblTxt_Id)                     # вставляем на форму
 
-        self.cntLblTxt_Name = cntLblText(name='name', header='Имя')
+        self.cntLblTxt_Name = cntText(name='name', header='Имя')
         y = self.cntLblTxt_Id.Bottom + vertInterval
         self.cntLblTxt_Name.Location = Point(x, y)
-        self.cntLblTxt_Name.txt_value.Text = name
+        self.cntLblTxt_Name.txt.Text = name
         self.Controls.Add(self.cntLblTxt_Name)
 
-        self.cntLblTxt_SecondName = cntLblText(name='secondName', header='Отчество')
+        self.cntLblTxt_SecondName = cntText(name='secondName', header='Отчество')
         y = self.cntLblTxt_Name.Bottom + vertInterval
         self.cntLblTxt_SecondName.Location = Point(x, y)
-        self.cntLblTxt_SecondName.txt_value.Text = secondName
+        self.cntLblTxt_SecondName.txt.Text = secondName
         self.Controls.Add(self.cntLblTxt_SecondName)
 
-        self.cntLblTxt_lastName = cntLblText(name='secondName', header='Фамилия')
+        self.cntLblTxt_lastName = cntText(name='secondName', header='Фамилия')
         y = self.cntLblTxt_SecondName.Bottom + vertInterval
         self.cntLblTxt_lastName.Location = Point(x, y)
-        self.cntLblTxt_lastName.txt_value.Text = lastName
+        self.cntLblTxt_lastName.txt.Text = lastName
         self.Controls.Add(self.cntLblTxt_lastName)
 
-        self.cntLblTxt_level = cntLblText(name='level', header='Разряд')
+        self.cntLblTxt_level = cntText(name='level', header='Разряд')
         y = self.cntLblTxt_lastName.Bottom + vertInterval
         self.cntLblTxt_level.Location = Point(x, y)
-        self.cntLblTxt_level.txt_value.Text = str(level)
+        self.cntLblTxt_level.txt.Text = str(level)
         self.Controls.Add(self.cntLblTxt_level)
 
         # создаем кнопку Save

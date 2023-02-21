@@ -112,17 +112,17 @@ class frmDictionaryItem(WinForms.Form):
 
         x = 20  # координата X для выстраивания контролов
         # создаем контейнер с Label и TextBox для Id
-        self.cntLblTxtId = cntLblText(name='lbl', header='Id', readonly = True)
+        self.cntLblTxtId = cntText(name='lbl', header='Id', readonly = True)
         y = vertInterval                                           # координата Y для первого контейнера
         self.cntLblTxtId.Location = Point(x, y)                 # положения контейнера
-        self.cntLblTxtId.txt_value.Text = str(argId)
+        self.cntLblTxtId.txt.Text = str(argId)
         self.Controls.Add(self.cntLblTxtId)                     # вставляем на форму
 
         # создаем контейнер с Label и TextBox для названия
-        self.cntLblTxtName = cntLblText(name='txt', header='Название')
+        self.cntLblTxtName = cntText(name='txt', header='Название')
         y = self.cntLblTxtId.Bottom + vertInterval                 # координата Y для следующего контейнера
         self.cntLblTxtName.Location = Point(x, y)
-        self.cntLblTxtName.txt_value.Text = argValue
+        self.cntLblTxtName.txt.Text = argValue
         self.Controls.Add(self.cntLblTxtName)                   # вставляем на форму
 
         # создаем кнопку Save
