@@ -2,7 +2,7 @@ from common import WinForms, Size, Point, System
 import guiDepartments
 import guiPositions
 import guiTasks
-import guiJobList
+import guiTabel
 import guiWorkers
 
 mainForm = WinForms.Form()
@@ -47,7 +47,7 @@ def openFormTasks(sender, e):
 def openFormJobList(sender, e):
     frmName = 'frmJobList'
     if activateIfOpened(frmName) == False:
-        frm = guiJobList.frmJobList()
+        frm = guiTabel.frmJobList()
         frm.Name = frmName
         frm.MdiParent = mainForm
         frm.Show()

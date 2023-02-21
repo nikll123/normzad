@@ -3,33 +3,33 @@ import guiBaseForm
 import dbDepartments
 
 tableArg = {'name':'Departments','header':'Подразделения'}
+fldsArg = []
+fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
+fldsArg.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
 
 class frmDepartmentTable(guiBaseForm.frmDictionary):
     def __init__(self):
-        fldsArg = []
-        fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
-        fldsArg.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
         super().__init__(tableArg, fldsArg, readonly=True)
 
-    def editItem(self, sender, e):
-        id = self.getSelectedFldValue('id')
-        name = self.getSelectedFldValue('Name')
-        frm = frmDepartment(id, name, self)
-        frm.ShowDialog()
-    
     def createItem(self, sender, e):
         id = guiBaseForm.newId
         name = ''
         frm = frmDepartment(id, name, self)
         frm.ShowDialog()
 
+    def editItem(self, sender, e):
+        if not self.grd.SelectedRows[0].IsNewRow:
+            id, name = self.getSelectedRowValues(['id','Name'])
+            frm = frmDepartment(id, name, self)
+            frm.ShowDialog()
+
     def deleteItem(self, sender, e):
-        id = self.getSelectedFldValue('id')
-        name = self.getSelectedFldValue('Name')
-        if id != None:
-            if common.ShowQuestionMessage(f'Удалить подразделение: {name}?'):
+        if not self.grd.SelectedRows[0].IsNewRow:
+            id, name = self.getSelectedRowValues(['id','Name'])
+            if common.showQuestionMessage(f"Удалить подразделение: {name}?"):
                 err = dbDepartments.delete(id)
-                if not common.checkIfError(err):
+                isError = common.checkIfError(err)
+                if not isError:
                     self.getDataFromDb()
 
 class frmDepartment(guiBaseForm.frmDictionaryItem):

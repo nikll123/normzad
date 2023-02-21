@@ -2,35 +2,31 @@ import common
 import guiBaseForm
 import dbPositions
 
-tableArg = {'name':'Positions','header':'Должности'}
+table = {'name':'Positions','header':'Должности'}
+fldList = []
+fldList.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
+fldList.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
 
 class frmPositions(guiBaseForm.frmDictionary):
     def __init__(self):
-        fldsArg = []
-        fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
-        fldsArg.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
-        super().__init__(tableArg, fldsArg, readonly=True)
-        self.btnNew.MouseClick += self.createItem
-        self.btnEdit.MouseClick += self.editItem
-        self.btnDelete.MouseClick += self.deleteItem
+        super().__init__(table, fldList, readonly=True)
 
-    def editItem(self, sender, e):
-        id = self.getSelectedFldValue('id')
-        name = self.getSelectedFldValue('Name')
-        frm = frmPosition(id, name, self)
-        frm.ShowDialog()
-    
     def createItem(self, sender, e):
         id = guiBaseForm.newId
         name = ''
         frm = frmPosition(id, name, self)
         frm.ShowDialog()
 
+    def editItem(self, sender, e):
+        if not self.grd.SelectedRows[0].IsNewRow:
+            id, name = self.getSelectedRowValues(['id','Name'])
+            frm = frmPosition(id, name, self)
+            frm.ShowDialog()
+
     def deleteItem(self, sender, e):
-        id = self.getSelectedFldValue('id')
-        if id is not None:
-            name = self.getSelectedFldValue('Name')
-            if common.ShowQuestionMessage(f"Удалить должность: {name}?"):
+        if not self.grd.SelectedRows[0].IsNewRow:
+            id, name = self.getSelectedRowValues(['id','Name'])
+            if common.showQuestionMessage(f"Удалить должность: {name}?"):
                 err = dbPositions.delete(id)
                 isError = common.checkIfError(err)
                 if not isError:
@@ -38,7 +34,7 @@ class frmPositions(guiBaseForm.frmDictionary):
         
 class frmPosition(guiBaseForm.frmDictionaryItem):
     def __init__(self, positionId, positionName, parent):
-        super().__init__(tableArg, positionId, positionName)
+        super().__init__(table, positionId, positionName)
         self.parent = parent
         self.btnSave.MouseClick += self.doSave
 

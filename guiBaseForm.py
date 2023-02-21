@@ -1,8 +1,6 @@
-from common import WinForms, Size, Point, checkIfError
+from common import *
+# WinForms, Size, Point, checkIfError
 import db
-
-yInterval = 10  # вертикальный (по оси Y) интервал между объектами на форме
-newId = 0       # фиктивный ID, используется во время создания нового объекта
 
 # DataGridViewComboBoxColumn 
 # https://learn.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-host-controls-in-windows-forms-datagridview-cells?view=netframeworkdesktop-4.8
@@ -11,6 +9,10 @@ newId = 0       # фиктивный ID, используется во врем�
 # базовый класс формы справочника 
 # это шаблон для создания конкретных справочников
 # родительский класс WinForms.Form
+# аргумент tableArg - это словарь вида: {'name':'ИмяТаблицыБазыДанных','header':'Заголовок Для Формы'}
+# аргумент fldsArg  - это список словарей вида: 
+#   [{'fld_name':'ИмяПолявТаблице', 'header':'Заголовок поля', 'visible':True,  'width':300}, ...]
+# Если readonly=True - то грид только для чтения (в гриде ячейки нередактируемые)
 class frmDictionary(WinForms.Form):
     def __init__(self, tableArg, fldsArg, readonly=False):
         super().__init__()
@@ -36,10 +38,10 @@ class frmDictionary(WinForms.Form):
         self.grd.SelectionMode = WinForms.DataGridViewSelectionMode.FullRowSelect # режим выделения - вся строка
         self.grd.CellDoubleClick += self.dblClick                 # добавляем обработчик двойного клика на ячейке грида
 
-        self.btnNew = WinForms.Button()                           # создали кнопку
+        self.btnNew = WinForms.Button()                       # создали кнопку
         self.btnNew.Text = 'Добавить'
-        self.btnNew.MouseClick += self.createItem                 # добавляем обработчик клика по кнопке
-        self.Controls.Add(self.btnNew)                            # встраиваем кнопку на форму
+        self.btnNew.MouseClick += self.createItem             # добавляем обработчик клика по кнопке
+        self.Controls.Add(self.btnNew)                        # встраиваем кнопку на форму
 
         self.btnEdit = WinForms.Button()
         self.btnEdit.Text = 'Изменить'
@@ -55,7 +57,7 @@ class frmDictionary(WinForms.Form):
         self.Size = Size(500,300)                                 # изменяем размер формы
 
     def dblClick(self, sender, e):                                # обработчик двойного клика на ячейке грида
-        id = self.getSelectedFldValue('id')
+        id = self.getSelectedRowValue('id')
         if id == None:
             self.createItem(sender, e)
         else:
@@ -65,14 +67,22 @@ class frmDictionary(WinForms.Form):
         w, h = self.ClientSize.Width, self.ClientSize.Height
         h = max(0, h - 50)
         self.grd.Size = Size(w, h)
-        y = self.grd.Location.Y + self.grd.Size.Height + yInterval
+        y = self.grd.Location.Y + self.grd.Size.Height + vertInterval
         self.btnNew.Location = Point(50, y)
         self.btnEdit.Location = Point(150, y)
         self.btnDelete.Location = Point(250, y)
     
-    # получить значение поля в выделеной строке
-    def getSelectedFldValue(self, fldName):
-        value = self.grd.SelectedRows[0].Cells[fldName].Value
+    # получить значениЯ полЕЙ в выделеной строке
+    def getSelectedRowValues(self, flds):
+        values = []
+        for f in flds:
+            v = self.getSelectedRowValue(f)
+            values.append(v)
+        return values
+
+    # получить значениЕ полЯ в выделеной строке
+    def getSelectedRowValue(self, fld):
+        value = self.grd.SelectedRows[0].Cells[fld].Value
         return value
 
     # получить данные из БД и поместить их в грид
@@ -87,27 +97,6 @@ class frmDictionary(WinForms.Form):
 
     def Execute(self):                                 # метод для запуска формы
         WinForms.Application.Run(self)
-
-# класс Контейнера содержащего Label и TextBox
-# родительский класс WinForms.ContainerControl
-class cntLblText(WinForms.ContainerControl):
-    def __init__(self, name, header, value='', readonly=False):
-        super().__init__()
-        self.Name=name
-        self.Size = Size(300, 24)
-
-        self.lbl_header = WinForms.Label()
-        self.lbl_header.Text = header
-        self.lbl_header.Size = Size(150, 24)
-        self.lbl_header.Location = Point(0,0)
-        self.Controls.Add(self.lbl_header)
-
-        self.txt_value = WinForms.TextBox()
-        self.txt_value.Size = Size(150, 24)
-        self.txt_value.Location = Point(150,0)
-        self.txt_value.ReadOnly = readonly
-        self.txt_value.Text = value
-        self.Controls.Add(self.txt_value)
 
 # базовый класс формы для редактирования элемента справочника 
 # шаблон для создания конкретных форм
@@ -124,14 +113,14 @@ class frmDictionaryItem(WinForms.Form):
         x = 20  # координата X для выстраивания контролов
         # создаем контейнер с Label и TextBox для Id
         self.cntLblTxtId = cntLblText(name='lbl', header='Id', readonly = True)
-        y = yInterval                                           # координата Y для первого контейнера
+        y = vertInterval                                           # координата Y для первого контейнера
         self.cntLblTxtId.Location = Point(x, y)                 # положения контейнера
         self.cntLblTxtId.txt_value.Text = str(argId)
         self.Controls.Add(self.cntLblTxtId)                     # вставляем на форму
 
         # создаем контейнер с Label и TextBox для названия
         self.cntLblTxtName = cntLblText(name='txt', header='Название')
-        y = self.cntLblTxtId.Bottom + yInterval                 # координата Y для следующего контейнера
+        y = self.cntLblTxtId.Bottom + vertInterval                 # координата Y для следующего контейнера
         self.cntLblTxtName.Location = Point(x, y)
         self.cntLblTxtName.txt_value.Text = argValue
         self.Controls.Add(self.cntLblTxtName)                   # вставляем на форму
@@ -140,7 +129,7 @@ class frmDictionaryItem(WinForms.Form):
         self.btnSave = WinForms.Button()
         self.btnSave.Text = 'Save'
         x = int((self.ClientSize.Width - self.btnSave.Size.Width)/ 2) 
-        y = self.cntLblTxtName.Bottom + yInterval
+        y = self.cntLblTxtName.Bottom + vertInterval
         self.btnSave.Location = Point(x, y)
         self.btnSave.MouseClick += self.doSave                  # цепляем на нее обработчик клика
         self.Controls.Add(self.btnSave)                         # вставляем на форму
