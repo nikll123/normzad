@@ -60,24 +60,28 @@ def openFormWorkerList(sender, e):
         frm.MdiParent = mainForm
         frm.Show()
 
-
+# пункты вертикального меню спавоников 
 menuItemDepartments = WinForms.ToolStripMenuItem("Подразделения", None, System.EventHandler(openFormDepartments))
 menuItemPositions = WinForms.ToolStripMenuItem("Должности", None, System.EventHandler(openFormPositions))
 menuItemTasks = WinForms.ToolStripMenuItem("Задания", None, System.EventHandler(openFormTasks))
 menuItemWorkers = WinForms.ToolStripMenuItem("Сотрудники", None, System.EventHandler(openFormWorkerList))
 
+# виртикальное меню справочников
 menuDicts = WinForms.ToolStripMenuItem("Справочники")
 menuDicts.DropDownItems.Add(menuItemDepartments)
 menuDicts.DropDownItems.Add(menuItemPositions)
 menuDicts.DropDownItems.Add(menuItemTasks)
 menuDicts.DropDownItems.Add(menuItemWorkers)
 
+# пункт меню "Табель"
 menuTabel = WinForms.ToolStripMenuItem("Табель", None, System.EventHandler(openFormJobList))
 
+# горизонтальное меню (strip)
 menuStrip = WinForms.MenuStrip()  # меню главной формы
 menuStrip.Dock = WinForms.DockStyle.Top
 menuStrip.Items.Add(menuDicts);
 menuStrip.Items.Add(menuTabel);
+
 
 mainForm.Controls.Add(menuStrip)
 
