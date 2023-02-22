@@ -8,14 +8,14 @@ import guiWorkers
 mainForm = WinForms.Form()
 mainForm.Text = "Нормированные задания"
 mainForm.Size = Size(1500,800)
-mainForm.Visible = True
-mainForm.IsMdiContainer = True
+# mainForm.Visible = True
+mainForm.IsMdiContainer = True  # Mdi - multi document interface, форма контейнер для других форм "детей"
 
-def activateIfOpened(name):
+def activateIfOpened(name):   # активировать форму если она уже открыта
     res = False
-    for frm in mainForm.MdiChildren:
+    for frm in mainForm.MdiChildren:   # цикл по "детям" главной формы
         if frm.Name == name: # already opened (уже открыта)
-            frm.Activate()
+            frm.Activate()   # активировать форму (вывести на первый план)
             res = True
             break
     return res
@@ -60,14 +60,13 @@ def openFormWorkerList(sender, e):
         frm.MdiParent = mainForm
         frm.Show()
 
-ms = WinForms.MenuStrip()
-menuDicts = WinForms.ToolStripMenuItem("Справочники")
 
 menuItemDepartments = WinForms.ToolStripMenuItem("Подразделения", None, System.EventHandler(openFormDepartments))
 menuItemPositions = WinForms.ToolStripMenuItem("Должности", None, System.EventHandler(openFormPositions))
 menuItemTasks = WinForms.ToolStripMenuItem("Задания", None, System.EventHandler(openFormTasks))
 menuItemWorkers = WinForms.ToolStripMenuItem("Сотрудники", None, System.EventHandler(openFormWorkerList))
 
+menuDicts = WinForms.ToolStripMenuItem("Справочники")
 menuDicts.DropDownItems.Add(menuItemDepartments)
 menuDicts.DropDownItems.Add(menuItemPositions)
 menuDicts.DropDownItems.Add(menuItemTasks)
@@ -75,13 +74,12 @@ menuDicts.DropDownItems.Add(menuItemWorkers)
 
 menuTabel = WinForms.ToolStripMenuItem("Табель", None, System.EventHandler(openFormJobList))
 
-ms.MdiWindowListItem = menuDicts
+menuStrip = WinForms.MenuStrip()  # меню главной формы
+menuStrip.Dock = WinForms.DockStyle.Top
+menuStrip.Items.Add(menuDicts);
+menuStrip.Items.Add(menuTabel);
 
-ms.Items.Add(menuDicts);
-ms.Items.Add(menuTabel);
-ms.Dock = WinForms.DockStyle.Top
-mainForm.MainStrip = ms
-mainForm.Controls.Add(ms)
+mainForm.Controls.Add(menuStrip)
 
 WinForms.Application.Run(mainForm)
 

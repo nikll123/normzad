@@ -148,7 +148,7 @@ class frmDictionaryItem(WinForms.Form):
 
         # создаем кнопку Save
         self.btnSave = WinForms.Button()
-        self.btnSave.Text = 'Save'
+        self.btnSave.Text = 'Сохранить'
         x = int((self.ClientSize.Width - self.btnSave.Size.Width)/ 2) 
         y = self.cntLblTxtName.Bottom + vertInterval
         self.btnSave.Location = Point(x, y)
