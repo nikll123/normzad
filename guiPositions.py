@@ -36,7 +36,6 @@ class frmPosition(guiBaseForm.frmDictionaryItem):
     def __init__(self, positionId, positionName, parent):
         super().__init__(table, positionId, positionName)
         self.parent = parent
-        self.btnSave.MouseClick += self.doSave
 
     def doSave(self, sender, e):
         id = int(self.cntLblTxtId.txt.Text)

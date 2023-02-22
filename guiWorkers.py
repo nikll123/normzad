@@ -101,4 +101,12 @@ class frmWorker(WinForms.Form):
         self.Controls.Add(self.btnSave)                         # вставляем на форму
 
     def doSave(self, sender, e):
-        pass
+        id = int(self.txtId.txt.Text)
+        LastName = self.txtLastName.txt.Text
+        Name = self.txtName.txt.Text
+        SecondName = self.txtSecondName.txt.Text
+        Level = int(self.txtLevel.txt.Text)
+        PositionId = self.cmbPosition.getId()
+        DepartmentId = self.cmbDepartment.getId()
+        dbWorkers.new(id,LastName,Name,SecondName,Level,PositionId,DepartmentId)
+        

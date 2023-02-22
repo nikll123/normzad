@@ -26,9 +26,11 @@ def showQuestionMessage(msg):
 def isArray(var):
     return hasattr(var,'__iter__')
 
-# класс - Контейнер содержащий Label 
-# родительский класс WinForms.ContainerControl
 class _baseControl(WinForms.ContainerControl):
+    """класс - Контейнер содержащий Label 
+
+    родительский класс WinForms.ContainerControl
+    """
     def __init__(self, name, header, readonly=False):
         super().__init__()
         self.Name=name
@@ -40,9 +42,13 @@ class _baseControl(WinForms.ContainerControl):
         self.lbl_header.Location = Point(0,0)
         self.Controls.Add(self.lbl_header)
 
-# класс - Контейнер содержащий Label и TextBox
-# родительский класс _baseControl
+# 
+# 
 class cntText(_baseControl):
+    """класс - Контейнер содержащий Label и TextBox
+    
+    Родительский класс _baseControl
+    """
     def __init__(self, name, header, value='', readonly=False):
         super().__init__(name, header)
 
@@ -53,9 +59,11 @@ class cntText(_baseControl):
         self.txt.Text = value
         self.Controls.Add(self.txt)
 
-# класс - Контейнер содержащий Label и комбобокс
-# родительский класс _baseControl
 class cntCombox(_baseControl):
+    """Класс - Контейнер содержащий Label и комбобокс
+
+    Родительский класс _baseControl
+    """
     def __init__(self, name, header, dataSource, idItem, readonly=False):
         super().__init__(name, header)
         self.idItem = idItem

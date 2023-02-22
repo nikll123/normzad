@@ -15,7 +15,7 @@ def new(newName):
     return err, newId
 
 def delete(id):
-    err = db.delete(tableName, pkField, id)
+    err = db.delete(tableName, id)
     return err
 
 def update(id, newName):

@@ -186,8 +186,8 @@ def insert(tableName, fldsList, data):
     err, newId = execute(sql, data)
     return err, newId 
 
-def delete(tableName, fldPK, id):
-    sql = f"DELETE FROM {tableName} WHERE {fldPK}=?"
+def delete(tableName, id):
+    sql = f"DELETE FROM {tableName} WHERE id=?"
     err, _notUsed = execute(sql, [id])
     return err
 

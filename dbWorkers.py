@@ -6,38 +6,23 @@ import db
 
 tableName = "Workers"
 
-def new(id,LastName,Name,SecondName,PositionId,Level):
+def new(id,LastName,Name,SecondName,Level,PositionId,DepartmentId):
     LastName = LastName.strip()
     Name = Name.strip()
     SecondName = SecondName.strip()
-    err = config.dummyErr
-    
+   
     if LastName and Name and SecondName:
-        with sqlite3.connect(config.dbFileName) as conn:
-            cursor = conn.cursor()
-            sql = f"""INSERT INTO {tableName} (id,LastName,Name,SecondName,PositionId,Level) VALUES (?,?,?,?,?,?)"""
-            try:
-                cursor.execute(sql, [id,LastName,Name,SecondName,PositionId,Level])
-                err = ''
-            except Exception as ex: 
-                err = f"SQL eror:\n   {sql}\n   {ex.args[0]}"
+        flds = ['id','LastName','Name','SecondName','Level','PositionId','DepartmentId']
+        data = [id, LastName, Name, SecondName, Level, PositionId, DepartmentId]
+        err, newId = db.insert(tableName, flds, data)
     else:
-        err = "Нет данных"
+        err = "Нет полных имен"
     return err
 
 
 def delete(id):
-    err = config.dummyErr
-    with sqlite3.connect(config.dbFileName) as conn:
-        cursor = conn.cursor()
-        sql = f"""DELETE FROM {tableName} WHERE id=?"""
-        try:
-            cursor.execute(sql, [id])
-            err = ''
-        except Exception as ex: 
-            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}"
+    err = db.delete(tableName, id)
     return err
-
 
 def update(id,LastName,Name,SecondName,PositionId,Level):
     err = config.dummyErr

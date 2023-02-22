@@ -9,7 +9,7 @@ def new(WorkerId, TaskId, Date, TimeJob, Comment):
     return err, newId
 
 def delete(delId):
-    err  = db.delete(tableName, 'id', delId)
+    err  = db.delete(tableName, delId)
     return err
 
 def update(id, WorkerId, TaskId, Date, TimeJob, Comment):
