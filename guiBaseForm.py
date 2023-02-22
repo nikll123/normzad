@@ -63,7 +63,7 @@ class frmDictionary(WinForms.Form):
             col.Width = fld['width']                              # ширина
             self.grd.Columns.Add(col)                             # вставляем колонку в грид
 
-        self.getDataFromDb()                                      # заполняем грид данными из БД
+        self.getDataFromDb()                                      # выбираем данные из БД и заполняем грид данными
         self.grd.ReadOnly = readonly                              # свойство "только для чтения"
         self.grd.BackgroundColor = self.BackColor                 # цвет заднего фона грида такой же как и цвет фона формы
         self.grd.SelectionMode = WinForms.DataGridViewSelectionMode.FullRowSelect # режим выделения - вся строка
