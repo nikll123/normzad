@@ -47,13 +47,13 @@ tableName = 'Workers'
 # workerList.append([157, 'Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
 # workerList.append([150, 'Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
 
-fldList = ['LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
+fldList = ['TabNum', 'LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
 workerList = []
-workerList.append(['Иванов',  'Иван',  'Иванович',    rndPosId(),rndLev(),rndDepId()])
-workerList.append(['Петров',  'Петр',  'Петрович',    rndPosId(),rndLev(),rndDepId()])
-workerList.append(['Сидоров', 'Сидор', 'Сидорович',   rndPosId(),rndLev(),rndDepId()])
-workerList.append(['Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
-workerList.append(['Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
+workerList.append([156,'Иванов',  'Иван',  'Иванович',    rndPosId(),rndLev(),rndDepId()])
+workerList.append([258,'Петров',  'Петр',  'Петрович',    rndPosId(),rndLev(),rndDepId()])
+workerList.append([452,'Сидоров', 'Сидор', 'Сидорович',   rndPosId(),rndLev(),rndDepId()])
+workerList.append([112,'Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
+workerList.append([12355,'Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
 
 for wd in workerList:
     err, newId = db.insert(tableName,fldList,wd)

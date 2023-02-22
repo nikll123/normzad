@@ -5,7 +5,7 @@ table = {'name':'JobList','header':'Табель'}
 fldList = []
 fldList.append({'fld_name':'Id',        'header':'Id',          'visible':False, 'width':10,  'readonly':True})
 fldList.append({'fld_name':'Date',      'header':'Дата',        'visible':True,  'width':100, 'readonly':False})
-fldList.append({'fld_name':'WorkerId',  'header':'Табельный №', 'visible':True,  'width':100, 'readonly':False})
+fldList.append({'fld_name':'TabNum',    'header':'Табельный №', 'visible':True,  'width':100, 'readonly':False})
 fldList.append({'fld_name':'ShortName', 'header':'Ф.И.О.',      'visible':True,  'width':300, 'readonly':False})
 fldList.append({'fld_name':'Level',     'header':'Разряд',      'visible':True,  'width':100, 'readonly':False})
 fldList.append({'fld_name':'Position',  'header':'Должность',   'visible':True,  'width':150, 'readonly':False})

@@ -14,7 +14,8 @@ def delete(delId):
 
 def update(id, WorkerId, TaskId, Date, TimeJob, Comment):
     fldsList = ['WorkerId', 'TaskId', 'Date', 'TimeJob', 'Comment']
-    err = db.update(tableName, fldsList, [WorkerId, TaskId, Date, TimeJob, Comment],'id', id)
+    data = [WorkerId, TaskId, Date, TimeJob, Comment]
+    err = db.update(tableName, fldsList, data, id)
     return err
 
 

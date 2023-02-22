@@ -4,7 +4,8 @@ import dbWorkers
 
 table = {'name':'workerList','header':'Сотрудники'}
 fldList = []
-fldList.append({'fld_name':'Id',          'header':'Таб. №',        'visible':True,  'width':50})
+fldList.append({'fld_name':'Id',          'header':'Id',            'visible':False, 'width':50})
+fldList.append({'fld_name':'TabNum',      'header':'Таб. №',        'visible':True,  'width':50})
 fldList.append({'fld_name':'LastName',    'header':'Фамилия',       'visible':True,  'width':200})
 fldList.append({'fld_name':'Name',        'header':'Имя',           'visible':True,  'width':200})
 fldList.append({'fld_name':'SecondName',  'header':'Отчество',      'visible':True,  'width':200})
@@ -20,9 +21,9 @@ class frmWorkers(guiBaseForm.frmDictionary):
         self.Size = Size(1000,600)
 
     def editItem(self, sender, e):
-        id, name, secondName, lastName, level, departmentId, positionId = \
-            self.getSelectedRowValues(['id', 'Name', 'SecondName', 'LastName', 'Level', 'DepartmentId', 'PositionId'])
-        frm = frmWorker(id, name, secondName, lastName, level, departmentId, positionId, self)
+        id, tabnum, name, secondName, lastName, level, departmentId, positionId = \
+            self.getSelectedRowValues(['id', 'TabNum', 'Name', 'SecondName', 'LastName', 'Level', 'DepartmentId', 'PositionId'])
+        frm = frmWorker(id, tabnum, name, secondName, lastName, level, departmentId, positionId, self)
         frm.ShowDialog()
     
     def createItem(self, sender, e):
@@ -41,72 +42,80 @@ class frmWorkers(guiBaseForm.frmDictionary):
                     self.getDataFromDb()
 
 class frmWorker(WinForms.Form):
-    def __init__(self, id, name, secondName, lastName, level, departmentId, positionId, parent):
+    def __init__(self, id, tabnum, name, secondName, lastName, level, departmentId, positionId, parent):
         super().__init__()
         self.parent = parent
-        self.Size = Size(500,600)
-        x = 20  # координата X для выстраивания контролов
+        self.Size = Size(500,400)
+        self.id = id     # сохраняем id как свойство формы
+        x = 20           # координата X для выстраивания виджетов (контролов)
+        
         # создаем контейнер с Label и TextBox для Id
-        self.txtId = cntText(name='txtId', header='Табельный №')
-        y = vertInterval                                  # координата Y для первого контейнера
-        self.txtId.Location = Point(x, y)                 # положения контейнера
-        self.txtId.txt.Text = str(id)
-        self.Controls.Add(self.txtId)                     # вставляем на форму
+        self.cntTxtTn = cntText(name='txtTn', header='Табельный №')
+        y = vertInterval                                     # координата Y для первого контейнера
+        self.cntTxtTn.Location = Point(x, y)                 # положения контейнера
+        self.cntTxtTn.txt.Text = str(tabnum)
+        self.Controls.Add(self.cntTxtTn)                     # вставляем на форму
 
-        self.txtName = cntText(name='txtName', header='Имя')
-        y = self.txtId.Bottom + vertInterval
-        self.txtName.Location = Point(x, y)
-        self.txtName.txt.Text = name
-        self.Controls.Add(self.txtName)
+        self.cntTxtName = cntText(name='txtName', header='Имя')
+        y = self.cntTxtTn.Bottom + vertInterval
+        self.cntTxtName.Location = Point(x, y)
+        self.cntTxtName.txt.Text = name
+        self.Controls.Add(self.cntTxtName)
 
-        self.txtSecondName = cntText(name='txtSecondName', header='Отчество')
-        y = self.txtName.Bottom + vertInterval
-        self.txtSecondName.Location = Point(x, y)
-        self.txtSecondName.txt.Text = secondName
-        self.Controls.Add(self.txtSecondName)
+        self.cntTxtSecondName = cntText(name='txtSecondName', header='Отчество')
+        y = self.cntTxtName.Bottom + vertInterval
+        self.cntTxtSecondName.Location = Point(x, y)
+        self.cntTxtSecondName.txt.Text = secondName
+        self.Controls.Add(self.cntTxtSecondName)
 
-        self.txtLastName = cntText(name='txtLastName', header='Фамилия')
-        y = self.txtSecondName.Bottom + vertInterval
-        self.txtLastName.Location = Point(x, y)
-        self.txtLastName.txt.Text = lastName
-        self.Controls.Add(self.txtLastName)
+        self.cntTxtLastName = cntText(name='txtLastName', header='Фамилия')
+        y = self.cntTxtSecondName.Bottom + vertInterval
+        self.cntTxtLastName.Location = Point(x, y)
+        self.cntTxtLastName.txt.Text = lastName
+        self.Controls.Add(self.cntTxtLastName)
 
-        self.txtLevel = cntText(name='txtLevel', header='Разряд')
-        y = self.txtLastName.Bottom + vertInterval
-        self.txtLevel.Location = Point(x, y)
-        self.txtLevel.txt.Text = str(level)
-        self.Controls.Add(self.txtLevel)
+        self.cntTxtLevel = cntText(name='txtLevel', header='Разряд')
+        y = self.cntTxtLastName.Bottom + vertInterval
+        self.cntTxtLevel.Location = Point(x, y)
+        self.cntTxtLevel.txt.Text = str(level)
+        self.Controls.Add(self.cntTxtLevel)
 
-        self.cmbDepartment = cntCombox(name='cmbDepartment', header='Подразделение', dataSource='vDepartments', idItem=departmentId)
-        y = self.txtLevel.Bottom + vertInterval
-        self.cmbDepartment.Location = Point(x, y)
-        self.cmbDepartment.cmbBox.Text = str(level)
-        self.cmbDepartment.DropDownStyle = WinForms.ComboBoxStyle.DropDownList
-        self.Controls.Add(self.cmbDepartment)
+        self.cntCmbDepartment = cntCombox(name='cmbDepartment', header='Подразделение', dataSource='vDepartments', id=departmentId)
+        y = self.cntTxtLevel.Bottom + vertInterval
+        self.cntCmbDepartment.Location = Point(x, y)
+        self.cntCmbDepartment.cmbBox.Text = str(level)
+        self.cntCmbDepartment.DropDownStyle = WinForms.ComboBoxStyle.DropDownList
+        self.Controls.Add(self.cntCmbDepartment)
 
-        self.cmbPosition = cntCombox(name='cmbPosition', header='Должность', dataSource='vPositions', idItem=positionId)
-        y = self.cmbDepartment.Bottom + vertInterval
-        self.cmbPosition.Location = Point(x, y)
-        self.cmbPosition.cmbBox.Text = str(level)
-        self.cmbPosition.DropDownStyle = WinForms.ComboBoxStyle.DropDownList
-        self.Controls.Add(self.cmbPosition)
+        self.cntCmbPosition = cntCombox(name='cmbPosition', header='Должность', dataSource='vPositions', id=positionId)
+        y = self.cntCmbDepartment.Bottom + vertInterval
+        self.cntCmbPosition.Location = Point(x, y)
+        self.cntCmbPosition.cmbBox.Text = str(level)
+        self.cntCmbPosition.DropDownStyle = WinForms.ComboBoxStyle.DropDownList
+        self.Controls.Add(self.cntCmbPosition)
 
         # создаем кнопку Save
         self.btnSave = WinForms.Button()
         self.btnSave.Text = 'Save'
         x = int((self.ClientSize.Width - self.btnSave.Size.Width)/ 2) 
-        y = vertInterval
+        y = self.cntCmbPosition.Bottom + vertInterval
         self.btnSave.Location = Point(x, y)
         self.btnSave.MouseClick += self.doSave                  # цепляем на нее обработчик клика
         self.Controls.Add(self.btnSave)                         # вставляем на форму
 
     def doSave(self, sender, e):
-        id = int(self.txtId.txt.Text)
-        LastName = self.txtLastName.txt.Text
-        Name = self.txtName.txt.Text
-        SecondName = self.txtSecondName.txt.Text
-        Level = int(self.txtLevel.txt.Text)
-        PositionId = self.cmbPosition.getId()
-        DepartmentId = self.cmbDepartment.getId()
-        dbWorkers.new(id,LastName,Name,SecondName,Level,PositionId,DepartmentId)
-        
+        tn = int(self.cntTxtTn.txt.Text)
+        LastName = self.cntTxtLastName.txt.Text
+        Name = self.cntTxtName.txt.Text
+        SecondName = self.cntTxtSecondName.txt.Text
+        Level = int(self.cntTxtLevel.txt.Text)
+        PositionId = self.cntCmbPosition.getId()
+        DepartmentId = self.cntCmbDepartment.getId()
+        if self.id == dummyId:
+            err = dbWorkers.new(tn,LastName,Name,SecondName,Level,PositionId,DepartmentId)
+        else:
+            err = dbWorkers.update(self.id ,tn,LastName,Name,SecondName,Level,PositionId,DepartmentId)
+        if not checkIfError(err):
+            self.parent.getDataFromDb()
+            self.Close()
+

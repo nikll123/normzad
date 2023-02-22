@@ -22,7 +22,8 @@ def update(id, newName):
     newName = newName.strip()
     if newName:
         fldList = ['Name']
-        err = db.update(tableName, fldList, [newName], pkField, id)
+        data = [newName]
+        err = db.update(tableName, fldList, data, id)
     else:
         err = "Нет данных"
     return err

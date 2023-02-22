@@ -6,35 +6,35 @@ import db
 
 tableName = "Workers"
 
-def new(id,LastName,Name,SecondName,Level,PositionId,DepartmentId):
-    LastName = LastName.strip()
-    Name = Name.strip()
-    SecondName = SecondName.strip()
-   
-    if LastName and Name and SecondName:
-        flds = ['id','LastName','Name','SecondName','Level','PositionId','DepartmentId']
-        data = [id, LastName, Name, SecondName, Level, PositionId, DepartmentId]
+def new(tn,LastName,Name,SecondName,Level,PositionId,DepartmentId):
+    err, LastName, Name, SecondName= _checkNames(LastName,Name,SecondName)
+    if not err:
+        flds = ['TabNum','LastName','Name','SecondName','Level','PositionId','DepartmentId']
+        data = [tn, LastName, Name, SecondName, Level, PositionId, DepartmentId]
         err, newId = db.insert(tableName, flds, data)
-    else:
-        err = "Нет полных имен"
     return err
-
 
 def delete(id):
     err = db.delete(tableName, id)
     return err
 
-def update(id,LastName,Name,SecondName,PositionId,Level):
-    err = config.dummyErr
-    with sqlite3.connect(config.dbFileName) as conn:
-        cursor = conn.cursor()
-        sql = f"""UPDATE {tableName} SET LastName = ?,Name = ?,SecondName = ?,PositionId = ?,Level = ? WHERE id = ?"""
-        try:
-            cursor.execute(sql, [LastName,Name,SecondName,PositionId,Level,id])
-            err = ''
-        except Exception as ex: 
-            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}"
+def update(id,tn,LastName,Name,SecondName,Level,PositionId,DepartmentId):
+    err, LastName, Name, SecondName= _checkNames(LastName,Name,SecondName)
+    if not err:
+        flds = ['TabNum','LastName','Name','SecondName','Level','PositionId','DepartmentId']
+        data = [tn,LastName,Name,SecondName,Level,PositionId,DepartmentId]
+        err = db.update(tableName, flds, data, id)
     return err
+
+def _checkNames(LastName,Name,SecondName):
+    LastName = LastName.strip()
+    Name = Name.strip()
+    SecondName = SecondName.strip()
+    if LastName and Name and SecondName:
+        err = ''
+    else:
+        err = "Нет полного имени"
+    return err, LastName, Name, SecondName
 
 
 if __name__ == '__main__':

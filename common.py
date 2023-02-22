@@ -64,17 +64,16 @@ class cntCombox(_baseControl):
 
     Родительский класс _baseControl
     """
-    def __init__(self, name, header, dataSource, idItem, readonly=False):
+    def __init__(self, name, header, dataSource, id, readonly=False):
         super().__init__(name, header)
-        self.idItem = idItem
         self.cmbBox = WinForms.ComboBox()
         err, data = db.select(dataSource, ['id', 'name'])
         if not checkIfError(err):
             self.rows = data
-            for id, name in data:
-                self.cmbBox.Items.Add(name)
-                if self.idItem == id:
-                    self.cmbBox.Text = name
+            for _id, _name in data:
+                self.cmbBox.Items.Add(_name)
+                if id == _id:
+                    self.cmbBox.Text = _name
 
             self.cmbBox.Size = Size(150, 24)
             self.cmbBox.Location = Point(150,0)
@@ -82,6 +81,9 @@ class cntCombox(_baseControl):
             self.Controls.Add(self.cmbBox)
     
     def getId(self):
-        for id, name in self.rows:
-            if self.cmbBox.Text == name:
-                self.idItem = id
+        id = None
+        for _id, _name in self.rows:
+            if self.cmbBox.Text == _name:
+                id = _id
+        return id
+

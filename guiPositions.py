@@ -44,9 +44,7 @@ class frmPosition(guiBaseForm.frmDictionaryItem):
             err, newId = dbPositions.new(name)
         else:
             err = dbPositions.update(id, name)
-        if err:
-            common.checkIfError(err)
-        else:
+        if not common.checkIfError(err):
             self.parent.getDataFromDb()
             self.Close()
 

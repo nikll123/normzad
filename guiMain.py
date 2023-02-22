@@ -14,7 +14,7 @@ mainForm.IsMdiContainer = True
 def activateIfOpened(name):
     res = False
     for frm in mainForm.MdiChildren:
-        if frm.Name == name: # already opened
+        if frm.Name == name: # already opened (уже открыта)
             frm.Activate()
             res = True
             break
