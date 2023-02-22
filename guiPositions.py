@@ -2,7 +2,7 @@ import common
 import guiBaseForm
 import dbPositions
 
-table = {'name':'Positions','header':'Должности'}
+table = {'name':'vPositions','header':'Должности'}
 fldList = []
 fldList.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
 fldList.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
@@ -12,7 +12,7 @@ class frmPositions(guiBaseForm.frmDictionary):
         super().__init__(table, fldList, readonly=True)
 
     def createItem(self, sender, e):
-        id = guiBaseForm.newId
+        id = guiBaseForm.dummyId
         name = ''
         frm = frmPosition(id, name, self)
         frm.ShowDialog()
@@ -41,7 +41,7 @@ class frmPosition(guiBaseForm.frmDictionaryItem):
     def doSave(self, sender, e):
         id = int(self.cntLblTxtId.txt.Text)
         name = self.cntLblTxtName.txt.Text
-        if id == guiBaseForm.newId:
+        if id == guiBaseForm.dummyId:
             err, newId = dbPositions.new(name)
         else:
             err = dbPositions.update(id, name)

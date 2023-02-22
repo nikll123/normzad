@@ -25,8 +25,16 @@ def create_db():
         sql = """CREATE UNIQUE INDEX IF NOT EXISTS indexUniquePositions ON Positions(Name);"""
         cursor.execute(sql)
 
+        sql = """CREATE TABLE IF NOT EXISTS Tasks(
+                    id   integer PRIMARY KEY AUTOINCREMENT, 
+                    Name text    NOT NULL
+                    );"""
+        cursor.execute(sql)
+        sql = "CREATE UNIQUE INDEX IF NOT EXISTS indexUniqueTasks ON Tasks(Name);"
+        cursor.execute(sql)
+
         sql = """CREATE TABLE IF NOT EXISTS workers(
-                    id           integer PRIMARY KEY, 
+                    id           integer PRIMARY KEY AUTOINCREMENT, 
                     LastName     text    NOT NULL, 
                     Name         text    NOT NULL, 
                     SecondName   text    NOT NULL,
@@ -37,13 +45,7 @@ def create_db():
                     FOREIGN KEY(PositionId) REFERENCES Positions(id)
                     );"""
         cursor.execute(sql)
-
-        sql = """CREATE TABLE IF NOT EXISTS Tasks(
-                    id   integer PRIMARY KEY AUTOINCREMENT, 
-                    Name text    NOT NULL
-                    );"""
-        cursor.execute(sql)
-        sql = "CREATE UNIQUE INDEX IF NOT EXISTS indexUniqueTasks ON Tasks(Name);"
+        sql = "CREATE UNIQUE INDEX IF NOT EXISTS indexworkers ON workers(id);"
         cursor.execute(sql)
 
         sql = """CREATE TABLE IF NOT EXISTS jobs(
@@ -83,7 +85,6 @@ def create_db():
                     ;"""        
         cursor.execute(sql)
 
-
         sql = """CREATE VIEW IF NOT EXISTS workerList
                     AS 
                     SELECT 
@@ -109,6 +110,27 @@ def create_db():
                             w.SecondName
                     ;"""
         cursor.execute(sql)
+
+        sql = """CREATE VIEW IF NOT EXISTS vPositions
+                        AS 
+                        SELECT 
+                            id,
+                            Name
+                        FROM Positions 
+                        ORDER BY Name
+                        ;"""
+        cursor.execute(sql)
+            
+        sql = """CREATE VIEW IF NOT EXISTS vDepartments
+                        AS 
+                        SELECT 
+                            id,
+                            Name
+                        FROM Departments
+                        ORDER BY Name
+                        ;"""
+        cursor.execute(sql)
+            
 
 
 def getLastId(cursor):

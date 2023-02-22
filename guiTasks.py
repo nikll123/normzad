@@ -18,14 +18,13 @@ class frmTasks(guiBaseForm.frmDictionary):
         frm.ShowDialog()
     
     def createItem(self, sender, e):
-        positionId = guiBaseForm.newId
+        positionId = guiBaseForm.dummyId
         positionName = ''
         frm = frmTask(positionId, positionName, self)
         frm.ShowDialog()
     
     def deleteItem(self, sender, e):
-        id = self.getSelectedRowValues('id')
-        name = self.getSelectedRowValues('Name')
+        id, name = self.getSelectedRowValues(['id', 'Name'])
         if id != None:
             if common.showQuestionMessage(f'Удалить задание: {name}?'):
                 err = dbTasks.delete(id)
@@ -40,7 +39,7 @@ class frmTask(guiBaseForm.frmDictionaryItem):
     def doSave(self, sender, e):
         id = int(self.cntLblTxtId.txt.Text)
         name = self.cntLblTxtName.txt.Text
-        if id == guiBaseForm.newId:
+        if id == guiBaseForm.dummyId:
             err, newId = dbTasks.new(name)
         else:
             err = dbTasks.update(id, name)

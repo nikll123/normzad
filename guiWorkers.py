@@ -4,7 +4,7 @@ import dbWorkers
 
 table = {'name':'workerList','header':'Сотрудники'}
 fldList = []
-fldList.append({'fld_name':'Id',          'header':'Id',            'visible':False, 'width':10})
+fldList.append({'fld_name':'Id',          'header':'Таб. №',        'visible':True,  'width':50})
 fldList.append({'fld_name':'LastName',    'header':'Фамилия',       'visible':True,  'width':200})
 fldList.append({'fld_name':'Name',        'header':'Имя',           'visible':True,  'width':200})
 fldList.append({'fld_name':'SecondName',  'header':'Отчество',      'visible':True,  'width':200})
@@ -17,6 +17,7 @@ fldList.append({'fld_name':'PositionId',  'header':'PositionId',    'visible':Fa
 class frmWorkers(guiBaseForm.frmDictionary):
     def __init__(self):
         super().__init__(table, fldList, readonly=True)
+        self.Size = Size(1000,600)
 
     def editItem(self, sender, e):
         id, name, secondName, lastName, level, departmentId, positionId = \
@@ -25,14 +26,19 @@ class frmWorkers(guiBaseForm.frmDictionary):
         frm.ShowDialog()
     
     def createItem(self, sender, e):
-        id = guiBaseForm.newId
+        id = guiBaseForm.dummyId
         name = ''
         frm = frmWorkers(id, name, self)
         frm.ShowDialog()
 
     def deleteItem(self, sender, e):
-        pass
-        
+        if not self.grd.SelectedRows[0].IsNewRow:
+            id, name, lastname, secondname = self.getSelectedRowValues(['id','Name', 'LastName', 'SecondName'])
+            if showQuestionMessage(f"Удалить сотрудника: {lastname} {name} {secondname}?"):
+                err = dbWorkers.delete(id)
+                isError = checkIfError(err)
+                if not isError:
+                    self.getDataFromDb()
 
 class frmWorker(WinForms.Form):
     def __init__(self, id, name, secondName, lastName, level, departmentId, positionId, parent):
@@ -41,35 +47,49 @@ class frmWorker(WinForms.Form):
         self.Size = Size(500,600)
         x = 20  # координата X для выстраивания контролов
         # создаем контейнер с Label и TextBox для Id
-        self.cntLblTxt_Id = cntText(name='lbl', header='Id', readonly=True)
-        y = vertInterval                                        # координата Y для первого контейнера
-        self.cntLblTxt_Id.Location = Point(x, y)                 # положения контейнера
-        self.cntLblTxt_Id.txt.Text = str(id)
-        self.Controls.Add(self.cntLblTxt_Id)                     # вставляем на форму
+        self.txtId = cntText(name='txtId', header='Табельный №')
+        y = vertInterval                                  # координата Y для первого контейнера
+        self.txtId.Location = Point(x, y)                 # положения контейнера
+        self.txtId.txt.Text = str(id)
+        self.Controls.Add(self.txtId)                     # вставляем на форму
 
-        self.cntLblTxt_Name = cntText(name='name', header='Имя')
-        y = self.cntLblTxt_Id.Bottom + vertInterval
-        self.cntLblTxt_Name.Location = Point(x, y)
-        self.cntLblTxt_Name.txt.Text = name
-        self.Controls.Add(self.cntLblTxt_Name)
+        self.txtName = cntText(name='txtName', header='Имя')
+        y = self.txtId.Bottom + vertInterval
+        self.txtName.Location = Point(x, y)
+        self.txtName.txt.Text = name
+        self.Controls.Add(self.txtName)
 
-        self.cntLblTxt_SecondName = cntText(name='secondName', header='Отчество')
-        y = self.cntLblTxt_Name.Bottom + vertInterval
-        self.cntLblTxt_SecondName.Location = Point(x, y)
-        self.cntLblTxt_SecondName.txt.Text = secondName
-        self.Controls.Add(self.cntLblTxt_SecondName)
+        self.txtSecondName = cntText(name='txtSecondName', header='Отчество')
+        y = self.txtName.Bottom + vertInterval
+        self.txtSecondName.Location = Point(x, y)
+        self.txtSecondName.txt.Text = secondName
+        self.Controls.Add(self.txtSecondName)
 
-        self.cntLblTxt_lastName = cntText(name='secondName', header='Фамилия')
-        y = self.cntLblTxt_SecondName.Bottom + vertInterval
-        self.cntLblTxt_lastName.Location = Point(x, y)
-        self.cntLblTxt_lastName.txt.Text = lastName
-        self.Controls.Add(self.cntLblTxt_lastName)
+        self.txtLastName = cntText(name='txtLastName', header='Фамилия')
+        y = self.txtSecondName.Bottom + vertInterval
+        self.txtLastName.Location = Point(x, y)
+        self.txtLastName.txt.Text = lastName
+        self.Controls.Add(self.txtLastName)
 
-        self.cntLblTxt_level = cntText(name='level', header='Разряд')
-        y = self.cntLblTxt_lastName.Bottom + vertInterval
-        self.cntLblTxt_level.Location = Point(x, y)
-        self.cntLblTxt_level.txt.Text = str(level)
-        self.Controls.Add(self.cntLblTxt_level)
+        self.txtLevel = cntText(name='txtLevel', header='Разряд')
+        y = self.txtLastName.Bottom + vertInterval
+        self.txtLevel.Location = Point(x, y)
+        self.txtLevel.txt.Text = str(level)
+        self.Controls.Add(self.txtLevel)
+
+        self.cmbDepartment = cntCombox(name='cmbDepartment', header='Подразделение', dataSource='vDepartments', idItem=departmentId)
+        y = self.txtLevel.Bottom + vertInterval
+        self.cmbDepartment.Location = Point(x, y)
+        self.cmbDepartment.cmbBox.Text = str(level)
+        self.cmbDepartment.DropDownStyle = WinForms.ComboBoxStyle.DropDownList
+        self.Controls.Add(self.cmbDepartment)
+
+        self.cmbPosition = cntCombox(name='cmbPosition', header='Должность', dataSource='vPositions', idItem=positionId)
+        y = self.cmbDepartment.Bottom + vertInterval
+        self.cmbPosition.Location = Point(x, y)
+        self.cmbPosition.cmbBox.Text = str(level)
+        self.cmbPosition.DropDownStyle = WinForms.ComboBoxStyle.DropDownList
+        self.Controls.Add(self.cmbPosition)
 
         # создаем кнопку Save
         self.btnSave = WinForms.Button()
@@ -79,7 +99,6 @@ class frmWorker(WinForms.Form):
         self.btnSave.Location = Point(x, y)
         self.btnSave.MouseClick += self.doSave                  # цепляем на нее обработчик клика
         self.Controls.Add(self.btnSave)                         # вставляем на форму
-
 
     def doSave(self, sender, e):
         pass

@@ -12,7 +12,7 @@ class frmDepartmentTable(guiBaseForm.frmDictionary):
         super().__init__(tableArg, fldsArg, readonly=True)
 
     def createItem(self, sender, e):
-        id = guiBaseForm.newId
+        id = guiBaseForm.dummyId
         name = ''
         frm = frmDepartment(id, name, self)
         frm.ShowDialog()
@@ -40,7 +40,7 @@ class frmDepartment(guiBaseForm.frmDictionaryItem):
     def doSave(self, sender, e):
         id = int(self.cntLblTxtId.txt.Text)
         name = self.cntLblTxtName.txt.Text
-        if id == guiBaseForm.newId:
+        if id == guiBaseForm.dummyId:
             err, newId = dbDepartments.new(name)
         else:
             err = dbDepartments.update(id, name)

@@ -1,4 +1,5 @@
 import clr
+import db
 
 # from pythonnet import load
 # load()
@@ -9,7 +10,8 @@ from System.Drawing import Size, Point
 import System.Windows
 
 vertInterval = 10   # вертикальный (по оси Y) интервал между объектами на форме
-newId = 0           # фиктивный ID, используется во время создания нового объекта
+dummyId = -1        # фиктивный ID, используется во время создания нового объекта
+
 
 def checkIfError(err):
     isError = err != ''
@@ -53,14 +55,25 @@ class cntText(_baseControl):
 
 # класс - Контейнер содержащий Label и комбобокс
 # родительский класс _baseControl
-class cntCombobx(_baseControl):
-    def __init__(self, name, header, value='', readonly=False):
+class cntCombox(_baseControl):
+    def __init__(self, name, header, dataSource, idItem, readonly=False):
         super().__init__(name, header)
-
+        self.idItem = idItem
         self.cmbBox = WinForms.ComboBox()
-        self.cmbBox.Size = Size(150, 24)
-        self.cmbBox.Location = Point(150,0)
-        self.cmbBox.ReadOnly = readonly
-        self.cmbBox.Text = value
-        self.Controls.Add(self.cmbBox)
+        err, data = db.select(dataSource, ['id', 'name'])
+        if not checkIfError(err):
+            self.rows = data
+            for id, name in data:
+                self.cmbBox.Items.Add(name)
+                if self.idItem == id:
+                    self.cmbBox.Text = name
 
+            self.cmbBox.Size = Size(150, 24)
+            self.cmbBox.Location = Point(150,0)
+            self.cmbBox.ReadOnly = readonly
+            self.Controls.Add(self.cmbBox)
+    
+    def getId(self):
+        for id, name in self.rows:
+            if self.cmbBox.Text == name:
+                self.idItem = id

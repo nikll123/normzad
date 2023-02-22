@@ -1,26 +1,57 @@
 from common import *
-# WinForms, Size, Point, checkIfError
 import db
 
 # DataGridViewComboBoxColumn 
 # https://learn.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-host-controls-in-windows-forms-datagridview-cells?view=netframeworkdesktop-4.8
 # col.CellTemplate.ValueType = int
 
-# базовый класс формы справочника 
-# это шаблон для создания конкретных справочников
-# родительский класс WinForms.Form
-# аргумент tableArg - это словарь вида: {'name':'ИмяТаблицыБазыДанных','header':'Заголовок Для Формы'}
-# аргумент fldsArg  - это список словарей вида: 
-#   [{'fld_name':'ИмяПолявТаблице', 'header':'Заголовок поля', 'visible':True,  'width':300}, ...]
-# Если readonly=True - то грид только для чтения (в гриде ячейки нередактируемые)
 class frmDictionary(WinForms.Form):
-    def __init__(self, tableArg, fldsArg, readonly=False):
+    """Базовый класс формы справочника
+
+    это шаблон для создания конкретных справочников,
+    родительский класс WinForms.Form
+    аргументы:
+
+    argTable - это словарь вида: {'name':'ИмяТаблицыБазыДанных','header':'Заголовок Для Формы'}
+
+    argFlds  - это список словарей вида: 
+    [{'fld_name':'ИмяПолявТаблице', 'header':'Заголовок поля', 'visible':True,  'width':300}, ...]
+
+    readonly - если readonly=True - то грид только для чтения (в гриде ячейки нередактируемые)
+    """
+    def __init__(self, argTable, argFlds, readonly=False):
         super().__init__()
-        self.Text = tableArg['header']     # Заголовок формы 
-        self.tableName = tableArg['name']  # сохраняем имя таблицы как свойство формы для последующего использования
-        self.flds = fldsArg                # сохраняем список полей как свойство формы для последующего использования
-        self.grd = WinForms.DataGridView() # создаем объект датагридвью - таблица на форме
-        self.Controls.Add(self.grd)        # встроили грид в форму
+        self.Text = argTable['header']     # Заголовок формы 
+        self.tableName = argTable['name']  # сохраняем имя таблицы как свойство формы для последующего использования
+        self.flds = argFlds                # сохраняем список полей как свойство формы для последующего использования
+
+        self.btnNew = WinForms.Button()                       # создали кнопку
+        self.btnNew.Text = 'Добавить'
+        self.btnNew.Location = Point(50, vertInterval)        # ставим кнопку
+        self.btnNew.MouseClick += self.createItem             # добавляем обработчик клика по кнопке
+        self.Controls.Add(self.btnNew)                        # встраиваем кнопку на форму
+
+        self.btnEdit = WinForms.Button()
+        self.btnEdit.Text = 'Изменить'
+        self.btnEdit.Location = Point(150, vertInterval)
+        self.btnEdit.MouseClick += self.editItem
+        self.Controls.Add(self.btnEdit)
+
+        self.btnDelete = WinForms.Button()
+        self.btnDelete.Text = 'Удалить' 
+        self.btnDelete.Location = Point(250, vertInterval)
+        self.btnDelete.MouseClick += self.deleteItem
+        self.Controls.Add(self.btnDelete)
+        
+        self.btnrefresh = WinForms.Button()
+        self.btnrefresh.Text = 'Обновить' 
+        self.btnrefresh.Location = Point(350, vertInterval)
+        self.btnrefresh.MouseClick += self.refreshData
+        self.Controls.Add(self.btnrefresh)
+
+        self.grd = WinForms.DataGridView()                                    # создаем объект датагридвью - таблица на форме
+        self.grd.Location = Point(0, self.btnrefresh.Bottom + vertInterval)   # ставим грид под кнопки
+        self.Controls.Add(self.grd)                                           # встроили грид в форму
 
         # Создание колонок (филдов) в таблице (гриде)
         for fld in self.flds:
@@ -38,21 +69,6 @@ class frmDictionary(WinForms.Form):
         self.grd.SelectionMode = WinForms.DataGridViewSelectionMode.FullRowSelect # режим выделения - вся строка
         self.grd.CellDoubleClick += self.dblClick                 # добавляем обработчик двойного клика на ячейке грида
 
-        self.btnNew = WinForms.Button()                       # создали кнопку
-        self.btnNew.Text = 'Добавить'
-        self.btnNew.MouseClick += self.createItem             # добавляем обработчик клика по кнопке
-        self.Controls.Add(self.btnNew)                        # встраиваем кнопку на форму
-
-        self.btnEdit = WinForms.Button()
-        self.btnEdit.Text = 'Изменить'
-        self.btnEdit.MouseClick += self.editItem
-        self.Controls.Add(self.btnEdit)
-
-        self.btnDelete = WinForms.Button()
-        self.btnDelete.Text = 'Удалить' 
-        self.btnDelete.MouseClick += self.deleteItem
-        self.Controls.Add(self.btnDelete)
-        
         self.Resize += self.frmIsResized                          # добавляем обработчик события изменения размера формы
         self.Size = Size(500,300)                                 # изменяем размер формы
 
@@ -67,10 +83,6 @@ class frmDictionary(WinForms.Form):
         w, h = self.ClientSize.Width, self.ClientSize.Height
         h = max(0, h - 50)
         self.grd.Size = Size(w, h)
-        y = self.grd.Location.Y + self.grd.Size.Height + vertInterval
-        self.btnNew.Location = Point(50, y)
-        self.btnEdit.Location = Point(150, y)
-        self.btnDelete.Location = Point(250, y)
     
     # получить значениЯ полЕЙ в выделеной строке
     def getSelectedRowValues(self, flds):
@@ -80,10 +92,13 @@ class frmDictionary(WinForms.Form):
             values.append(v)
         return values
 
-    # получить значениЕ полЯ в выделеной строке
+    # получить значениЕ поля в выделеной строке
     def getSelectedRowValue(self, fld):
         value = self.grd.SelectedRows[0].Cells[fld].Value
         return value
+
+    def refreshData(self, sender, e):
+        self.getDataFromDb()
 
     # получить данные из БД и поместить их в грид
     def getDataFromDb(self):
@@ -98,17 +113,23 @@ class frmDictionary(WinForms.Form):
     def Execute(self):                                 # метод для запуска формы
         WinForms.Application.Run(self)
 
-# базовый класс формы для редактирования элемента справочника 
-# шаблон для создания конкретных форм
-# родительский класс WinForms.Form
 class frmDictionaryItem(WinForms.Form):
-    def __init__(self, tableArg, argId, argValue, size=Size(500,300)):
+    """Бзовый класс формы для редактирования элемента справочника 
+
+    Шаблон для создания конкретных форм, 
+    родительский класс WinForms.Form
+    
+    аргументы:
+    argTable, argId, argValue, size=Size(500,300)
+
+    """
+    def __init__(self, argTable, argId, argValue, size=Size(500,300)):
         super().__init__()
         self.Size = size                    # установка размера
         self.MinimumSize = size             # фиксация минимального размера
         self.MaximumSize = size             # фиксация максимального размера
         # self.TableName = tableArg['name']   
-        self.text = tableArg['header']      # заголовок формы
+        self.text = argTable['header']      # заголовок формы
 
         x = 20  # координата X для выстраивания контролов
         # создаем контейнер с Label и TextBox для Id
@@ -138,14 +159,14 @@ class frmDictionaryItem(WinForms.Form):
         WinForms.Application.Run(self)
 
 
-if __name__ == '__main__':
-    table = {'name':'Departments','header':'Справочник', 'readonly':True}
-    cols = []
-    cols.append({'fld_name':'Id',   'header':'Id',       'visible':True, 'readonly':True,   'width':50})
-    cols.append({'fld_name':'Name', 'header':'Название', 'visible':True, 'readonly':False,  'width':300})
+# if __name__ == '__main__':
+    # table = {'name':'Departments','header':'Справочник', 'readonly':True}
+    # cols = []
+    # cols.append({'fld_name':'Id',   'header':'Id',       'visible':True, 'readonly':True,   'width':50})
+    # cols.append({'fld_name':'Name', 'header':'Название', 'visible':True, 'readonly':False,  'width':300})
 
-    frm = frmDictionary(table, cols, readonly=True)
-    frm.Execute()
+    # frm = frmDictionary(table, cols, readonly=True)
+    # frm.Execute()
 
     # frm = frmSimpleObject(tableArg='Справочник', argId=dummyId, argName='testData')
     # frm.ShowDialog()

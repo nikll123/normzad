@@ -39,13 +39,21 @@ def rndLev():
     return random.randrange(1, 10)
 
 tableName = 'Workers'
-fldList = ['id','LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
+# fldList = ['id','LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
+# workerList = []
+# workerList.append([121, 'Иванов',  'Иван',  'Иванович',    rndPosId(),rndLev(),rndDepId()])
+# workerList.append([125, 'Петров',  'Петр',  'Петрович',    rndPosId(),rndLev(),rndDepId()])
+# workerList.append([136, 'Сидоров', 'Сидор', 'Сидорович',   rndPosId(),rndLev(),rndDepId()])
+# workerList.append([157, 'Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
+# workerList.append([150, 'Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
+
+fldList = ['LastName','Name','SecondName','PositionId','Level', 'DepartmentId']
 workerList = []
-workerList.append([121, 'Иванов',  'Иван',  'Иванович',    rndPosId(),rndLev(),rndDepId()])
-workerList.append([125, 'Петров',  'Петр',  'Петрович',    rndPosId(),rndLev(),rndDepId()])
-workerList.append([136, 'Сидоров', 'Сидор', 'Сидорович',   rndPosId(),rndLev(),rndDepId()])
-workerList.append([157, 'Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
-workerList.append([150, 'Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
+workerList.append(['Иванов',  'Иван',  'Иванович',    rndPosId(),rndLev(),rndDepId()])
+workerList.append(['Петров',  'Петр',  'Петрович',    rndPosId(),rndLev(),rndDepId()])
+workerList.append(['Сидоров', 'Сидор', 'Сидорович',   rndPosId(),rndLev(),rndDepId()])
+workerList.append(['Попова',  'Мария', 'Спиридоновна',rndPosId(),rndLev(),rndDepId()])
+workerList.append(['Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
 
 for wd in workerList:
     err, newId = db.insert(tableName,fldList,wd)
