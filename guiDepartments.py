@@ -1,52 +1,134 @@
-import common
-import guiBaseForm
+from tkinter import *
+from tkinter import ttk
 import dbDepartments
+from tkinter.messagebox import showerror, askyesno
 
-tableArg = {'name':'Departments','header':'Подразделения'}
-fldsArg = []
-fldsArg.append({'fld_name':'Id',   'header':'Id',       'visible':False, 'width':10})
-fldsArg.append({'fld_name':'Name', 'header':'Название', 'visible':True,  'width':300})
+def btnAddPressed(e):
+    parent = e.widget.master
+    showFormItem("Новое подразделение", parent)
 
-class frmDepartmentTable(guiBaseForm.frmDictionary):
-    def __init__(self):
-        super().__init__(tableArg, fldsArg, readonly=True)
+def showFormItem(title, parent, id=None, name = None):
+    frmNewDepartment = Toplevel()
+    frmNewDepartment.title(title)
+    frmNewDepartment.geometry("400x300")
+    frmNewDepartment.iconbitmap("nz.ico")
+    frmNewDepartment.parent = parent
+    frmNewDepartment.id = id
 
-    def createItem(self, sender, e):
-        id = guiBaseForm.dummyId
-        name = ''
-        frm = frmDepartment(id, name, self)
-        frm.ShowDialog()
+    frmNewDepartment.lbl = ttk.Label(frmNewDepartment, text="Название")
+    frmNewDepartment.lbl.grid(row=0,column=0,padx=10,pady=10)
 
-    def editItem(self, sender, e):
-        if not self.grd.SelectedRows[0].IsNewRow:
-            id, name = self.getSelectedRowValues(['id','Name'])
-            frm = frmDepartment(id, name, self)
-            frm.ShowDialog()
+    frmNewDepartment.txtName = ttk.Entry(frmNewDepartment)
+    frmNewDepartment.txtName.grid(row=0,column=1,padx=10,pady=10)
+    if name != None:
+        frmNewDepartment.txtName.insert(0, name)
 
-    def deleteItem(self, sender, e):
-        if not self.grd.SelectedRows[0].IsNewRow:
-            id, name = self.getSelectedRowValues(['id','Name'])
-            if common.showQuestionMessage(f"Удалить подразделение: {name}?"):
-                err = dbDepartments.delete(id)
-                isError = common.checkIfError(err)
-                if not isError:
-                    self.getDataFromDb()
+    frmNewDepartment.btnSave = ttk.Button(frmNewDepartment, text="Сохранить")
+    frmNewDepartment.btnSave.bind('<ButtonRelease-1>', btnSavePressed)
+    frmNewDepartment.btnSave.grid(row=1, column=1, padx=10, pady=10)
 
-class frmDepartment(guiBaseForm.frmDictionaryItem):
-    def __init__(self, argId, argName, parent):
-        super().__init__(tableArg, argId, argName)
-        self.parent = parent
+    # frmNewDepartment.wm_transient(root)
+    # frmNewDepartment.attributes('-topmost',True)
+    frmNewDepartment.grab_set()
 
-    def doSave(self, sender, e):
-        id = int(self.cntLblTxtId.txt.Text)
-        name = self.cntLblTxtName.txt.Text
-        if id == guiBaseForm.dummyId:
-            err, newId = dbDepartments.new(name)
-        else:
-            err = dbDepartments.update(id, name)
-        if err:
-            common.checkIfError(err)
-        else:
-            self.parent.getDataFromDb()
-            self.Close()
+def btnSavePressed(e):
+    frm = e.widget.master
+    newName = frm.txtName.get()
+    if frm.id == None:
+        err, newId = dbDepartments.new(newName)
+    else:
+        err = dbDepartments.update(frm.id, newName)
+    if err:
+        showerror("Ошибка", err)
+    else:
+        frmDataRefresh(frm.parent)
+        frm.destroy()
+
+def btnEditPressed(e):
+    frm = e.widget.master
+    id = frmGetTreeCurrentId(frm)
+    if id != None:
+        name = frmGetTreeCurrentName(frm)
+        showFormItem("Изменение подразделения", frm, id, name)
+
+def btnDelPressed(e):
+    frm = e.widget.master
+    id = frmGetTreeCurrentId(frm)
+    if id != None:
+        name = frmGetTreeCurrentName(frm)
+        result = askyesno("Подтверждение действия", f"Удалить: {name}?")
+        if result:
+            err = dbDepartments.delete(id)
+            if err:
+                showerror("Ошибка", err)
+            else:
+                frmDataRefresh(frm)
+
+def frmGetTreeCurrentId(frm):
+    return _frmGetTreeCurrentData(frm, 0)
+
+def frmGetTreeCurrentName(frm):
+    return _frmGetTreeCurrentData(frm, 1)
+
+def _frmGetTreeCurrentData(frm, index):
+    val = None
+    curItem = frm.tree.focus()
+    if curItem:
+        val = frm.tree.item(curItem)['values'][index]
+    # print(val)
+    return val
+
+def frmDataRefresh(frm):
+    for c in frm.tree.get_children(""):
+        frm.tree.delete(c)
+    err, data = dbDepartments.select()
+    if not err:
+        for row in data:
+            frm.tree.insert("", END, values=row)        
+
+def btnRefreshPressed(e):
+    frm = e.widget.master
+    frmDataRefresh(frm)
+
+def openFormDepartments(e):
+    frm = e.widget.master
+    frmDepartments = Toplevel(frm)
+    frmDepartments.title("Подразделения")
+    frmDepartments.geometry("400x350")
+    frmDepartments.iconbitmap("nz.ico")
+    # frmDepartments.datarefresh = frmRefresh
+    frmDepartments.resizable(False, False)
+    x = frm.winfo_x()
+    y = frm.winfo_y()
+    frmDepartments.geometry("+%d+%d" %(x+50,y+50))
+    frmDepartments.wm_transient(frm)
+    # frmDepartments.attributes('-topmost',True)
+
+    frmDepartments.tree = ttk.Treeview(frmDepartments, column=("colId", "colName"), show='headings')
+    frmDepartments.tree.CurrentId = 0
+    frmDepartments.tree.column("colId", anchor=W, width=40)
+    frmDepartments.tree.heading("colId", text="Id")
+    frmDepartments.tree.column("colName", anchor=W, width=100)
+    frmDepartments.tree.heading("colName", text="Название")
+    frmDepartments.tree.pack()
+    # frmDepartments.tree.bind('<ButtonRelease-1>', selectItem)
+
+    frmDepartments.btnAdd = ttk.Button(frmDepartments, text="Добавить")
+    frmDepartments.btnAdd.bind('<ButtonRelease-1>', btnAddPressed)
+    frmDepartments.btnAdd.pack()
+
+    frmDepartments.btnEdit = ttk.Button(frmDepartments, text="Изменить")
+    frmDepartments.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
+    frmDepartments.btnEdit.pack()
+
+    frmDepartments.btnDelete = ttk.Button(frmDepartments, text="Удалить")
+    frmDepartments.btnDelete.bind('<ButtonRelease-1>', btnDelPressed)
+    frmDepartments.btnDelete.pack()
+
+    frmDepartments.btnRefresh = ttk.Button(frmDepartments, text="Обновить")
+    frmDepartments.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
+    frmDepartments.btnRefresh.pack()
+
+    frmDataRefresh(frmDepartments)
+    
 

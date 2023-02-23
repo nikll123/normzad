@@ -28,6 +28,9 @@ def update(id, newName):
         err = "Нет данных"
     return err
 
+def select(flds=['*'], cond=''):
+    err, data = db.select(tableName,flds,cond)
+    return err, data
 
 if __name__ == '__main__':
     err, idTest = new("dept Test")
