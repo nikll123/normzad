@@ -3,7 +3,7 @@ from tkinter import ttk
 import dbDepartments
 from tkinter.messagebox import showerror, askyesno
 
-def frameDepartments(notebook):
+def mainFrame(notebook):
     mainFrame = ttk.Frame(notebook)
     mainFrame.Name = 'mainFrame'
     idReset(mainFrame)
@@ -54,8 +54,8 @@ def selectItem(e):
     frame = e.widget.master.master
     curItem = frame.tree.focus()
     if curItem:
-        frame.depId = frame.tree.item(curItem)['values'][0]
-        frame.depName = frame.tree.item(curItem)['values'][1]
+        frame.itemId = frame.tree.item(curItem)['values'][0]
+        frame.itemName = frame.tree.item(curItem)['values'][1]
 
 def frmDataRefresh(mainFrame):
     for c in mainFrame.tree.get_children(""):
@@ -70,12 +70,12 @@ def frmDataRefresh(mainFrame):
 def openFrmNew(title, mainFrame, id=None, name = None):
     frmNew = Toplevel()
     frmNew.title(title)
-    frmNew.Name = 'frmNewDepartment'
+    frmNew.Name = 'frmNew'
     frmNew.geometry("400x300")
     frmNew.iconbitmap("nz.ico")
     frmNew.mainFrame = mainFrame
-    frmNew.id = mainFrame.depId
-    name = mainFrame.depName
+    frmNew.id = mainFrame.itemId
+    name = mainFrame.itemName
 
     frmNew.lbl = ttk.Label(frmNew, text="Название")
     frmNew.lbl.grid(row=0, column=0, padx=10, pady=10)
@@ -112,23 +112,23 @@ def btnAddPressed(e):
 
 def btnEditPressed(e):
     mainFrame = e.widget.master.master
-    if mainFrame.depId != None:
+    if mainFrame.itemId != None:
         openFrmNew("Изменение подразделения", mainFrame)
 
 def btnDeletePressed(e):
     mainFrame = e.widget.master.master
-    if mainFrame.depId != None:
-        result = askyesno("Подтверждение действия", f"Удалить: {mainFrame.depName}?")
+    if mainFrame.itemId != None:
+        result = askyesno("Подтверждение действия", f"Удалить: {mainFrame.itemName}?")
         if result:
-            err = dbDepartments.delete(mainFrame.depId)
+            err = dbDepartments.delete(mainFrame.itemId)
             if err:
                 showerror("Ошибка", err)
             else:
                 frmDataRefresh(mainFrame)
 
 def idReset(mainFrame):
-    mainFrame.depId = None
-    mainFrame.depName = None
+    mainFrame.itemId = None
+    mainFrame.itemName = None
 
 def btnRefreshPressed(e):
     frm = e.widget.master.master
