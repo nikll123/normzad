@@ -22,6 +22,7 @@ def showFormItem(title, parent, id=None, name = None):
     frmNewDepartment.txtName.grid(row=0,column=1,padx=10,pady=10)
     if name != None:
         frmNewDepartment.txtName.insert(0, name)
+    frmNewDepartment.txtName.focus()
 
     frmNewDepartment.btnSave = ttk.Button(frmNewDepartment, text="Сохранить")
     frmNewDepartment.btnSave.bind('<ButtonRelease-1>', btnSavePressed)
@@ -90,19 +91,20 @@ def btnRefreshPressed(e):
     frm = e.widget.master
     frmDataRefresh(frm)
 
-def openFormDepartments(e):
-    frm = e.widget.master
-    frmDepartments = Toplevel(frm)
+
+def openFormDepartments():
+    # frmMain = e.widget.master
+    frmDepartments = Tk()
     frmDepartments.title("Подразделения")
     frmDepartments.geometry("400x350")
     frmDepartments.iconbitmap("nz.ico")
     # frmDepartments.datarefresh = frmRefresh
     frmDepartments.resizable(False, False)
-    x = frm.winfo_x()
-    y = frm.winfo_y()
-    frmDepartments.geometry("+%d+%d" %(x+50,y+50))
-    frmDepartments.wm_transient(frm)
-    # frmDepartments.attributes('-topmost',True)
+    # x = frmMain.winfo_x()
+    # y = frmMain.winfo_y()
+    # frmDepartments.geometry("+%d+%d" %(x+50,y+50))
+    # frmDepartments.wm_transient(frmMain)
+    frmDepartments.attributes('-topmost',True)
 
     frmDepartments.tree = ttk.Treeview(frmDepartments, column=("colId", "colName"), show='headings')
     frmDepartments.tree.CurrentId = 0
@@ -110,25 +112,34 @@ def openFormDepartments(e):
     frmDepartments.tree.heading("colId", text="Id")
     frmDepartments.tree.column("colName", anchor=W, width=100)
     frmDepartments.tree.heading("colName", text="Название")
-    frmDepartments.tree.pack()
+    frmDepartments.scrollbar = ttk.Scrollbar(orient=VERTICAL, command=frmDepartments.tree.yview)
+    # frmDepartments.tree.configure(yscroll=scrollbar.set)  
+    frmDepartments.scrollbar.grid(in_=frmDepartments, row=0, column=1, sticky="ns")
+  
+    # frmDepartments.tree.pack()
+    frmDepartments.tree.grid(row=0, column=0)
+
     # frmDepartments.tree.bind('<ButtonRelease-1>', selectItem)
 
-    frmDepartments.btnAdd = ttk.Button(frmDepartments, text="Добавить")
-    frmDepartments.btnAdd.bind('<ButtonRelease-1>', btnAddPressed)
-    frmDepartments.btnAdd.pack()
+    # frmDepartments.btnAdd = ttk.Button(frmDepartments, text="Добавить")
+    # frmDepartments.btnAdd.bind('<ButtonRelease-1>', btnAddPressed)
+    # frmDepartments.btnAdd.pack()
 
-    frmDepartments.btnEdit = ttk.Button(frmDepartments, text="Изменить")
-    frmDepartments.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
-    frmDepartments.btnEdit.pack()
+    # frmDepartments.btnEdit = ttk.Button(frmDepartments, text="Изменить")
+    # frmDepartments.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
+    # frmDepartments.btnEdit.pack()
 
-    frmDepartments.btnDelete = ttk.Button(frmDepartments, text="Удалить")
-    frmDepartments.btnDelete.bind('<ButtonRelease-1>', btnDelPressed)
-    frmDepartments.btnDelete.pack()
+    # frmDepartments.btnDelete = ttk.Button(frmDepartments, text="Удалить")
+    # frmDepartments.btnDelete.bind('<ButtonRelease-1>', btnDelPressed)
+    # frmDepartments.btnDelete.pack()
 
-    frmDepartments.btnRefresh = ttk.Button(frmDepartments, text="Обновить")
-    frmDepartments.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
-    frmDepartments.btnRefresh.pack()
+    # frmDepartments.btnRefresh = ttk.Button(frmDepartments, text="Обновить")
+    # frmDepartments.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
+    # frmDepartments.btnRefresh.pack()
 
     frmDataRefresh(frmDepartments)
     
 
+if __name__ == '__main__':
+    openFormDepartments()
+    frmDepartments.mainloop()
