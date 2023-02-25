@@ -14,6 +14,9 @@ notebook = ttk.Notebook()
 notebook.pack(expand=True, fill=BOTH)
  
 guiDepartments.mainFrame(notebook)
-guiPositions.createFramePositions(notebook)
+
+framePositions = guiPositions.createMainFrame()
+notebook.add(framePositions, text="Должности")
+
 
 root.mainloop()
