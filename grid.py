@@ -31,6 +31,12 @@ class grid(ttk.Frame):
         self.tree.bind('<ButtonRelease-1>', self.gridClick)
         self.scrollbar.pack(anchor=E, expand=True, fill=Y)
 
+    def frmDataPut(self, data):
+        for c in self.tree.get_children(""):
+            self.tree.delete(c)
+        for row in data:
+            self.tree.insert("", END, values=row)        
+
 
 if __name__ == '__main__':
     root = Tk()
@@ -41,5 +47,7 @@ if __name__ == '__main__':
     root.grid.addColumn(name="colName", text='Name', anchor=W, width=100)
     root.grid.buildGrid()
     root.grid.pack(fill=BOTH, expand=True)
+    data = [(1,'test1'),(2,'test2'),(3,'test3')]
+    root.grid.frmDataPut(data)
 
     root.mainloop()
