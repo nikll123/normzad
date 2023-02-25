@@ -1,12 +1,12 @@
 from tkinter import *
 from tkinter import ttk
 
-class grid(ttk.Frame):
+class frameGrid(ttk.Frame):
     """ grid class (parent class - frame)
 
     """
-    def __init__(self, master, name='grid'):
-        super().__init__(master, name=name)
+    def __init__(self, name='frameGrid'):
+        super().__init__(name=name)
         self.Name = name
         self.columnconfigure(index=0, weight=1)
         self.rowconfigure(index=0, weight=1)
@@ -31,7 +31,7 @@ class grid(ttk.Frame):
         self.tree.bind('<ButtonRelease-1>', self.gridClick)
         self.scrollbar.pack(anchor=E, expand=True, fill=Y)
 
-    def frmDataPut(self, data):
+    def putData(self, data):
         for c in self.tree.get_children(""):
             self.tree.delete(c)
         for row in data:
@@ -40,14 +40,11 @@ class grid(ttk.Frame):
 
 if __name__ == '__main__':
     root = Tk()
-    root.title("grid test")
+    root.title("frameGrid test")
     root.geometry("300x600")
-    root.grid = grid(root,'gridtest')
+    root.grid = frameGrid(root,'frameGrid')
     root.grid.addColumn(name="colId", text="id", anchor=W, width=50, stretch=NO)
     root.grid.addColumn(name="colName", text='Name', anchor=W, width=100)
     root.grid.buildGrid()
     root.grid.pack(fill=BOTH, expand=True)
-    data = [(1,'test1'),(2,'test2'),(3,'test3')]
-    root.grid.frmDataPut(data)
-
     root.mainloop()

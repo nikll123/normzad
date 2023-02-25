@@ -1,54 +1,42 @@
 from tkinter import *
 from tkinter import ttk
+import frameGrid
+import frame4buttons
 import dbPositions
 from tkinter.messagebox import showerror, askyesno
 
-def mainFrame(notebook):
-    mainFrame = ttk.Frame(notebook)
-    mainFrame.Name = 'mainFrame'
-    idReset(mainFrame)
-    notebook.add(mainFrame, text="Должности")
+def createFramePositions(parent):
+    grid1 = frameGrid.frameGrid('grdPos')
+    grid1.addColumn(name='Id',text='Id',anchor=W,width=50,stretch=NO)
+    grid1.addColumn(name='Name',text='Название',anchor=W,width=100,stretch=YES)
+    grid1.buildGrid()    
+    frmDataRefresh(grid1)
+    return grid1
 
-    mainFrame.subFrameTop = ttk.Frame(master=mainFrame, borderwidth=1, relief=SOLID)
-    mainFrame.subFrameTop.Name = 'subFrameTop'
-    mainFrame.subFrameTop.pack(fill=BOTH, expand=True)
-    mainFrame.subFrameTop.columnconfigure(index=0, weight=1)
-    mainFrame.subFrameTop.rowconfigure(index=0, weight=1)
+def createFrameButtons():
+    frame2 = frame4buttons()
+    frame2.Name='subFrameBottom'
+    # frame2.pack(pady=5, fill=X)
 
-    mainFrame.tree = ttk.Treeview(mainFrame.subFrameTop, column=("colId", "colName"), show='headings')
-    mainFrame.tree.CurrentId = 0
-    mainFrame.tree.column("colId", anchor=W, width=50, stretch=NO)
-    mainFrame.tree.heading("colId", text="Id")
-    mainFrame.tree.column("colName", anchor=W, width=100)
-    mainFrame.tree.heading("colName", text="Название")
-    mainFrame.tree.pack(fill=BOTH, expand=True, side=LEFT)
+    frame2.btnNew = ttk.Button(frame2, text="Добавить")
+    frame2.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
+    frame2.btnNew.pack(side=LEFT, padx=10, pady=10)
 
-    mainFrame.scrollbar = ttk.Scrollbar(mainFrame.subFrameTop, orient=VERTICAL, command=mainFrame.tree.yview)
-    mainFrame.tree.configure(yscroll=mainFrame.scrollbar.set)  
-    mainFrame.tree.bind('<ButtonRelease-1>', selectItem)
-    mainFrame.scrollbar.pack(anchor=E, expand=True, fill=Y)
-        
-    subFrameBottom = ttk.Frame(master=mainFrame)
-    subFrameBottom.Name='subFrameBottom'
-    subFrameBottom.pack(pady=5, fill=X)
+    frame2.btnEdit = ttk.Button(frame2, text="Изменить")
+    frame2.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
+    frame2.btnEdit.pack(side=LEFT, padx=10, pady=10)
 
-    mainFrame.btnNew = ttk.Button(subFrameBottom, text="Добавить")
-    mainFrame.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
-    mainFrame.btnNew.pack(side=LEFT)
+    frame2.btnDelete = ttk.Button(frame2, text="Удалить")
+    frame2.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
+    frame2.btnDelete.pack(side=LEFT, padx=10, pady=10)
 
-    mainFrame.btnEdit = ttk.Button(subFrameBottom, text="Изменить")
-    mainFrame.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
-    mainFrame.btnEdit.pack(side=LEFT)
+    frame2.btnRefresh = ttk.Button(frame2, text="Обновить")
+    frame2.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
+    frame2.btnRefresh.pack(side=LEFT, padx=10, pady=10)
 
-    mainFrame.btnDelete = ttk.Button(subFrameBottom, text="Удалить")
-    mainFrame.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
-    mainFrame.btnDelete.pack(side=LEFT)
+    return frame2
 
-    mainFrame.btnRefresh = ttk.Button(subFrameBottom, text="Обновить")
-    mainFrame.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
-    mainFrame.btnRefresh.pack(side=LEFT)
 
-    frmDataRefresh(mainFrame)
 
 def selectItem(e):
     frame = e.widget.master.master
@@ -57,15 +45,10 @@ def selectItem(e):
         frame.itemId = frame.tree.item(curItem)['values'][0]
         frame.itemName = frame.tree.item(curItem)['values'][1]
 
-def frmDataRefresh(mainFrame):
-    for c in mainFrame.tree.get_children(""):
-        mainFrame.tree.delete(c)
+def frmDataRefresh(grid):
     err, data = dbPositions.select()
     if not err:
-        for row in data:
-            mainFrame.tree.insert("", END, values=row)        
-    idReset(mainFrame)
-    
+        grid.putData(data)
 
 def openFrmNew(title, mainFrame, id=None, name = None):
     frmNew = Toplevel()
@@ -134,3 +117,13 @@ def btnRefreshPressed(e):
     frm = e.widget.master.master
     frmDataRefresh(frm)
 
+
+if __name__ == '__main__':
+    root = Tk()
+    root.title("Position test")
+    root.geometry("400x500")
+    root.frame1 = createFramePositions(root)
+    root.frame1.pack(fill=BOTH, expand=True)
+    # root.frame2 = createFrameButtons()
+    # root.frame2.pack(fill=X)
+    root.mainloop()
