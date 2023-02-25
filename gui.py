@@ -5,9 +5,8 @@ import guiDepartments, guiPositions
 root = Tk()
 root.title("Нормированные задания")
 root.Name = 'root'
-root.geometry("300x600")
+root.geometry("400x600")
 root.iconbitmap("nz.ico")
-
 
 # создаем набор вкладок
 notebook = ttk.Notebook()

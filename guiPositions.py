@@ -14,16 +14,15 @@ def createMainFrame():
     mainFrame.frame2.pack(fill=X)
     return mainFrame
 
-
 def createFramePositions(parent):
-    farme1 = frameGrid.frameGrid(parent)
-    farme1.addColumn(name='Id',text='Id',anchor=W,width=50,stretch=NO)
-    farme1.addColumn(name='Name',text='Название',anchor=W,width=100,stretch=YES)
-    farme1.buildGrid()    
-    farme1.tree.bind('<ButtonRelease-1>', gridClick)
-    idReset(farme1)
-    frame1DataRefresh(farme1)
-    return farme1
+    frame1 = frameGrid.frameGrid(parent)
+    frame1.addColumn(name='Id',text='Id',anchor=W,width=50,stretch=NO)
+    frame1.addColumn(name='Name',text='Название',anchor=W,width=100,stretch=YES)
+    frame1.buildGrid()    
+    frame1.tree.bind('<ButtonRelease-1>', gridClick)
+    idReset(frame1)
+    frame1DataRefresh(frame1)
+    return frame1
 
 def createFrameButtons(parent):
     frame2 = frame4buttons.frame4Buttons(parent)
@@ -116,11 +115,12 @@ def btnSavePressed(e):
         frame1DataRefresh(frm.frmParent.frame1)
         frm.destroy()
 
+# ------- test -------------
 if __name__ == '__main__':
     root = Tk()
     root.Name = 'root'
     root.title("Position test")
-    root.geometry("400x500")
+    root.geometry("500x500")
     root.frameMain = createMainFrame()
     root.frameMain.pack(fill=BOTH, expand=True)
     root.mainloop()

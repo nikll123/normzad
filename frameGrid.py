@@ -11,6 +11,7 @@ class frameGrid(ttk.Frame):
         self.columnconfigure(index=0, weight=1)
         self.rowconfigure(index=0, weight=1)
         self.Columns = []
+        self.tree = ttk.Treeview(self, column=[], show='headings') # dummy tree
 
     def addColumn(self, name, text, anchor=None, width=None, stretch=YES):
         self.Columns.append({'name':name, 'text':text, 'anchor':anchor, 'width':width, 'stretch':stretch})
@@ -22,6 +23,7 @@ class frameGrid(ttk.Frame):
             self.tree.column(c['name'], anchor=c['anchor'], width=c['width'], stretch=c['stretch'])
             self.tree.heading(c['name'], text=c['text'])
         self.tree.pack(fill=BOTH, expand=True, side=LEFT)
+
 
         self.scrollbar = ttk.Scrollbar(self, orient=VERTICAL, command=self.tree.yview)
         self.tree.configure(yscroll=self.scrollbar.set)  
@@ -35,7 +37,7 @@ class frameGrid(ttk.Frame):
             self.tree.insert("", END, values=row)        
 
 def gridClick(e):
-    print("gridClick: to be replaced: frameGrid.tree.bind('<ButtonRelease-1>', gridClick)")
+    print("frameGrid gridClick: to be replaced: frameGrid.tree.bind('<ButtonRelease-1>', gridClick)")
 
 
 if __name__ == '__main__':
