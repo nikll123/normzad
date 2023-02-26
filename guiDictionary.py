@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-import frameGrid
-import frame4buttons
+import guiFrameGrid
+import guiFrame4buttons
 import dbPositions
 from tkinter.messagebox import showerror, askyesno
 debugMode = False
@@ -12,10 +12,10 @@ class frameDictionary(ttk.Frame):
         super().__init__(master=parent)
         self.Name = name
 
-        self.frameGrid = frameGrid.frameGrid(self, cols)
+        self.frameGrid = guiFrameGrid.frameGrid(self, cols)
         self.frameGrid.pack(fill=BOTH, expand=True)
 
-        self.frame4buttons = frame4buttons.frame4Buttons(self)
+        self.frame4buttons = guiFrame4buttons.frame4Buttons(self)
         self.frame4buttons.btnNew.bind('<ButtonRelease-1>', self.btnAddPressed)
         self.frame4buttons.btnEdit.bind('<ButtonRelease-1>', self.btnEditPressed)
         self.frame4buttons.btnDelete.bind('<ButtonRelease-1>', self.btnDeletePressed)

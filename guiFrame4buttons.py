@@ -22,8 +22,6 @@ class frame4Buttons(ttk.Frame):
         self.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
         self.btnRefresh.pack(side=LEFT, padx=10, pady=10)
 
-
-
 def btnAddPressed(e):
     print("to be replaced: frame4Buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)")
 

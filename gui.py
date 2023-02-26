@@ -1,12 +1,8 @@
 from tkinter import *
 from tkinter import ttk
-import guiDepartments, guiPositions
+import guiCommon, guiDepartments, guiPositions
 
-root = Tk()
-root.title("Нормированные задания")
-root.Name = 'root'
-root.geometry("400x600")
-root.iconbitmap("nz.ico")
+root = guiCommon.formTk(title="Нормированные задания", frmName='root')
 
 # создаем набор вкладок
 notebook = ttk.Notebook()

@@ -52,10 +52,7 @@ def fgridDataRefresh(dictPositions):
 
 # ------- test -------------
 if __name__ == '__main__':
-    root = Tk()
-    root.Name = 'root'
-    root.title("Position test")
-    root.geometry("400x500")
+    root = guiCommon.formTk(frmName='root', title="Positions test")
     root.dictPositions = createFrame(root)
     root.dictPositions.pack(fill=BOTH, expand=True)
     root.mainloop()
