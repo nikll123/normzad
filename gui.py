@@ -19,3 +19,4 @@ notebook.add(framePositions, text="Должности")
 
 
 root.mainloop()
+
