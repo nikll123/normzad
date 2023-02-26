@@ -12,9 +12,10 @@ root.iconbitmap("nz.ico")
 notebook = ttk.Notebook()
 notebook.pack(expand=True, fill=BOTH)
  
-guiDepartments.mainFrame(notebook)
+frameDepartments = guiDepartments.createFrame(root)
+notebook.add(frameDepartments, text="Подразделения")
 
-framePositions = guiPositions.createMainFrame()
+framePositions = guiPositions.createFrame(root)
 notebook.add(framePositions, text="Должности")
 
 

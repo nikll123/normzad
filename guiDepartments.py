@@ -1,71 +1,52 @@
 from tkinter import *
 from tkinter import ttk
-import dbDepartments
+import Departments, guiDictionary, guiCommon
 from tkinter.messagebox import showerror, askyesno
 
-def mainFrame(notebook):
-    mainFrame = ttk.Frame(notebook)
-    mainFrame.Name = 'mainFrame'
-    idReset(mainFrame)
-    notebook.add(mainFrame, text="Подразделения")
+def createFrame(parent):
+    cols = []
+    cols.append({'name':'Id','text':'Id','anchor':W,'width':50,'stretch':NO})
+    cols.append({'name':'Name','text':'Название','anchor':W,'width':100,'stretch':YES})
+    dictDepartatmens = guiDictionary.frameDictionary(parent, cols)
+    dictDepartatmens.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
+    dictDepartatmens.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
+    dictDepartatmens.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
+    dictDepartatmens.frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
+    fgridDataRefresh(dictDepartatmens)    
+    return dictDepartatmens
 
-    mainFrame.subFrameTop = ttk.Frame(master=mainFrame, borderwidth=1, relief=SOLID)
-    mainFrame.subFrameTop.Name = 'subFrameTop'
-    mainFrame.subFrameTop.pack(fill=BOTH, expand=True)
-    mainFrame.subFrameTop.columnconfigure(index=0, weight=1)
-    mainFrame.subFrameTop.rowconfigure(index=0, weight=1)
+def btnAddPressed(e):
+    pass
 
-    mainFrame.tree = ttk.Treeview(mainFrame.subFrameTop, column=("colId", "colName"), show='headings')
-    mainFrame.tree.CurrentId = 0
-    mainFrame.tree.column("colId", anchor=W, width=50, stretch=NO)
-    mainFrame.tree.heading("colId", text="Id")
-    mainFrame.tree.column("colName", anchor=W, width=100)
-    mainFrame.tree.heading("colName", text="Название")
-    mainFrame.tree.pack(fill=BOTH, expand=True, side=LEFT)
+def btnEditPressed(e):
+    dictPositions = e.widget.master.master
+    id = dictPositions.getSelectedId()
+    if id != None:
+        # openFrmNew("Изменение позиции", frm)
+        print('openFrmNew')
 
-    mainFrame.scrollbar = ttk.Scrollbar(mainFrame.subFrameTop, orient=VERTICAL, command=mainFrame.tree.yview)
-    mainFrame.tree.configure(yscroll=mainFrame.scrollbar.set)  
-    mainFrame.tree.bind('<ButtonRelease-1>', selectItem)
-    mainFrame.scrollbar.pack(anchor=E, expand=True, fill=Y)
-        
-    subFrameBottom = ttk.Frame(master=mainFrame)
-    subFrameBottom.Name='subFrameBottom'
-    subFrameBottom.pack(pady=5, fill=X)
+def btnDeletePressed(e):
+    dictPositions = e.widget.master.master
+    id = dictPositions.getSelectedId()
+    if id != None:
+        err, name = Departments.getName(id)
+        if guiCommon.notError(err):
+            result = askyesno("Подтверждение действия", f"Удалить: {name}?")
+            if result:
+                err = Departments.delete(id)
+                if guiCommon.notError(err):
+                    fgridDataRefresh(dictPositions)
 
-    mainFrame.btnNew = ttk.Button(subFrameBottom, text="Добавить")
-    mainFrame.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
-    mainFrame.btnNew.pack(side=LEFT)
+def btnRefreshPressed(e):
+    dictPositions = e.widget.master.master
+    fgridDataRefresh(dictPositions)
 
-    mainFrame.btnEdit = ttk.Button(subFrameBottom, text="Изменить")
-    mainFrame.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
-    mainFrame.btnEdit.pack(side=LEFT)
+def fgridDataRefresh(dictPositions):
+    err, data = Departments.selectAll()
+    if guiCommon.notError(err):
+        dictPositions.dataRefresh(data)
 
-    mainFrame.btnDelete = ttk.Button(subFrameBottom, text="Удалить")
-    mainFrame.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
-    mainFrame.btnDelete.pack(side=LEFT)
 
-    mainFrame.btnRefresh = ttk.Button(subFrameBottom, text="Обновить")
-    mainFrame.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
-    mainFrame.btnRefresh.pack(side=LEFT)
-
-    frmDataRefresh(mainFrame)
-
-def selectItem(e):
-    frame = e.widget.master.master
-    curItem = frame.tree.focus()
-    if curItem:
-        frame.itemId = frame.tree.item(curItem)['values'][0]
-        frame.itemName = frame.tree.item(curItem)['values'][1]
-
-def frmDataRefresh(mainFrame):
-    for c in mainFrame.tree.get_children(""):
-        mainFrame.tree.delete(c)
-    err, data = dbDepartments.select()
-    if not err:
-        for row in data:
-            mainFrame.tree.insert("", END, values=row)        
-    idReset(mainFrame)
-    
 
 def openFrmNew(title, mainFrame, id=None, name = None):
     frmNew = Toplevel()
@@ -105,32 +86,43 @@ def btnSavePressed(e):
         frmDataRefresh(frm.mainFrame)
         frm.destroy()
 
-def btnAddPressed(e):
-    mainFrame = e.widget.master.master
-    idReset(mainFrame)
-    openFrmNew("Новое подразделение", mainFrame)
+# def btnAddPressed(e):
+#     mainFrame = e.widget.master.master
+#     idReset(mainFrame)
+#     openFrmNew("Новое подразделение", mainFrame)
 
-def btnEditPressed(e):
-    mainFrame = e.widget.master.master
-    if mainFrame.itemId != None:
-        openFrmNew("Изменение подразделения", mainFrame)
+# def btnEditPressed(e):
+#     mainFrame = e.widget.master.master
+#     if mainFrame.itemId != None:
+#         openFrmNew("Изменение подразделения", mainFrame)
 
-def btnDeletePressed(e):
-    mainFrame = e.widget.master.master
-    if mainFrame.itemId != None:
-        result = askyesno("Подтверждение действия", f"Удалить: {mainFrame.itemName}?")
-        if result:
-            err = dbDepartments.delete(mainFrame.itemId)
-            if err:
-                showerror("Ошибка", err)
-            else:
-                frmDataRefresh(mainFrame)
+# def btnDeletePressed(e):
+#     mainFrame = e.widget.master.master
+#     if mainFrame.itemId != None:
+#         result = askyesno("Подтверждение действия", f"Удалить: {mainFrame.itemName}?")
+#         if result:
+#             err = dbDepartments.delete(mainFrame.itemId)
+#             if err:
+#                 showerror("Ошибка", err)
+#             else:
+#                 frmDataRefresh(mainFrame)
 
-def idReset(mainFrame):
-    mainFrame.itemId = None
-    mainFrame.itemName = None
+# def idReset(mainFrame):
+#     mainFrame.itemId = None
+#     mainFrame.itemName = None
 
-def btnRefreshPressed(e):
-    frm = e.widget.master.master
-    frmDataRefresh(frm)
+# def btnRefreshPressed(e):
+#     frm = e.widget.master.master
+#     frmDataRefresh(frm)
+
+
+# ------- test -------------
+if __name__ == '__main__':
+    root = Tk()
+    root.Name = 'root'
+    root.title("Departments test")
+    root.geometry("400x500")
+    root.dictDepartments = createFrame(root)
+    root.dictDepartments.pack(fill=BOTH, expand=True)
+    root.mainloop()
 
