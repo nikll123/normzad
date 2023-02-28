@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-import Departments, guiDictionary, guiCommon, guiEditName
+import blDepartments, guiDictionary, guiCommon, guiEditName
 from tkinter.messagebox import showerror, askyesno
 
 def createFrame(parent):
@@ -12,8 +12,8 @@ def createFrame(parent):
     dictDepartatmens.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
     dictDepartatmens.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
     dictDepartatmens.frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
-    dictDepartatmens.dictRefresh = funcDataRefresh
-    dictDepartatmens.dictRefresh(dictDepartatmens)
+    dictDepartatmens.Refresh = funcDataRefresh
+    dictDepartatmens.Refresh(dictDepartatmens)
     return dictDepartatmens
 
 def btnAddPressed(e):
@@ -30,11 +30,11 @@ def btnDeletePressed(e):
     dictDepartatmens = e.widget.master.master
     id = dictDepartatmens.getSelectedId()
     if id != None:
-        err, name = Departments.getName(id)
+        err, name = blDepartments.getName(id)
         if guiCommon.notError(err):
             result = askyesno("Подтверждение действия", f"Удалить: {name}?")
             if result:
-                err = Departments.delete(id)
+                err = blDepartments.delete(id)
                 if guiCommon.notError(err):
                     funcDataRefresh(dictDepartatmens)
 
@@ -43,27 +43,27 @@ def btnRefreshPressed(e):
     funcDataRefresh(dictDepartatmens)
 
 def funcDataRefresh(dictDepartatmens):
-    err, data = Departments.selectAll()
+    err, data = blDepartments.selectAll()
     if guiCommon.notError(err):
-        dictDepartatmens.dataRefresh(data)
+        dictDepartatmens.dataPut(data)
 
 class guiEditDepartment(guiEditName.frmEditName):
     Name='guiEditDepartment'
     def __init__(self, parent, rowId=None):
         super().__init__(parent, rowId)
         if self.rowId != None:
-            err, name = Departments.getName(self.rowId)
+            err, name = blDepartments.getName(self.rowId)
             if guiCommon.notError(err):
                 self.setName(name)
     
     def btnSaveClicked(self, e):
         name = self.getName()
         if self.rowId ==None:
-            err, newId = Departments.insName(name)
+            err, newId = blDepartments.insName(name)
         else:
-            err = Departments.updName(self.rowId, name)
+            err = blDepartments.updName(self.rowId, name)
         if guiCommon.notError(err):
-            self.parent.dictDepartments.gridDataRefresh(self.parent.dictDepartments)
+            self.parent.dictDepartments.Refresh(self.parent.dictDepartments)
             self.destroy()
 
 

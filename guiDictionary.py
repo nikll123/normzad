@@ -26,7 +26,7 @@ class frameDictionary(ttk.Frame):
     def getSelectedId(self):
         return self.frameGrid.getSelectedId()
 
-    def dataRefresh(self, data):
+    def dataPut(self, data):
         self.frameGrid.putData(data)
 
     # ------- 4 buttons ----------
@@ -42,9 +42,8 @@ class frameDictionary(ttk.Frame):
     def btnRefreshPressed(self, e):
         print(".frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)")
 
-    def dictRefresh(self):
+    def Refresh(self):
         pass
-        []
 
 # ------- test -------------
 if __name__ == '__main__':

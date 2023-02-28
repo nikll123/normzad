@@ -16,3 +16,11 @@ def getName(id):
         name = None
     return err, name
 
+def updName(id, name):
+    err = dbPositions.update(id, name)
+    return err
+
+def insName(name):
+    err, newId = dbPositions.new(name)
+    return err, newId
+
