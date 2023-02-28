@@ -28,6 +28,9 @@ def update(id, newName):
         err = "Нет данных"
     return err
 
+def select(flds=['*'], cond=''):
+    return db.select(tableName=tableName, fldsList=flds, cond=cond)
+
 
 if __name__ == '__main__':
     err, idTest = new("Tasks Test")

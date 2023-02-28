@@ -17,14 +17,13 @@ def createFrame(parent):
     return dictDepartatmens
 
 def btnAddPressed(e):
-    parent = e.widget.master.master.master
-    frm = guiEditDepartment(parent=parent)
+    frameDict = e.widget.master.master
+    frm = guiEditDepartment(parent=frameDict)
 
 def btnEditPressed(e):
-    dictDepartatmens = e.widget.master.master
-    id = dictDepartatmens.getSelectedId()
-    parent = e.widget.master.master.master
-    frm = guiEditDepartment(parent=parent, rowId=id)
+    frameDict = e.widget.master.master
+    id = frameDict.getSelectedId()
+    frm = guiEditDepartment(parent=frameDict, rowId=id)
     
 def btnDeletePressed(e):
     dictDepartatmens = e.widget.master.master
@@ -63,7 +62,7 @@ class guiEditDepartment(guiEditName.frmEditName):
         else:
             err = blDepartments.updName(self.rowId, name)
         if guiCommon.notError(err):
-            self.parent.dictDepartments.Refresh(self.parent.dictDepartments)
+            self.parent.Refresh(self.parent)
             self.destroy()
 
 

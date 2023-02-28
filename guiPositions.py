@@ -17,14 +17,14 @@ def createFrame(parent):
     return dictPositions
 
 def btnAddPressed(e):
-    parent = e.widget.master.master.master
-    frm = guiEditPosition(parent=parent)
+    frameDict = e.widget.master.master
+    frm = guiEditPosition(parent=frameDict)
 
 def btnEditPressed(e):
-    dictPositions = e.widget.master.master
-    id = dictPositions.getSelectedId()
+    frameDict = e.widget.master.master
+    id = frameDict.getSelectedId()
     parent = e.widget.master.master.master
-    frm = guiEditPosition(parent=parent, rowId=id)
+    frm = guiEditPosition(parent=frameDict, rowId=id)
     
 def btnDeletePressed(e):
     dictPositions = e.widget.master.master
@@ -48,7 +48,7 @@ def funcDataRefresh(dictPositions):
         dictPositions.dataPut(data)
 
 class guiEditPosition(guiEditName.frmEditName):
-    Name='guiEditDepartment'
+    Name='guiEditPosition'
     def __init__(self, parent, rowId=None):
         super().__init__(parent, rowId)
         if self.rowId != None:
@@ -63,7 +63,7 @@ class guiEditPosition(guiEditName.frmEditName):
         else:
             err = blPositions.updName(self.rowId, name)
         if guiCommon.notError(err):
-            self.parent.dictPositions.Refresh(self.parent.dictPositions)
+            self.parent.Refresh(self.parent)
             self.destroy()
 
 
