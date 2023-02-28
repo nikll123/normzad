@@ -7,16 +7,17 @@ class formTk(Tk):
     def __init__(self,  title):
         super().__init__()
         _frmInit(self,  title)
+        self.geometry("800x400")
 
 class formTopLevel(Toplevel):
     Name='formTopLevel'
     def __init__(self, master, title):
         super().__init__(master=master)
         _frmInit(self,  title)
+        self.geometry("400x300")
 
 def _frmInit(self,title):
     self.title(title)
-    self.geometry("400x300")
     self.iconbitmap("nz.ico")
 
 def notError(err):

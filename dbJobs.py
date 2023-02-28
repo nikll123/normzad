@@ -18,6 +18,10 @@ def update(id, WorkerId, TaskId, Date, TimeJob, Comment):
     err = db.update(tableName, fldsList, data, id)
     return err
 
+def select(flds=['*'], cond=''):
+    err, data = db.select(tableName=tableName, fldsList=flds, cond=cond)
+    return err, data
+
 
 if __name__ == "__main__":
 
