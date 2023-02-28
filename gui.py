@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import guiCommon, guiDepartments, guiPositions
 
-root = guiCommon.formTk(title="Нормированные задания", frmName='root')
+root = guiCommon.formTk(title="Нормированные задания")
 
 # создаем набор вкладок
 notebook = ttk.Notebook()
