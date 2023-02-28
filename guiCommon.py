@@ -3,18 +3,19 @@ from tkinter import *
 from tkinter import ttk
 
 class formTk(Tk):
-    def __init__(self,  title, frmName='formTk'):
+    Name='formTk'
+    def __init__(self,  title):
         super().__init__()
-        _frmInit(self,  title, frmName)
+        _frmInit(self,  title)
 
 class formTopLevel(Toplevel):
-    def __init__(self, master, title, frmName):
+    Name='formTopLevel'
+    def __init__(self, master, title):
         super().__init__(master=master)
-        _frmInit(self,  title, frmName)
+        _frmInit(self,  title)
 
-def _frmInit(self,title, frmName):
+def _frmInit(self,title):
     self.title(title)
-    self.Name = frmName
     self.geometry("400x300")
     self.iconbitmap("nz.ico")
 

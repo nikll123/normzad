@@ -3,8 +3,10 @@
 
 import sqlite3 
 import config
+from collections import namedtuple
 
 def create_db():
+    print('Создание базы данных')
     with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
         cursor = conn.cursor()
 
@@ -143,6 +145,11 @@ def create_db():
                         ORDER BY Name
                         ;""")
 
+def namedtuple_factory(cursor, row):
+    fields = [column[0] for column in cursor.description]
+    cls = namedtuple("Row", fields)
+    return cls._make(row)
+
 def getLastId(cursor):
     res = cursor.execute("Select last_insert_rowid()")
     res = res.fetchone()
@@ -152,6 +159,8 @@ def execute(sql, params=[]):
     err = config.dummyErr
     data = None
     with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
+        # conn.row_factory = sqlite3.Row
+        # row_factory = namedtuple_factory  # row.field
         cursor = conn.cursor()
         cursor.execute("PRAGMA foreign_keys = ON")
         try:

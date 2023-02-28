@@ -1,40 +1,46 @@
 from tkinter import *
 from tkinter import ttk
-import config
+import Departments
 
 import guiCommon
 
-class frmItem(guiCommon.formTopLevel):
-    def __init__(self, master, title, table='', flds=[], id=config.dummyNum, frmName='frmItem'):
-        super().__init__(master=master, title=title, frmName=frmName)
+class frmEditName(guiCommon.formTopLevel):
+    Name = 'frmEditName'
+    def __init__(self, parent, rowId):
+        if rowId == None:
+            title = 'Добавить'
+        else:
+            title = 'Изменить'
+        super().__init__(master=parent, title=title)
+        self.rowId = rowId
+        self.parent=parent
         self.frameEmpty1 = guiCommon.frameEmpty(self, height=30)
         self.frameEmpty1.pack()
 
-        if table:
-            for f in flds:
-                pass
-
-
-        self.txtName = guiCommon.frameLbltext(self, 'Нзвание')
+        self.txtName = guiCommon.frameLbltext(self, 'Название')
         self.txtName.pack(side=TOP)
-
+                    
         self.frameEmpty2 = guiCommon.frameEmpty(self, height=30)
         self.frameEmpty2.pack()
 
         self.btnSave = Button(self, text='Сохранить')
         self.btnSave.bind('<ButtonRelease-1>', self.btnSaveClicked)
         self.btnSave.pack(side=TOP)
+        self.grab_set()
     
     def btnSaveClicked(self, e):
-        print('btnSaveClicked')
-    
+        self.destroy()
+
     def setName(self, name):
         self.txtName.set(name)
+
+    def getName(self):
+        return self.txtName.get()
+
 
 
 if __name__ =='__main__' :
     root = Tk()
-    frm = frmItem(root, 'item test', 'frmItemTest')
-    frm.txtName.set('test data')
-    frm.grab_set()
+    frm = frmEditName(root, 'item test')
+    print(frm.Name)
     frm.mainloop()

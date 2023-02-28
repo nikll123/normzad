@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-import Departments, guiDictionary, guiCommon, guiFormItem
+import Departments, guiDictionary, guiCommon, guiEditName
 from tkinter.messagebox import showerror, askyesno
 
 def createFrame(parent):
@@ -12,25 +12,21 @@ def createFrame(parent):
     dictDepartatmens.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
     dictDepartatmens.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
     dictDepartatmens.frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
-    fgridDataRefresh(dictDepartatmens)    
+    dictDepartatmens.gridDataRefresh = fgridDataRefresh
+    # fgridDataRefresh(dictDepartatmens)    
+    dictDepartatmens.gridDataRefresh(dictDepartatmens)
     return dictDepartatmens
 
 def btnAddPressed(e):
     parent = e.widget.master.master.master
-    frm = guiFormItem.frmItem(parent, 'добавить', 'frmDepItem')
-    frm.grab_set()
+    frm = guiEditDepartment(parent=parent)
 
 def btnEditPressed(e):
     dictDepartatmens = e.widget.master.master
     id = dictDepartatmens.getSelectedId()
-    if id != None:
-        err, name = Departments.getName(id)
-        if guiCommon.notError(err):
-            parent = e.widget.master.master.master
-            frm = guiFormItem.frmItem(parent, 'Измененить', 'frmDepItem')
-            frm.setName(name)
-            frm.grab_set()
-
+    parent = e.widget.master.master.master
+    frm = guiEditDepartment(parent=parent, rowId=id)
+    
 def btnDeletePressed(e):
     dictDepartatmens = e.widget.master.master
     id = dictDepartatmens.getSelectedId()
@@ -52,61 +48,29 @@ def fgridDataRefresh(dictDepartatmens):
     if guiCommon.notError(err):
         dictDepartatmens.dataRefresh(data)
 
-def openFrmNew(title, parent, id=None):
-    frmNew = guiCommon.formTopLevel(parent, title=title, frmName='frmNewDep')
-    frmNew.id = parent.itemId
-    if id != None:
-        err, name = Departments.getName(id)
+class guiEditDepartment(guiEditName.frmEditName):
+    Name='guiEditDepartment'
+    def __init__(self, parent, rowId=None):
+        super().__init__(parent, rowId)
+        if self.rowId != None:
+            err, name = Departments.getName(self.rowId)
+            if guiCommon.notError(err):
+                self.setName(name)
+    
+    def btnSaveClicked(self, e):
+        name = self.getName()
+        if self.rowId ==None:
+            err, newId = Departments.insName(name)
+        else:
+            err = Departments.updName(self.rowId, name)
         if guiCommon.notError(err):
-            frmNew.txtName = name
-    frmNew.grab_set()
-
-# def btnSavePressed(e):
-#     frm = e.widget.master
-#     newName = frm.txtName.get()
-#     if frm.id == None:
-#         err, newId = dbDepartments.new(newName)
-#     else:
-#         err = dbDepartments.update(frm.id, newName)
-#     if err:
-#         showerror("Ошибка", err)
-#     else:
-#         frmDataRefresh(frm.mainFrame)
-#         frm.destroy()
-
-# def btnAddPressed(e):
-#     mainFrame = e.widget.master.master
-#     idReset(mainFrame)
-#     openFrmNew("Новое подразделение", mainFrame)
-
-# def btnEditPressed(e):
-#     mainFrame = e.widget.master.master
-#     if mainFrame.itemId != None:
-#         openFrmNew("Изменение подразделения", mainFrame)
-
-# def btnDeletePressed(e):
-#     mainFrame = e.widget.master.master
-#     if mainFrame.itemId != None:
-#         result = askyesno("Подтверждение действия", f"Удалить: {mainFrame.itemName}?")
-#         if result:
-#             err = dbDepartments.delete(mainFrame.itemId)
-#             if err:
-#                 showerror("Ошибка", err)
-#             else:
-#                 frmDataRefresh(mainFrame)
-
-# def idReset(mainFrame):
-#     mainFrame.itemId = None
-#     mainFrame.itemName = None
-
-# def btnRefreshPressed(e):
-#     frm = e.widget.master.master
-#     frmDataRefresh(frm)
+            self.parent.dictDepartments.gridDataRefresh(self.parent.dictDepartments)
+            self.destroy()
 
 
 # ------- test -------------
 if __name__ == '__main__':
-    root = guiCommon.formTk(frmName='root', title="Departments test")
+    root = guiCommon.formTk(title="Departments test")
     root.dictDepartments = createFrame(root)
     root.dictDepartments.pack(fill=BOTH, expand=True)
     root.mainloop()

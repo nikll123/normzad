@@ -1,6 +1,7 @@
 import db
 
-# Внесение тестовых данных
+print('Внесение тестовых данных')
+
 tableName = 'Departments'
 fldList = ['name']
 for d in ['СТО цех эксплуатации'], ['ЧПМ']:
