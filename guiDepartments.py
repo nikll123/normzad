@@ -12,9 +12,8 @@ def createFrame(parent):
     dictDepartatmens.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
     dictDepartatmens.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
     dictDepartatmens.frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
-    dictDepartatmens.gridDataRefresh = fgridDataRefresh
-    # fgridDataRefresh(dictDepartatmens)    
-    dictDepartatmens.gridDataRefresh(dictDepartatmens)
+    dictDepartatmens.dictRefresh = funcDataRefresh
+    dictDepartatmens.dictRefresh(dictDepartatmens)
     return dictDepartatmens
 
 def btnAddPressed(e):
@@ -37,13 +36,13 @@ def btnDeletePressed(e):
             if result:
                 err = Departments.delete(id)
                 if guiCommon.notError(err):
-                    fgridDataRefresh(dictDepartatmens)
+                    funcDataRefresh(dictDepartatmens)
 
 def btnRefreshPressed(e):
     dictDepartatmens = e.widget.master.master
-    fgridDataRefresh(dictDepartatmens)
+    funcDataRefresh(dictDepartatmens)
 
-def fgridDataRefresh(dictDepartatmens):
+def funcDataRefresh(dictDepartatmens):
     err, data = Departments.selectAll()
     if guiCommon.notError(err):
         dictDepartatmens.dataRefresh(data)

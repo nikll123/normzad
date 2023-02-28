@@ -42,7 +42,7 @@ class frameDictionary(ttk.Frame):
     def btnRefreshPressed(self, e):
         print(".frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)")
 
-    def gridDataRefresh(self):
+    def dictRefresh(self):
         pass
         []
 
