@@ -11,7 +11,7 @@ class form(Tk):
         self.geometry("800x400")
 
 class subForm(Toplevel):
-    Name='formTopLevel'
+    Name='subForm'
     def __init__(self, master, title):
         super().__init__(master=master)
         _frmInit(self,  title)
@@ -33,17 +33,20 @@ def notError(err):
     return not isError
 
 class frameEmpty(ttk.Frame):
-    def __init__(self, master, width=100, height=100, relief=FLAT):
-        super().__init__(master, relief=relief, width=width, height=height)
+    Name='frameEmpty'
+    def __init__(self, master, relief=FLAT):
+        super().__init__(master, relief=relief, width=350, height=40, padding=5)
 
 class frameLbltext(ttk.Frame):
+    Name='frameLbltext'
     def __init__(self, master, title='lbl', relief=FLAT):
-        super().__init__(master, relief=relief, width=500, height=100)
+        super().__init__(master, relief=relief, width=350, height=40, padding=5)
+        self.pack_propagate(False)
         self.lbl = Label(self, text=title, width=20)
-        pad = 5
-        self.lbl.pack(side=LEFT, padx=pad, pady=pad)
+        self.lbl.pack(side=LEFT)
+        
         self.tetx = Entry(self, width=30)
-        self.tetx.pack(side=LEFT, fill=X, expand=True, padx=pad, pady=pad)
+        self.tetx.pack(side=LEFT, fill=X, expand=True)
     
     def set(self, txt):
         self.tetx.insert(0, txt)
@@ -51,21 +54,31 @@ class frameLbltext(ttk.Frame):
     def get(self):
         return self.tetx.get()
 
-class cmbField(ttk.Combobox):
-    def __init__(self, master, tabName, fldName):
-        super().__init__(master)
-        err, data = blDepartments.selectAll()
-        if notError(err):
-            self.values=data
+class frameCmb(ttk.Frame):
+    def __init__(self, master, title='cmb', relief=FLAT):
+        super().__init__(master, relief=relief, width=350, height=40, padding=5)
+        self.pack_propagate(False)
+        self.lbl = Label(self, text=title, width=20)
+        self.lbl.pack(side=LEFT)
+        
+        self.cmb = ttk.Combobox(self)
+        self.cmb.pack(side=LEFT, fill=X, expand=True)
+
+        # err, data = blDepartments.selectAll()
+        # if notError(err):
+        #     self.values=data
         
 
 
 if __name__ == '__main__':
     root = form('Test')
-    subform = subForm(root, 'subform', 'subformTitle')
-    subform.frameEmpty = frameEmpty(subform, height=30)
+    subform = subForm(root, 'subformTitle')
+    subform.frameEmpty = frameEmpty(subform, relief=SOLID)
     subform.frameEmpty.pack()
-    subform.frameLbltext = frameLbltext(subform)
+    subform.frameLbltext = frameLbltext(subform, 'test txt', relief=SOLID)
     subform.frameLbltext.pack()
-    subform.frameLbltext.set('test')
+    subform.frameLbltext.set('test data')
+    subform.cmb=frameCmb(subform, 'test cmb', relief=SOLID)
+    subform.cmb.pack()
     root.mainloop()
+
