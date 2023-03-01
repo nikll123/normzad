@@ -25,8 +25,8 @@ def update(tableName, id, newName):
         err = "Строка не найдена"
     return err
 
-def select(tableName, flds, cond):
-    err, data = dbCommon.select(tableName,flds,cond)
+def select(tableName, flds, cond, order):
+    err, data = dbCommon.select(tableName,flds,cond,order)
     return err, data
 
 if __name__ == '__main__':

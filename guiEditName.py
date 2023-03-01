@@ -26,7 +26,6 @@ class frmEditName(guiCommon.formTopLevel):
         self.btnSave = Button(self, text='Сохранить')
         self.btnSave.bind('<ButtonRelease-1>', self.btnSaveClicked)
         self.btnSave.pack(side=TOP)
-        self.grab_set()
     
     def btnSaveClicked(self, e):
         self.destroy()

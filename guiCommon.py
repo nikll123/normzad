@@ -1,6 +1,7 @@
 from tkinter.messagebox import showerror, askyesno
 from tkinter import *
 from tkinter import ttk
+import blDepartments
 
 class formTk(Tk):
     Name='formTk'
@@ -15,6 +16,7 @@ class formTopLevel(Toplevel):
         super().__init__(master=master)
         _frmInit(self,  title)
         self.geometry("400x300")
+        self.grab_set()
 
 def _frmInit(self,title):
     self.title(title)
@@ -52,6 +54,9 @@ class frameLbltext(ttk.Frame):
 class cmbField(ttk.Combobox):
     def __init__(self, master, tabName, fldName):
         super().__init__(master)
+        err, data = blDepartments.selectAll()
+        if notError(err):
+            self.values=data
         
 
 

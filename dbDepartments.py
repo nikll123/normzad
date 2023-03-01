@@ -14,8 +14,8 @@ def update(id, newName):
     err = dbDictionary.update(tableName, id, newName)
     return err
 
-def select (flds=['*'], cond=''):
-    err, data = dbDictionary.select(tableName, flds, cond)
+def select (flds=['*'], cond='',order=''):
+    err, data = dbDictionary.select(tableName, flds, cond, order)
     return err, data
 
 

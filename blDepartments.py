@@ -5,7 +5,7 @@ def delete(id):
     return err
 
 def selectAll():
-    err, data = dbDepartments.select()
+    err, data = dbDepartments.select(order='Name')
     return err, data
 
 def getName(id):

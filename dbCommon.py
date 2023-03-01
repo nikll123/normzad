@@ -77,12 +77,17 @@ def update(tableName, fldsList, data, id):
     err, _notUsed = execute(sql, data)
     return err
 
-def select(tableName, fldsList, cond):
+def select(tableName, fldsList, cond, order):
     substr = ','.join(fldsList)
     if cond:
         where = f"WHERE {cond}"
     else:
         where = ''
-    sql = f"SELECT {substr} FROM {tableName} {where}"
+    if order:
+        orderby = f"ORDER BY {order}"
+    else:
+        orderby = ''
+
+    sql = f"SELECT {substr} FROM {tableName} {where} {orderby}"
     err, data = execute(sql)
     return err, data

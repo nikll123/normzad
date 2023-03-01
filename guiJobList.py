@@ -24,12 +24,12 @@ def createFrame(parent):
 
 def btnAddPressed(e):
     frameDict = e.widget.master.master
-    frm = guiEditTask(parent=frameDict)
+    frm = guiEdit(parent=frameDict)
 
 def btnEditPressed(e):
     frameDict = e.widget.master.master
     id = frameDict.getSelectedId()
-    frm = guiEditTask(parent=frameDict, rowId=id)
+    frm = guiEdit(parent=frameDict, rowId=id)
     
 def btnDeletePressed(e):
     dictJobList = e.widget.master.master
@@ -52,14 +52,27 @@ def funcDataRefresh(dictJobList):
     if guiCommon.notError(err):
         dictJobList.dataPut(data)
 
-class guiEditTask(guiEditName.frmEditName):
-    Name='guiEditTask'
+class guiEdit(guiCommon.formTopLevel):
+    Name='guiEditJob'
     def __init__(self, parent, rowId=None):
         super().__init__(parent, rowId)
+        self.rowId = rowId
+
+        self.txtDate = guiCommon.frameLbltext(self, 'Дата')
+        self.txtDate.pack()
+        self.txtFio = guiCommon.frameLbltext(self, 'Ф.И.О.')
+        self.txtFio.pack()
+        self.txtTabNom = guiCommon.frameLbltext(self, 'Таб. №')
+        self.txtTabNom.pack()
+        self.txtTask = guiCommon.frameLbltext(self, 'Задание')
+        self.txtTask.pack()
+        self.txtTime = guiCommon.frameLbltext(self, 'Время')
+        self.txtTime.pack()
+
         if self.rowId != None:
             err, name = dlModule.getName(self.rowId)
             if guiCommon.notError(err):
-                self.setName(name)
+                pass
     
     def btnSaveClicked(self, e):
         name = self.getName()
