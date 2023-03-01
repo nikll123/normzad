@@ -67,7 +67,7 @@ class guiEditTask(guiEditName.frmEditName):
 
 # ------- test -------------
 if __name__ == '__main__':
-    root = guiCommon.formTk(title="Tasks test")
+    root = guiCommon.form(title="Tasks test")
     root.dictTasks = createFrame(root)
     root.dictTasks.pack(fill=BOTH, expand=True)
     root.mainloop()

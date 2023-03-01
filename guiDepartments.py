@@ -68,7 +68,7 @@ class guiEditDepartment(guiEditName.frmEditName):
 
 # ------- test -------------
 if __name__ == '__main__':
-    root = guiCommon.formTk(title="Departments test")
+    root = guiCommon.form(title="Departments test")
     root.dictDepartments = createFrame(root)
     root.dictDepartments.pack(fill=BOTH, expand=True)
     root.mainloop()

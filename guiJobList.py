@@ -52,7 +52,7 @@ def funcDataRefresh(dictJobList):
     if guiCommon.notError(err):
         dictJobList.dataPut(data)
 
-class guiEdit(guiCommon.formTopLevel):
+class guiEdit(guiCommon.subForm):
     Name='guiEditJob'
     def __init__(self, parent, rowId=None):
         super().__init__(parent, rowId)
@@ -86,7 +86,7 @@ class guiEdit(guiCommon.formTopLevel):
 
 # ------- test -------------
 if __name__ == '__main__':
-    root = guiCommon.formTk(title="joblist test")
+    root = guiCommon.form(title="joblist test")
     root.dictTasks = createFrame(root)
     root.dictTasks.pack(fill=BOTH, expand=True)
     root.mainloop()

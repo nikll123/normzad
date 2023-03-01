@@ -69,7 +69,7 @@ class guiEditPosition(guiEditName.frmEditName):
 
 # ------- test -------------
 if __name__ == '__main__':
-    root = guiCommon.formTk(title="Positions test")
+    root = guiCommon.form(title="Positions test")
     root.dictPositions = createFrame(root)
     root.dictPositions.pack(fill=BOTH, expand=True)
     root.mainloop()

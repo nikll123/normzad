@@ -4,7 +4,7 @@ import blDepartments
 
 import guiCommon
 
-class frmEditName(guiCommon.formTopLevel):
+class frmEditName(guiCommon.subForm):
     Name = 'frmEditName'
     def __init__(self, parent, rowId):
         if rowId == None:

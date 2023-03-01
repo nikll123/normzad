@@ -3,14 +3,14 @@ from tkinter import *
 from tkinter import ttk
 import blDepartments
 
-class formTk(Tk):
+class form(Tk):
     Name='formTk'
     def __init__(self,  title):
         super().__init__()
         _frmInit(self,  title)
         self.geometry("800x400")
 
-class formTopLevel(Toplevel):
+class subForm(Toplevel):
     Name='formTopLevel'
     def __init__(self, master, title):
         super().__init__(master=master)
@@ -61,8 +61,8 @@ class cmbField(ttk.Combobox):
 
 
 if __name__ == '__main__':
-    root = formTk('Test')
-    subform = formTopLevel(root, 'subform', 'subformTitle')
+    root = form('Test')
+    subform = subForm(root, 'subform', 'subformTitle')
     subform.frameEmpty = frameEmpty(subform, height=30)
     subform.frameEmpty.pack()
     subform.frameLbltext = frameLbltext(subform)
