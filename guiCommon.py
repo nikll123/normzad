@@ -2,6 +2,7 @@ from tkinter.messagebox import showerror, askyesno
 from tkinter import *
 from tkinter import ttk
 import blDepartments
+import blPositions
 
 class form(Tk):
     Name='formTk'
@@ -55,30 +56,82 @@ class frameLbltext(ttk.Frame):
         return self.tetx.get()
 
 class frameCmb(ttk.Frame):
+    Name='frameCmb'
     def __init__(self, master, title='cmb', relief=FLAT):
         super().__init__(master, relief=relief, width=350, height=40, padding=5)
         self.pack_propagate(False)
         self.lbl = Label(self, text=title, width=20)
         self.lbl.pack(side=LEFT)
-        
+        self.id = None
+        self.data = None
+
         self.cmb = ttk.Combobox(self)
         self.cmb.pack(side=LEFT, fill=X, expand=True)
+        self.cmb.bind('<KeyRelease>', self.search)
+        self.cmb.bind("<<ComboboxSelected>>", self.selected)
+    
+    def setId(self, id):
+        self.id = None
+        self.cmb.set("")
+        if self.data != None and id != None:
+            for row in self.data:
+                if row[0] == id:
+                    self.id = id
+                    self.cmb.set(row[1])
+                    break
 
-        # err, data = blDepartments.selectAll()
-        # if notError(err):
-        #     self.values=data
-        
+    def getCurrentId(self):
+        id, text = self._getCurrent()
+        return id
+
+    def _getCurrent(self):
+        ix = self.cmb.current()
+        if ix != -1:
+            return self.data[ix]
+        else:
+            return [None, None]
+
+    def loadValues(self, data):
+        self.data = data
+        self.setListValues('')
+
+    def setListValues(self, txt):
+        valuesAll = [r[1] for r in data]
+        if txt == '':
+            values = valuesAll
+        else:
+            values=[]
+            for v in valuesAll:
+                if txt.lower() in v.lower():
+                    values.append(v)
+        self.cmb['value'] = values
+    
+    def search(self, e):
+        txt = e.widget.get()
+        self.setListValues(txt)
+        self.event_generate('<Down>')
+
+    def selected(self, e):
+        print(self.cmb.current(), self.cmb.get(), self.getCurrentId())
 
 
 if __name__ == '__main__':
     root = form('Test')
     subform = subForm(root, 'subformTitle')
-    subform.frameEmpty = frameEmpty(subform, relief=SOLID)
+    relief=FLAT
+    subform.frameEmpty = frameEmpty(subform, relief=relief)
     subform.frameEmpty.pack()
-    subform.frameLbltext = frameLbltext(subform, 'test txt', relief=SOLID)
+    subform.frameLbltext = frameLbltext(subform, 'test txt', relief=relief)
     subform.frameLbltext.pack()
     subform.frameLbltext.set('test data')
-    subform.cmb=frameCmb(subform, 'test cmb', relief=SOLID)
+    subform.cmb=frameCmb(subform, 'test cmb', relief=relief)
     subform.cmb.pack()
+
+    err, data = blPositions.selectAll()
+    if notError(err):
+        subform.cmb.loadValues(data)
+        subform.cmb.setId(4)
+
+
     root.mainloop()
 
