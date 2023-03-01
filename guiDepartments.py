@@ -23,7 +23,8 @@ def btnAddPressed(e):
 def btnEditPressed(e):
     frameDict = e.widget.master.master
     id = frameDict.getSelectedId()
-    frm = guiEditDepartment(parent=frameDict, rowId=id)
+    if id != None:
+        frm = guiEditDepartment(parent=frameDict, rowId=id)
     
 def btnDeletePressed(e):
     dictDepartatmens = e.widget.master.master

@@ -27,7 +27,7 @@ for d in ['Снегоборьба'],['Репонт плат КТПЦ'],['Рем�
 import random
 def randomId(tableName):
     fldList = ['id']
-    err, ids = dbCommon.select(tableName,fldList, cond='')
+    err, ids = dbCommon.select(tableName,fldList, cond='',order='')
     randomIx = random.randrange(0, len(ids))
     rndId = ids[randomIx][0]
     return rndId

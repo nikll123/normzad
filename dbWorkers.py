@@ -1,10 +1,9 @@
 # workers 
 
-import sqlite3
-import config
 import dbCommon
 
 tableName = "Workers"
+viewName = "WorkerList"
 
 def new(tn,LastName,Name,SecondName,Level,PositionId,DepartmentId):
     err, LastName, Name, SecondName= _checkNames(LastName,Name,SecondName)
@@ -35,6 +34,19 @@ def _checkNames(LastName,Name,SecondName):
     else:
         err = "Нет полного имени"
     return err, LastName, Name, SecondName
+
+def select(flds=['*'], cond='', order=''):
+    err, data = dbCommon.select(viewName, flds, cond, order)
+    return err, data
+
+def selectFio(cond=''):
+    err, data = select(['id','FIO'], cond=cond)
+    return err, data
+
+def selectFioNum(cond=''):
+    err, data = select(['id','FIO_Num'], cond=cond)
+    return err, data
+
 
 
 if __name__ == '__main__':

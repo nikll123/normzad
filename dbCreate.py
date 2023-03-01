@@ -97,6 +97,18 @@ def create_db():
                             """)      
 
         cursor.execute("""CREATE VIEW IF NOT EXISTS 
+                vWorkers
+                    AS 
+                    SELECT *,
+                            LastName || ' ' || SUBSTR(Name,1,1) || '. ' || SUBSTR(SecondName,1,1) || '.' AS FIO 
+                    FROM 
+                            workers
+                    ORDER BY 
+                            FIO
+                        """)
+       
+
+        cursor.execute("""CREATE VIEW IF NOT EXISTS 
                 workerList
                     AS 
                     SELECT 
@@ -109,39 +121,19 @@ def create_db():
                             d.Name as Department, 
                             p.Name as position,
                             w.DepartmentId, 
-                            w.PositionId
+                            w.PositionId,
+                            w.FIO,
+                            w.FIO || '  (' || w.TabNum || ')' as FIO_Num
                     FROM 
-                            workers as w, 
+                            vWorkers as w, 
                             Departments as d, 
                             Positions as p
                     WHERE 
                             w.DepartmentId = d.id 
                             AND w.PositionId = p.id
                     ORDER BY 
-                            w.LastName, 
-                            w.Name, 
-                            w.SecondName
-                            ;""")
-        
-        # cursor.execute("""CREATE VIEW IF NOT EXISTS 
-        #         vPositions
-        #                 AS 
-        #                 SELECT 
-        #                     id,
-        #                     Name
-        #                 FROM Positions 
-        #                 ORDER BY Name
-        #                 ;""")
-        
-        # cursor.execute("""CREATE VIEW IF NOT EXISTS 
-        #         vDepartments
-        #                 AS 
-        #                 SELECT 
-        #                     id,
-        #                     Name
-        #                 FROM Departments
-        #                 ORDER BY Name
-        #                 ;""")
+                            FIO;
+                        """)
 
 
 if __name__ == '__main__':

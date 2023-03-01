@@ -21,7 +21,7 @@ def select (flds=['*'], cond='', order=''):
 
 
 if __name__ == '__main__':
-    err, idTest = new("Tasks Test")
+    err, idTest = insert("Tasks Test")
     print (err, idTest)
 
     if idTest != None:

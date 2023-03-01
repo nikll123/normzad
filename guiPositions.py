@@ -18,13 +18,13 @@ def createFrame(parent):
 
 def btnAddPressed(e):
     frameDict = e.widget.master.master
-    frm = guiEditPosition(parent=frameDict)
+    guiEditPosition(parent=frameDict)
 
 def btnEditPressed(e):
     frameDict = e.widget.master.master
     id = frameDict.getSelectedId()
-    parent = e.widget.master.master.master
-    frm = guiEditPosition(parent=frameDict, rowId=id)
+    if id != None:
+        guiEditPosition(parent=frameDict, rowId=id)
     
 def btnDeletePressed(e):
     dictPositions = e.widget.master.master

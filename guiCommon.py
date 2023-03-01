@@ -96,7 +96,7 @@ class frameCmb(ttk.Frame):
         self.setListValues('')
 
     def setListValues(self, txt):
-        valuesAll = [r[1] for r in data]
+        valuesAll = [r[1] for r in self.data]
         if txt == '':
             values = valuesAll
         else:

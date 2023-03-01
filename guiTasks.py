@@ -18,12 +18,13 @@ def createFrame(parent):
 
 def btnAddPressed(e):
     frameDict = e.widget.master.master
-    frm = guiEditTask(parent=frameDict)
+    guiEditTask(parent=frameDict)
 
 def btnEditPressed(e):
     frameDict = e.widget.master.master
     id = frameDict.getSelectedId()
-    frm = guiEditTask(parent=frameDict, rowId=id)
+    if id != None:
+        guiEditTask(parent=frameDict, rowId=id)
     
 def btnDeletePressed(e):
     dictTasks = e.widget.master.master
