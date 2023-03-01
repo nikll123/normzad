@@ -21,6 +21,6 @@ def updName(id, name):
     return err
 
 def insName(name):
-    err, newId = dbTasks.new(name)
+    err, newId = dbTasks.insert(name)
     return err, newId
 

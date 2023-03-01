@@ -1,25 +1,25 @@
-import db
+import dbCommon
 
 print('Внесение тестовых данных')
 
 tableName = 'Departments'
 fldList = ['name']
 for d in ['СТО цех эксплуатации'], ['ЧПМ']:
-    err, newId = db.insert(tableName,fldList,d)
+    err, newId = dbCommon.insert(tableName,fldList,d)
     if err:
         print (err)
 
 tableName = 'Positions'
 fldList = ['name']
 for d in ['Дворник'], ['ЧПМ'], ['Кочегар'], ['Машинист'], ['Электрик'], ['Начальник']:
-    err, newId = db.insert(tableName,fldList,d)
+    err, newId = dbCommon.insert(tableName,fldList,d)
     if err:
         print (err)
 
 tableName = 'Tasks'
 fldList = ['name']
 for d in ['Снегоборьба'],['Репонт плат КТПЦ'],['Ремонт ПСС'],['Командировка'],['Отпуск'],['Больничный'],['Управление паровозом']:
-    err, newId = db.insert(tableName,fldList,d)
+    err, newId = dbCommon.insert(tableName,fldList,d)
     if err:
         print (err)
 
@@ -27,7 +27,7 @@ for d in ['Снегоборьба'],['Репонт плат КТПЦ'],['Рем�
 import random
 def randomId(tableName):
     fldList = ['id']
-    err, ids = db.select(tableName,fldList)
+    err, ids = dbCommon.select(tableName,fldList, cond='')
     randomIx = random.randrange(0, len(ids))
     rndId = ids[randomIx][0]
     return rndId
@@ -57,7 +57,7 @@ workerList.append([112,'Попова',  'Мария', 'Спиридоновна'
 workerList.append([12355,'Джонсон', 'Джон',  'Джонович',    rndPosId(),rndLev(),rndDepId()])
 
 for wd in workerList:
-    err, newId = db.insert(tableName,fldList,wd)
+    err, newId = dbCommon.insert(tableName,fldList,wd)
     if err:
         print (err)
 
@@ -84,7 +84,7 @@ for i in range(5):
     jobsList.append([rndTabNom(), rndTaskId(), datetime.date(2023,1,24), rndTime(), f'comment {random.randrange(0, 1000)}'])
 
 for jd in jobsList:
-    err, newId = db.insert(tableName, fldList, jd)
+    err, newId = dbCommon.insert(tableName, fldList, jd)
     if err:
         print (err)
 

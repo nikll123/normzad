@@ -1,7 +1,7 @@
-import db
+import dbCommon
 
 def JobList():
-    err, data = db.select("jobList")
+    err, data = dbCommon.select("jobList")
     if not err:
         return data
     

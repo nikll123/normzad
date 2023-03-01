@@ -7,7 +7,7 @@ def insert(newName):
     return err, newId
 
 def delete(Id):
-    err = dbDictionary.insert(tableName, Id)
+    err = dbDictionary.delete(tableName, Id)
     return err
 
 def update(id, newName):
@@ -15,7 +15,7 @@ def update(id, newName):
     return err
 
 def select (flds=['*'], cond=''):
-    err, data = dbDictionary.select (tableName, flds, cond)
+    err, data = dbDictionary.select(tableName, flds, cond)
     return err, data
 
 

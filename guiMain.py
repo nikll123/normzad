@@ -9,7 +9,7 @@ notebook = ttk.Notebook()
 notebook.pack(expand=True, fill=BOTH)
  
 frameDepartments = guiJobList.createFrame(root)
-notebook.add(frameDepartments, text="Подразделения")
+notebook.add(frameDepartments, text="Табель")
 
 frameDepartments = guiDepartments.createFrame(root)
 notebook.add(frameDepartments, text="Подразделения")

@@ -1,0 +1,88 @@
+import sqlite3 
+import config
+from collections import namedtuple
+
+def getLastId(cursor):
+    res = cursor.execute("Select last_insert_rowid()")
+    res = res.fetchone()
+    return res[0]
+
+def namedtuple_factory(cursor, row):
+    fields = [column[0] for column in cursor.description]
+    cls = namedtuple("Row", fields)
+    return cls._make(row)
+
+def execute(sql, params=[]):
+    err = config.dummyErr
+    data = None
+    with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
+        # conn.row_factory = sqlite3.Row
+        # row_factory = namedtuple_factory  # row.field
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON")
+        try:
+            cursor.execute(sql, params)
+            err = ''
+            if 'INSERT' == sql[:6]:
+                data = getLastId(cursor)
+            elif 'SELECT' == sql[:6]:
+                data = cursor.fetchall()
+        except Exception as ex: 
+            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {params}"
+    return err, data
+
+# Эта функция (executeTry) - полный аналог функции execute, но без использования команды with 
+def executeTry(sql, data=[]):
+    err = config.dummyErr
+    newId = None
+    try:
+        conn = sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON")
+        cursor.execute(sql, data)
+        conn.commit()
+        err = ''
+        if 'INSERT' == sql[:6]:
+            newId = getLastId(cursor)
+        cursor.close()        
+    except Exception as ex: 
+        err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {data}"
+    finally:
+        if conn:
+            conn.close()
+    return err, newId
+
+def insert(tableName, fldsList, data):
+    fldsText = ','.join(fldsList)
+    placeHolders = []
+    for f in fldsList:
+        placeHolders.append('?')
+    placeHoldersText = ','.join(placeHolders)
+    sql = f"INSERT INTO {tableName} ({fldsText}) VALUES ({placeHoldersText});"
+    err, newId = execute(sql, data)
+    return err, newId 
+
+def delete(tableName, id):
+    sql = f"DELETE FROM {tableName} WHERE id=?"
+    err, _notUsed = execute(sql, [id])
+    return err
+
+def update(tableName, fldsList, data, id):
+    list = []
+    for f in fldsList:
+        list.append(f'{f}=?')
+    substr = ','.join(list)
+    sql = f"UPDATE {tableName} SET {substr} WHERE id=?"
+    data.append(id)
+    err, _notUsed = execute(sql, data)
+    return err
+
+def select(tableName, fldsList, cond):
+    substr = ','.join(fldsList)
+    if cond:
+        where = f"WHERE {cond}"
+    else:
+        where = ''
+    sql = f"SELECT {substr} FROM {tableName} {where}"
+    err, data = execute(sql)
+    return err, data

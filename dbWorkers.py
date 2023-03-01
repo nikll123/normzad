@@ -2,7 +2,7 @@
 
 import sqlite3
 import config
-import db
+import dbCommon
 
 tableName = "Workers"
 
@@ -11,11 +11,11 @@ def new(tn,LastName,Name,SecondName,Level,PositionId,DepartmentId):
     if not err:
         flds = ['TabNum','LastName','Name','SecondName','Level','PositionId','DepartmentId']
         data = [tn, LastName, Name, SecondName, Level, PositionId, DepartmentId]
-        err, newId = db.insert(tableName, flds, data)
+        err, newId = dbCommon.insert(tableName, flds, data)
     return err
 
 def delete(id):
-    err = db.delete(tableName, id)
+    err = dbCommon.delete(tableName, id)
     return err
 
 def update(id,tn,LastName,Name,SecondName,Level,PositionId,DepartmentId):
@@ -23,7 +23,7 @@ def update(id,tn,LastName,Name,SecondName,Level,PositionId,DepartmentId):
     if not err:
         flds = ['TabNum','LastName','Name','SecondName','Level','PositionId','DepartmentId']
         data = [tn,LastName,Name,SecondName,Level,PositionId,DepartmentId]
-        err = db.update(tableName, flds, data, id)
+        err = dbCommon.update(tableName, flds, data, id)
     return err
 
 def _checkNames(LastName,Name,SecondName):

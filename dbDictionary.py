@@ -1,18 +1,18 @@
 # Базовая БД функциональность справочников
-import db
+import dbCommon
 
 def insert(tableName, newName):
     newName = newName.strip()
     if newName:
         fldList = ['Name']
-        err, newId  = db.insert(tableName, fldList, [newName])
+        err, newId  = dbCommon.insert(tableName, fldList, [newName])
     else:
         newId = None
         err = "Нет данных"
     return err, newId
 
 def delete(tableName, id):
-    err = db.delete(tableName, id)
+    err = dbCommon.delete(tableName, id)
     return err
 
 def update(tableName, id, newName):
@@ -20,13 +20,13 @@ def update(tableName, id, newName):
     if newName:
         fldList = ['Name']
         data = [newName]
-        err = db.update(tableName, fldList, data, id)
+        err = dbCommon.update(tableName, fldList, data, id)
     else:
-        err = "Нет данных"
+        err = "Строка не найдена"
     return err
 
 def select(tableName, flds, cond):
-    err, data = db.select(tableName,flds,cond)
+    err, data = dbCommon.select(tableName,flds,cond)
     return err, data
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-import blJobList as dlModule, guiDictionary, guiCommon, guiEditName
+import blJobList as dlModule, guiTable, guiCommon, guiEditName
 from tkinter.messagebox import showerror, askyesno
 
 def createFrame(parent):
@@ -13,7 +13,7 @@ def createFrame(parent):
     cols.append({'name':'Position','text':'Должность','anchor':W,'width':100,'stretch':YES})
     cols.append({'name':'Task','text':'Задание','anchor':W,'width':100,'stretch':YES})
     cols.append({'name':'TimeJob','text':'Время','anchor':W,'width':100,'stretch':YES})
-    dictJobList = guiDictionary.frameDictionary(parent, cols)
+    dictJobList = guiTable.frameDictionary(parent, cols)
     dictJobList.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
     dictJobList.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
     dictJobList.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
@@ -73,7 +73,7 @@ class guiEditTask(guiEditName.frmEditName):
 
 # ------- test -------------
 if __name__ == '__main__':
-    root = guiCommon.formTk(title="Tasks test")
+    root = guiCommon.formTk(title="joblist test")
     root.dictTasks = createFrame(root)
     root.dictTasks.pack(fill=BOTH, expand=True)
     root.mainloop()

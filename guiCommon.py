@@ -49,6 +49,11 @@ class frameLbltext(ttk.Frame):
     def get(self):
         return self.tetx.get()
 
+class cmbField(ttk.Combobox):
+    def __init__(self, master, tabName, fldName):
+        super().__init__(master)
+        
+
 
 if __name__ == '__main__':
     root = formTk('Test')

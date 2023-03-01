@@ -1,25 +1,25 @@
 import datetime
-import db
+import dbCommon
 
 tableName = "Jobs"
 
 def new(WorkerId, TaskId, Date, TimeJob, Comment):
     fldsList = ['WorkerId', 'TaskId', 'Date', 'TimeJob', 'Comment']
-    err, newId = db.insert(tableName, fldsList, [WorkerId, TaskId, Date, TimeJob, Comment])
+    err, newId = dbCommon.insert(tableName, fldsList, [WorkerId, TaskId, Date, TimeJob, Comment])
     return err, newId
 
 def delete(delId):
-    err  = db.delete(tableName, delId)
+    err  = dbCommon.delete(tableName, delId)
     return err
 
 def update(id, WorkerId, TaskId, Date, TimeJob, Comment):
     fldsList = ['WorkerId', 'TaskId', 'Date', 'TimeJob', 'Comment']
     data = [WorkerId, TaskId, Date, TimeJob, Comment]
-    err = db.update(tableName, fldsList, data, id)
+    err = dbCommon.update(tableName, fldsList, data, id)
     return err
 
 def select(flds=['*'], cond=''):
-    err, data = db.select(tableName=tableName, fldsList=flds, cond=cond)
+    err, data = dbCommon.select(tableName=tableName, fldsList=flds, cond=cond)
     return err, data
 
 

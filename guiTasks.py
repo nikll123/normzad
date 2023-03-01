@@ -1,13 +1,13 @@
 from tkinter import *
 from tkinter import ttk
-import blTasks, guiDictionary, guiCommon, guiEditName
+import blTasks, guiTable, guiCommon, guiEditName
 from tkinter.messagebox import showerror, askyesno
 
 def createFrame(parent):
     cols = []
     cols.append({'name':'Id','text':'Id','anchor':W,'width':50,'stretch':NO})
     cols.append({'name':'Name','text':'Название','anchor':W,'width':100,'stretch':YES})
-    dictTasks = guiDictionary.frameDictionary(parent, cols)
+    dictTasks = guiTable.frameDictionary(parent, cols)
     dictTasks.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
     dictTasks.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
     dictTasks.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
