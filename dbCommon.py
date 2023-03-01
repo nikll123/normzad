@@ -17,7 +17,7 @@ def execute(sql, params=[]):
     data = None
     with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
         # conn.row_factory = sqlite3.Row
-        # row_factory = namedtuple_factory  # row.field
+        conn.row_factory = namedtuple_factory  # row.field
         cursor = conn.cursor()
         cursor.execute("PRAGMA foreign_keys = ON")
         try:

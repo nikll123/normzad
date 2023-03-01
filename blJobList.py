@@ -7,3 +7,7 @@ def selectAll():
 def getJobListRow(id):
     err, data = dbJobList.select(cond=f'id={id}')
     return err, data
+
+def getJobsRow(id):
+    err, data = dbJobList.selectJobs(cond=f'id={id}')
+    return err, data

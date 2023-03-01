@@ -75,11 +75,6 @@ class guiEditTabel(guiCommon.subForm):
 
         self.txtTime = guiCommon.frametext(self, 'Время')
         self.txtTime.pack()
-
-        if self.rowId != None:
-            err, name = blModule.getName(self.rowId)
-            if guiCommon.notError(err):
-                pass
         
         if self.rowId==None:
             date = datetime.now()
@@ -87,9 +82,15 @@ class guiEditTabel(guiCommon.subForm):
             self.txtDate.set(date)
             self.txtTime.set('8')
         else:
-            err, data = blModule.getJobListRow(self.rowId)
-            # guiCommon.notError(err):
-            #     data
+            err, data = blModule.getJobsRow(self.rowId)
+            if guiCommon.notError(err):
+                row = data[0]
+                self.txtDate.set(row.Date)
+                self.txtTime.set(row.TimeJob)
+                self.cmbTask.setId(row.TaskId)
+                self.cmbFIO.setId(row.WorkerId)
+
+
 
 
         self.btnSave = Button(self, text='Сохранить')
