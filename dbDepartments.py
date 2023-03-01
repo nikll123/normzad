@@ -1,39 +1,26 @@
 # deparments stuff
-import db
+import dbDictionary
 
 tableName = 'Departments'
-pkField = 'id'
-
-def new(newName):
-    newName = newName.strip()
-    if newName:
-        fldList = ['Name']
-        err, newId  = db.insert(tableName, fldList, [newName])
-    else:
-        newId = None
-        err = "Нет данных"
+def insert(newName):
+    err, newId = dbDictionary.insert(tableName, newName)
     return err, newId
 
-def delete(id):
-    err = db.delete(tableName, id)
+def delete(Id):
+    err = dbDictionary.insert(tableName, Id)
     return err
 
 def update(id, newName):
-    newName = newName.strip()
-    if newName:
-        fldList = ['Name']
-        data = [newName]
-        err = db.update(tableName, fldList, data, id)
-    else:
-        err = "Нет данных"
+    err = dbDictionary.update(tableName, id, newName)
     return err
 
-def select(flds=['*'], cond=''):
-    err, data = db.select(tableName,flds,cond)
+def select (flds=['*'], cond=''):
+    err, data = dbDictionary.select (tableName, flds, cond)
     return err, data
 
+
 if __name__ == '__main__':
-    err, idTest = new("dept Test")
+    err, idTest = insert("dept Test")
     print (err, idTest)
 
     if idTest != None:
@@ -42,5 +29,3 @@ if __name__ == '__main__':
 
         err = delete(idTest)
         print (err)
-
-

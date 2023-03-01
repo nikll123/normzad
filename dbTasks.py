@@ -1,35 +1,23 @@
 # Tasks stuff
-import db
+import dbDictionary
 
 tableName = 'Tasks'
-pkField = 'id'
-
-def new(newName):
-    newName = newName.strip()
-    if newName:
-        fldList = ['Name']
-        err, newId  = db.insert(tableName, fldList, [newName])
-    else:
-        newId = None
-        err = "Нет данных"
+def insert(newName):
+    err, newId = dbDictionary.insert(tableName, newName)
     return err, newId
 
-def delete(id):
-    err = db.delete(tableName, id)
+def delete(Id):
+    err = dbDictionary.insert(tableName, Id)
     return err
 
 def update(id, newName):
-    newName = newName.strip()
-    if newName:
-        fldList = ['Name']
-        data = [newName]
-        err = db.update(tableName, fldList, data, id)
-    else:
-        err = "Нет данных"
+    err = dbDictionary.update(tableName, id, newName)
     return err
 
-def select(flds=['*'], cond=''):
-    return db.select(tableName=tableName, fldsList=flds, cond=cond)
+def select (flds=['*'], cond=''):
+    err, data = dbDictionary.select (tableName, flds, cond)
+    return err, data
+
 
 
 if __name__ == '__main__':

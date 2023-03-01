@@ -21,6 +21,6 @@ def updName(id, name):
     return err
 
 def insName(name):
-    err, newId = dbPositions.new(name)
+    err, newId = dbPositions.insert(name)
     return err, newId
 
