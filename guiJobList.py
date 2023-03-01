@@ -58,15 +58,15 @@ class guiEdit(guiCommon.subForm):
         super().__init__(parent, rowId)
         self.rowId = rowId
 
-        self.txtDate = guiCommon.frameLbltext(self, 'Дата')
+        self.txtDate = guiCommon.frametext(self, 'Дата')
         self.txtDate.pack()
-        self.txtFio = guiCommon.frameLbltext(self, 'Ф.И.О.')
+        self.txtFio = guiCommon.frametext(self, 'Ф.И.О.')
         self.txtFio.pack()
-        self.txtTabNom = guiCommon.frameLbltext(self, 'Таб. №')
+        self.txtTabNom = guiCommon.frametext(self, 'Таб. №')
         self.txtTabNom.pack()
-        self.txtTask = guiCommon.frameLbltext(self, 'Задание')
+        self.txtTask = guiCommon.frametext(self, 'Задание')
         self.txtTask.pack()
-        self.txtTime = guiCommon.frameLbltext(self, 'Время')
+        self.txtTime = guiCommon.frametext(self, 'Время')
         self.txtTime.pack()
 
         if self.rowId != None:

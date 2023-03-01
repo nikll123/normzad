@@ -38,7 +38,7 @@ class frameEmpty(ttk.Frame):
     def __init__(self, master, relief=FLAT):
         super().__init__(master, relief=relief, width=350, height=40, padding=5)
 
-class frameLbltext(ttk.Frame):
+class frametext(ttk.Frame):
     Name='frameLbltext'
     def __init__(self, master, title='lbl', relief=FLAT):
         super().__init__(master, relief=relief, width=350, height=40, padding=5)
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     relief=FLAT
     subform.frameEmpty = frameEmpty(subform, relief=relief)
     subform.frameEmpty.pack()
-    subform.frameLbltext = frameLbltext(subform, 'test txt', relief=relief)
+    subform.frameLbltext = frametext(subform, 'test txt', relief=relief)
     subform.frameLbltext.pack()
     subform.frameLbltext.set('test data')
     subform.cmb=frameCmb(subform, 'test cmb', relief=relief)

@@ -14,13 +14,13 @@ class frmEditName(guiCommon.subForm):
         super().__init__(master=parent, title=title)
         self.rowId = rowId
         self.parent=parent
-        self.frameEmpty1 = guiCommon.frameEmpty(self, height=30)
+        self.frameEmpty1 = guiCommon.frameEmpty(self)
         self.frameEmpty1.pack()
 
-        self.txtName = guiCommon.frameLbltext(self, 'Название')
+        self.txtName = guiCommon.frametext(self, 'Название')
         self.txtName.pack(side=TOP)
                     
-        self.frameEmpty2 = guiCommon.frameEmpty(self, height=30)
+        self.frameEmpty2 = guiCommon.frameEmpty(self)
         self.frameEmpty2.pack()
 
         self.btnSave = Button(self, text='Сохранить')
