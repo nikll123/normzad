@@ -70,7 +70,7 @@ class frameCmb(ttk.Frame):
         self.cmb.bind('<KeyRelease>', self.search)
         self.cmb.bind("<<ComboboxSelected>>", self.selected)
     
-    def setId(self, id):
+    def setCurrentId(self, id):
         self.id = None
         self.cmb.set("")
         if self.data != None and id != None:
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     err, data = blPositions.selectAll()
     if notError(err):
         subform.cmb.loadValues(data)
-        subform.cmb.setId(4)
+        subform.cmb.setCurrentId(4)
 
 
     root.mainloop()

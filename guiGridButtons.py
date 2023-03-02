@@ -29,7 +29,7 @@ class frameDictionary(ttk.Frame):
     def dataPut(self, data):
         self.frameGrid.putData(data)
 
-    # ------- 4 buttons ----------
+    # ------- 4 buttons заглушки обработчиков событий ----------
     def btnAddPressed(self, e):
         print(".frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)")
 

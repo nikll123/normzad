@@ -1,4 +1,5 @@
 import dbCommon
+import config
 
 print('Внесение тестовых данных')
 
@@ -61,7 +62,6 @@ for wd in workerList:
     if err:
         print (err)
 
-import datetime
 def rndTabNom():
     return randomId('Workers')
 
@@ -74,14 +74,18 @@ def rndTime():
 tableName = 'Jobs'
 fldList = ['WorkerId', 'TaskId', 'Date', 'TimeJob', 'Comment']
 jobsList = []
-for i in range(5):
-    jobsList.append([rndTabNom(), rndTaskId(), datetime.date(2023,1,22), rndTime(), f'comment {random.randrange(0, 1000)}'])
 
+date = config.dateGuiToDb('22.01.2023')
+for i in range(5):
+    jobsList.append([rndTabNom(), rndTaskId(), date, rndTime(), f'comment {random.randrange(0, 1000)}'])
+
+date = config.dateGuiToDb('23.1.2023')
 for i in range(4):
-    jobsList.append([rndTabNom(), rndTaskId(), datetime.date(2023,1,23), rndTime(), f'comment {random.randrange(0, 1000)}'])
+    jobsList.append([rndTabNom(), rndTaskId(), date, rndTime(), f'comment {random.randrange(0, 1000)}'])
 
+date = config.dateGuiToDb('24.1.2023')
 for i in range(5):
-    jobsList.append([rndTabNom(), rndTaskId(), datetime.date(2023,1,24), rndTime(), f'comment {random.randrange(0, 1000)}'])
+    jobsList.append([rndTabNom(), rndTaskId(), date, rndTime(), f'comment {random.randrange(0, 1000)}'])
 
 for jd in jobsList:
     err, newId = dbCommon.insert(tableName, fldList, jd)

@@ -4,9 +4,8 @@ from collections import namedtuple
 
 def getLastId(cursor):
     res = cursor.execute("Select last_insert_rowid()")
-    res = res.fetchone()
-    return res[0]
-
+    return res.lastrowid
+    
 def namedtuple_factory(cursor, row):
     fields = [column[0] for column in cursor.description]
     cls = namedtuple("Row", fields)

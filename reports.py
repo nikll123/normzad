@@ -1,8 +1,8 @@
 import dbCommon
 
-def JobList():
-    err, data = dbCommon.select("jobList")
+def vJobs():
+    err, data = dbCommon.select("vJobs")
     if not err:
         return data
     
-# JobList()
+# vJobs()

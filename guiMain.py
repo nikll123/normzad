@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-import guiCommon, guiDepartments, guiPositions, guiTasks, guiJobList
+import guiCommon, guiDepartments, guiPositions, guiTasks, guiJobs
 
 root = guiCommon.form(title="Нормированные задания")
 
@@ -8,7 +8,7 @@ root = guiCommon.form(title="Нормированные задания")
 notebook = ttk.Notebook()
 notebook.pack(expand=True, fill=BOTH)
  
-frameDepartments = guiJobList.createFrame(root)
+frameDepartments = guiJobs.createFrame(root)
 notebook.add(frameDepartments, text="Табель")
 
 frameDepartments = guiDepartments.createFrame(root)

@@ -1,39 +1,34 @@
-import datetime
 import dbCommon
 
 tableName = "Jobs"
+viewName = "vJobs"
 
-def new(WorkerId, TaskId, Date, TimeJob, Comment):
-    fldsList = ['WorkerId', 'TaskId', 'Date', 'TimeJob', 'Comment']
-    err, newId = dbCommon.insert(tableName, fldsList, [WorkerId, TaskId, Date, TimeJob, Comment])
+def selectView(flds=['*'], cond='', order=''):
+    err, data = _select(viewName, flds, cond, order)
+    return err, data
+
+def select(flds=['*'], cond='', order=''):
+    err, data = _select(tableName, flds, cond, order)
+    return err, data
+
+def insert(WorkerId,TaskId,Date,TimeJob,Comment):
+    flds = ['WorkerId','TaskId','Date','TimeJob','Comment']
+    data = [WorkerId,TaskId,Date,TimeJob,Comment]
+    err, newId = dbCommon.insert(tableName=tableName, fldsList=flds,data=data)
     return err, newId
 
-def delete(delId):
-    err  = dbCommon.delete(tableName, delId)
+def delete(id):
+    err = dbCommon.delete(tableName=tableName,id=id)
     return err
 
-def update(id, WorkerId, TaskId, Date, TimeJob, Comment):
-    fldsList = ['WorkerId', 'TaskId', 'Date', 'TimeJob', 'Comment']
-    data = [WorkerId, TaskId, Date, TimeJob, Comment]
-    err = dbCommon.update(tableName, fldsList, data, id)
+def update(id, data, flds=['WorkerId','TaskId','Date','TimeJob','Comment']):
+    err = dbCommon.update(tableName=tableName, fldsList=flds,data=data)
     return err
 
-def select(flds=['*'], cond=''):
-    err, data = dbCommon.select(tableName=tableName, fldsList=flds, cond=cond)
+def _select(tableName, fldsList, cond, order):
+    err, data = dbCommon.select(tableName=tableName, fldsList=fldsList, cond=cond, order=order)
     return err, data
 
 
 if __name__ == "__main__":
-
-    WorkerId, TaskId, Date, TimeJob, Comment = 121, 3, datetime.datetime.now().date(), 8, 'comment test'
-    err, testId = new(WorkerId, TaskId, Date, TimeJob, Comment)
-    if err:
-        print(err)
-    
-    WorkerId, TaskId, Date, TimeJob, Comment = 125, 2, datetime.datetime.now().date(), 5, 'comment test2'
-    err =  update(testId, WorkerId, TaskId, Date, TimeJob, Comment)
-
-    err =  delete(testId)
-
-
-
+    print(selectView())

@@ -1,6 +1,6 @@
 from tkinter import *
 from datetime import datetime
-import blJobList as blModule, guiTable, guiCommon, blTasks, blWorkers
+import blJobs as blModule, guiGridButtons, guiCommon, blTasks, blWorkers, config
 from tkinter.messagebox import showerror, askyesno
 
 def createFrame(parent):
@@ -13,7 +13,7 @@ def createFrame(parent):
     cols.append({'name':'Position','text':'Должность','anchor':W,'width':100,'stretch':YES})
     cols.append({'name':'Task','text':'Задание','anchor':W,'width':100,'stretch':YES})
     cols.append({'name':'TimeJob','text':'Время','anchor':W,'width':100,'stretch':YES})
-    dictTabel = guiTable.frameDictionary(parent, cols)
+    dictTabel = guiGridButtons.frameDictionary(parent, cols)
     dictTabel.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
     dictTabel.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
     dictTabel.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
@@ -76,41 +76,47 @@ class guiEditTabel(guiCommon.subForm):
         self.txtTime = guiCommon.frametext(self, 'Время')
         self.txtTime.pack()
         
-        if self.rowId==None:
+        self.txtComment = guiCommon.frametext(self, 'Комментарий')
+        self.txtComment.pack()
+
+        if self.rowId==None:   # new data
             date = datetime.now()
             date = date.strftime("%d.%m.%Y")
             self.txtDate.set(date)
             self.txtTime.set('8')
         else:
-            err, data = blModule.getJobsRow(self.rowId)
+            err, data = blModule.get(self.rowId)
             if guiCommon.notError(err):
                 row = data[0]
                 self.txtDate.set(row.Date)
                 self.txtTime.set(row.TimeJob)
-                self.cmbTask.setId(row.TaskId)
-                self.cmbFIO.setId(row.WorkerId)
+                self.cmbTask.setCurrentId(row.TaskId)
+                self.cmbFIO.setCurrentId(row.WorkerId)
+                self.txtComment.set(row.Comment)
 
-
-
-
-        self.btnSave = Button(self, text='Сохранить')
-        self.btnSave.bind('<ButtonRelease-1>', self.btnSaveClicked)
+        self.btnSave = Button(self, text='Сохранить', command=self.btnSaveClicked)
         self.btnSave.pack(side=TOP)
 
-    
-    def btnSaveClicked(self, e):
-        name = self.getName()
-        if self.rowId ==None:
-            err, newId = blModule.insName(name)
+    def btnSaveClicked(self):
+        date = self.txtDate.get()
+        date = config.dateGuiToDb(date)
+        if date != None:
+            timeJob = self.txtTime.get()
+            taskId = self.cmbTask.getCurrentId()
+            workerId = self.cmbFIO.getCurrentId()
+            comment = self.txtComment.get()
+            if self.rowId==None:   # new data
+                err, _newId = blModule.add(date=date, timeJob=timeJob, taskId=taskId, workerId=workerId, comment=comment)
+            else:
+                err = blModule.save(id=id, date=date, timeJob=timeJob, taskId=taskId, workerId=workerId, comment=comment)
+            if guiCommon.notError(err):
+                self.destroy()
         else:
-            err = blModule.updName(self.rowId, name)
-        if guiCommon.notError(err):
-            self.parent.Refresh(self.parent)
-            self.destroy()
+            guiCommon.showerror('Ошибка', 'Неправильный формат даты')
 
 # ------- test -------------
 if __name__ == '__main__':
-    root = guiCommon.form(title="joblist test")
+    root = guiCommon.form(title="vJobs test")
     root.dictTasks = createFrame(root)
     root.dictTasks.pack(fill=BOTH, expand=True)
     root.mainloop()

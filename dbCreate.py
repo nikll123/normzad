@@ -18,6 +18,7 @@ def create_db():
                         ON Departments(Name);
                         """)
 
+        #----------------------
         cursor.execute("""CREATE TABLE IF NOT EXISTS 
                 Positions(
                         id   integer PRIMARY KEY AUTOINCREMENT, 
@@ -25,6 +26,7 @@ def create_db():
                         """)
         cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS indexUniquePositions ON Positions(Name);")
 
+        #----------------------
         cursor.execute("""CREATE TABLE IF NOT EXISTS 
                 Tasks(
                         id   integer PRIMARY KEY AUTOINCREMENT, 
@@ -35,8 +37,9 @@ def create_db():
                         ON Tasks(Name);
                         """)
 
+        #----------------------
         cursor.execute("""CREATE TABLE IF NOT EXISTS 
-                workers(
+                Workers(
                         id           integer PRIMARY KEY AUTOINCREMENT, 
                         TabNum       integer NOT NULL, 
                         LastName     text    NOT NULL, 
@@ -58,8 +61,9 @@ def create_db():
                         ON workers(TabNum);
                         """)
 
+        #----------------------
         cursor.execute("""CREATE TABLE IF NOT EXISTS 
-                jobs(
+                Jobs(
                     id           integer   PRIMARY KEY AUTOINCREMENT,
                     WorkerId     integer   NOT NULL, 
                     TaskId       integer   NOT NULL, 
@@ -71,7 +75,7 @@ def create_db():
                     """)
 
         cursor.execute("""CREATE VIEW IF NOT EXISTS 
-                jobList
+                vJobs
                     AS 
                     SELECT  
                             j.id, 
@@ -97,9 +101,9 @@ def create_db():
                             """)      
 
         cursor.execute("""CREATE VIEW IF NOT EXISTS 
-                vWorkers
+                vWorkerFio
                     AS 
-                    SELECT *,
+                    SELECT id,
                             LastName || ' ' || SUBSTR(Name,1,1) || '. ' || SUBSTR(SecondName,1,1) || '.' AS FIO 
                     FROM 
                             workers
@@ -109,7 +113,7 @@ def create_db():
        
 
         cursor.execute("""CREATE VIEW IF NOT EXISTS 
-                workerList
+                vWorkers
                     AS 
                     SELECT 
                             w.id, 
@@ -119,17 +123,19 @@ def create_db():
                             w.SecondName, 
                             w.Level, 
                             d.Name as Department, 
-                            p.Name as position,
+                            p.Name as Position,
                             w.DepartmentId, 
                             w.PositionId,
-                            w.FIO,
-                            w.FIO || '  (' || w.TabNum || ')' as FIO_Num
+                            wfio.FIO,
+                            wfio.FIO || '  (' || w.TabNum || ')' as FIO_Num
                     FROM 
-                            vWorkers as w, 
+                            Workers as w, 
+                            vWorkerFio as wfio, 
                             Departments as d, 
                             Positions as p
                     WHERE 
-                            w.DepartmentId = d.id 
+                                w.id = wfio.id 
+                            AND w.DepartmentId = d.id 
                             AND w.PositionId = p.id
                     ORDER BY 
                             FIO;

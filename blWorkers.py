@@ -12,19 +12,19 @@ def selectFioNumAll():
     err, data = dbWorkers.selectFioNum()
     return err, data
 
-def getName(id):
-    err, data = dbWorkers.select(flds=['Name'],cond=f'id={id}')
-    if not err:
-        name = data[0][0]
-    else:
-        name = None
-    return err, name
+# def getName(id):
+#     err, data = dbWorkers.select(flds=['Name'],cond=f'id={id}')
+#     if not err:
+#         name = data[0][0]
+#     else:
+#         name = None
+#     return err, name
 
-def updName(id, name):
-    err = dbWorkers.update(id, name)
-    return err
+# def updName(id, name):
+#     err = dbWorkers.update(id, name)
+#     return err
 
-def insName(name):
-    err, newId = dbWorkers.insert(name)
-    return err, newId
+# def insName(name):
+#     err, newId = dbWorkers.insert(name)
+#     return err, newId
 
