@@ -78,27 +78,27 @@ def create_db():
                 vJobs
                     AS 
                     SELECT  
-                            j.id, 
-                            j.Date, 
-                            w.TabNum, 
-                            w.LastName || ' ' || SUBSTR(w.Name,1,1) || '. ' || SUBSTR(w.SecondName,1,1) || '.' AS shortName,
-                            w.Level, 
-                            p.Name AS Position, 
-                            t.Name AS Task, 
-                            j.TimeJob
+                        j.id, 
+                        strftime('%d.%m.%Y', Date) as Date,
+                        w.TabNum, 
+                        w.LastName || ' ' || SUBSTR(w.Name,1,1) || '. ' || SUBSTR(w.SecondName,1,1) || '.' AS shortName,
+                        w.Level, 
+                        p.Name AS Position, 
+                        t.Name AS Task, 
+                        j.TimeJob
                     FROM    
-                            jobs      AS j, 
-                            Tasks     AS t,
-                            Workers   AS w,
-                            Positions AS p
+                        jobs      AS j, 
+                        Tasks     AS t,
+                        Workers   AS w,
+                        Positions AS p
                     WHERE   
-                            j.TaskId = t.id    AND
-                            j.WorkerId = w.id  AND
-                            w.Positionid = p.id
+                        j.TaskId = t.id    AND
+                        j.WorkerId = w.id  AND
+                        w.Positionid = p.id
                     ORDER BY 
-                            j.Date,
-                            j.WorkerId;
-                            """)      
+                        j.Date,
+                        j.WorkerId
+                        """)      
 
         cursor.execute("""CREATE VIEW IF NOT EXISTS 
                 vWorkerFio

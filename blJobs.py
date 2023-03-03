@@ -3,9 +3,6 @@ import config
 
 def selectAll():
     err, data = dbJobs.selectView()
-    for ix in range(len(data)):
-        date = config.dateGui(data[ix].Date)
-        data[ix].Date = date
     return err, data
 
 def getJobListRow(id):
