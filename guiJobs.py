@@ -13,14 +13,14 @@ def createFrame(parent):
     cols.append({'name':'Position','text':'Должность','anchor':W,'width':100,'stretch':YES})
     cols.append({'name':'Task','text':'Задание','anchor':W,'width':100,'stretch':YES})
     cols.append({'name':'TimeJob','text':'Время','anchor':W,'width':100,'stretch':YES})
-    dictTabel = guiGridButtons.frameDictionary(parent, cols)
-    dictTabel.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
-    dictTabel.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
-    dictTabel.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
-    dictTabel.frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
-    dictTabel.Refresh = dataRefresh
-    dictTabel.Refresh(dictTabel)
-    return dictTabel
+    dictJobs = guiGridButtons.frameDictionary(parent, cols)
+    dictJobs.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
+    dictJobs.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
+    dictJobs.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
+    dictJobs.frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
+    dictJobs.Refresh = dataRefresh
+    dictJobs.Refresh(dictJobs)
+    return dictJobs
 
 def btnAddPressed(e):
     frameDict = e.widget.master.master
@@ -48,10 +48,10 @@ def btnRefreshPressed(e):
     frameDict = e.widget.master.master
     dataRefresh(frameDict)
 
-def dataRefresh(dictJobList):
+def dataRefresh(frameDict):
     err, data = blJobs.selectAll()
     if guiCommon.notError(err):
-        dictJobList.dataPut(data)
+        frameDict.dataPut(data)
 
 class frmOneRow(guiCommon.subForm):
     Name='frmOneRow'
