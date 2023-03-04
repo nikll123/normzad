@@ -75,21 +75,35 @@ def create_db():
                     """)
 
         cursor.execute("""CREATE VIEW IF NOT EXISTS 
-                vJobs
+                vJobs1
+                    AS 
+                    SELECT  
+                        id,
+                        WorkerId, 
+                        TaskId, 
+                        strftime('%d.%m.%Y', Date) as Date,
+                        TimeJob,
+                        Comment
+                    FROM    
+                        jobs
+                 """)      
+
+        cursor.execute("""CREATE VIEW IF NOT EXISTS 
+                vJobs2
                     AS 
                     SELECT  
                         j.id, 
-                        strftime('%d.%m.%Y', Date) as Date,
-                        w.TabNum, 
-                        w.LastName || ' ' || SUBSTR(w.Name,1,1) || '. ' || SUBSTR(w.SecondName,1,1) || '.' AS shortName,
+                        j.Date,
+                        w.TabNum,
+                        w.FIO,
                         w.Level, 
                         p.Name AS Position, 
                         t.Name AS Task, 
                         j.TimeJob
                     FROM    
-                        jobs      AS j, 
+                        vJobs1    AS j, 
                         Tasks     AS t,
-                        Workers   AS w,
+                        vWorkers  AS w,
                         Positions AS p
                     WHERE   
                         j.TaskId = t.id    AND

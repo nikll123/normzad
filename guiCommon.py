@@ -38,8 +38,8 @@ class frameEmpty(ttk.Frame):
     def __init__(self, master, relief=FLAT):
         super().__init__(master, relief=relief, width=350, height=40, padding=5)
 
-class frametext(ttk.Frame):
-    Name='frameLbltext'
+class frameText(ttk.Frame):
+    Name='frameText'
     def __init__(self, master, title='lbl', relief=FLAT):
         super().__init__(master, relief=relief, width=350, height=40, padding=5)
         self.pack_propagate(False)
@@ -67,8 +67,8 @@ class frameCmb(ttk.Frame):
 
         self.cmb = ttk.Combobox(self)
         self.cmb.pack(side=LEFT, fill=X, expand=True)
-        self.cmb.bind('<KeyRelease>', self.search)
-        self.cmb.bind("<<ComboboxSelected>>", self.selected)
+        self.cmb.bind('<KeyRelease>', self.search)    # autoincrement search
+        # self.cmb.bind("<<ComboboxSelected>>", self.selected)
     
     def setCurrentId(self, id):
         self.id = None
@@ -81,15 +81,11 @@ class frameCmb(ttk.Frame):
                     break
 
     def getCurrentId(self):
-        id, text = self._getCurrent()
-        return id
-
-    def _getCurrent(self):
+        id = None
         ix = self.cmb.current()
         if ix != -1:
-            return self.data[ix]
-        else:
-            return [None, None]
+            id = self.data[ix][0]
+        return id
 
     def loadValues(self, data):
         self.data = data
@@ -111,8 +107,8 @@ class frameCmb(ttk.Frame):
         self.setListValues(txt)
         self.event_generate('<Down>')
 
-    def selected(self, e):
-        print(self.cmb.current(), self.cmb.get(), self.getCurrentId())
+    # def selected(self, e):
+    #     print(self.cmb.current(), self.cmb.get(), self.getCurrentId())
 
 
 if __name__ == '__main__':
@@ -121,7 +117,7 @@ if __name__ == '__main__':
     relief=FLAT
     subform.frameEmpty = frameEmpty(subform, relief=relief)
     subform.frameEmpty.pack()
-    subform.frameLbltext = frametext(subform, 'test txt', relief=relief)
+    subform.frameLbltext = frameText(subform, 'test txt', relief=relief)
     subform.frameLbltext.pack()
     subform.frameLbltext.set('test data')
     subform.cmb=frameCmb(subform, 'test cmb', relief=relief)

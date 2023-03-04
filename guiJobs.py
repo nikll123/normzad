@@ -1,6 +1,6 @@
 from tkinter import *
 from datetime import datetime
-import blJobs as blModule, guiGridButtons, guiCommon, blTasks, blWorkers, config
+import blJobs, guiGridButtons, guiCommon, blTasks, blWorkers, config
 from tkinter.messagebox import showerror, askyesno
 
 def createFrame(parent):
@@ -18,47 +18,49 @@ def createFrame(parent):
     dictTabel.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
     dictTabel.frame4buttons.btnDelete.bind('<ButtonRelease-1>', btnDeletePressed)
     dictTabel.frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
-    dictTabel.Refresh = funcDataRefresh
+    dictTabel.Refresh = dataRefresh
     dictTabel.Refresh(dictTabel)
     return dictTabel
 
 def btnAddPressed(e):
     frameDict = e.widget.master.master
-    frm = guiEditTabel(parent=frameDict)
+    frm = frmOneRow(parent=frameDict,title='Новое заданиё')
 
 def btnEditPressed(e):
     frameDict = e.widget.master.master
     id = frameDict.getSelectedId()
-    frm = guiEditTabel(parent=frameDict, rowId=id)
+    if id is not None:
+        frm = frmOneRow(parent=frameDict, rowId=id, title='Редактированиё задания')
     
 def btnDeletePressed(e):
     frameDict = e.widget.master.master
     id = frameDict.getSelectedId()
     if id != None:
-        err, name = blModule.getName(id)
+        err, name = blJobs.getName(id)
         if guiCommon.notError(err):
             result = askyesno("Подтверждение действия", f"Удалить: {name}?")
             if result:
-                err = blModule.delete(id)
+                err = blJobs.delete(id)
                 if guiCommon.notError(err):
-                    funcDataRefresh(frameDict)
+                    dataRefresh(frameDict)
 
 def btnRefreshPressed(e):
     frameDict = e.widget.master.master
-    funcDataRefresh(frameDict)
+    dataRefresh(frameDict)
 
-def funcDataRefresh(dictJobList):
-    err, data = blModule.selectAll()
+def dataRefresh(dictJobList):
+    err, data = blJobs.selectAll()
     if guiCommon.notError(err):
         dictJobList.dataPut(data)
 
-class guiEditTabel(guiCommon.subForm):
-    Name='guiEditTabel'
-    def __init__(self, parent, rowId=None):
-        super().__init__(parent, rowId)
+class frmOneRow(guiCommon.subForm):
+    Name='frmOneRow'
+    def __init__(self, parent, title, rowId=None):
+        super().__init__(parent, title)
         self.rowId = rowId
+        self.parent = parent
 
-        self.txtDate = guiCommon.frametext(self, 'Дата')
+        self.txtDate = guiCommon.frameText(self, 'Дата')
         self.txtDate.pack()
 
         self.cmbFIO = guiCommon.frameCmb(self, 'Ф.И.О.')
@@ -73,10 +75,10 @@ class guiEditTabel(guiCommon.subForm):
             self.cmbTask.loadValues(data)
         self.cmbTask.pack()
 
-        self.txtTime = guiCommon.frametext(self, 'Время')
+        self.txtTime = guiCommon.frameText(self, 'Время')
         self.txtTime.pack()
         
-        self.txtComment = guiCommon.frametext(self, 'Комментарий')
+        self.txtComment = guiCommon.frameText(self, 'Комментарий')
         self.txtComment.pack()
 
         if self.rowId==None:   # new data
@@ -85,7 +87,7 @@ class guiEditTabel(guiCommon.subForm):
             self.txtDate.set(date)
             self.txtTime.set('8')
         else:
-            err, data = blModule.get(self.rowId)
+            err, data = blJobs.get(self.rowId)
             if guiCommon.notError(err):
                 row = data[0]
                 self.txtDate.set(row.Date)
@@ -106,10 +108,11 @@ class guiEditTabel(guiCommon.subForm):
             workerId = self.cmbFIO.getCurrentId()
             comment = self.txtComment.get()
             if self.rowId==None:   # new data
-                err, _newId = blModule.add(date=date, timeJob=timeJob, taskId=taskId, workerId=workerId, comment=comment)
+                err, _newId = blJobs.add(date=date, timeJob=timeJob, taskId=taskId, workerId=workerId, comment=comment)
             else:
-                err = blModule.save(id=id, date=date, timeJob=timeJob, taskId=taskId, workerId=workerId, comment=comment)
+                err = blJobs.save(id=self.rowId, date=date, timeJob=timeJob, taskId=taskId, workerId=workerId, comment=comment)
             if guiCommon.notError(err):
+                self.parent.Refresh(self.parent)
                 self.destroy()
         else:
             guiCommon.showerror('Ошибка', 'Неправильный формат даты')

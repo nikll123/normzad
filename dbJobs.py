@@ -1,10 +1,15 @@
 import dbCommon
 
 tableName = "Jobs"
-viewName = "vJobs"
+viewName1 = "vJobs1"
+viewName2 = "vJobs2"
 
 def selectView(flds=['*'], cond='', order=''):
-    err, data = _select(viewName, flds, cond, order)
+    err, data = _select(viewName2, flds, cond, order)
+    return err, data
+
+def selectView1(flds=['*'], cond='', order=''):
+    err, data = _select(viewName1, flds, cond, order)
     return err, data
 
 def select(flds=['*'], cond='', order=''):
@@ -22,7 +27,7 @@ def delete(id):
     return err
 
 def update(id, data, flds=['WorkerId','TaskId','Date','TimeJob','Comment']):
-    err = dbCommon.update(tableName=tableName, fldsList=flds,data=data)
+    err = dbCommon.update(tableName=tableName, fldsList=flds, data=data, id=id)
     return err
 
 def _select(tableName, fldsList, cond, order):

@@ -1,6 +1,6 @@
 import dbCommon
 
-def vJobs():
+def rJobs():
     err, data = dbCommon.select("vJobs")
     if not err:
         return data

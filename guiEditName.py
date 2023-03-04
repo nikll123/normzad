@@ -17,7 +17,7 @@ class frmEditName(guiCommon.subForm):
         self.frameEmpty1 = guiCommon.frameEmpty(self)
         self.frameEmpty1.pack()
 
-        self.txtName = guiCommon.frametext(self, 'Название')
+        self.txtName = guiCommon.frameText(self, 'Название')
         self.txtName.pack(side=TOP)
                     
         self.frameEmpty2 = guiCommon.frameEmpty(self)
