@@ -1,4 +1,5 @@
 import sqlite3 
+import datetime
 import config
 from collections import namedtuple
 
@@ -90,3 +91,20 @@ def select(tableName, fldsList, cond, order):
     sql = f"SELECT {substr} FROM {tableName} {where} {orderby}"
     err, data = execute(sql)
     return err, data
+
+# def dateGui(date):
+#     date = date.strftime(config.fmtDateGui)
+#     return date
+
+# def dateDb(date):
+#     date = date.strftime(config.fmtDateDb)
+#     return date
+
+def dateToDbFormat(txt):
+    try:
+        date = datetime.datetime.strptime(txt, config.fmtDateGui)
+        date = date.strftime(config.fmtDateDb)
+        # date =dateDb(date)
+    except:
+        date = None
+    return date

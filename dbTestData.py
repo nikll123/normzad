@@ -1,5 +1,4 @@
 import dbCommon
-import config
 
 print('Внесение тестовых данных')
 
@@ -75,15 +74,15 @@ tableName = 'Jobs'
 fldList = ['WorkerId', 'TaskId', 'Date', 'TimeJob', 'Comment']
 jobsList = []
 
-date = config.dateGuiToDb('22.01.2023')
+date = dbCommon.dateToDbFormat('22.01.2023')
 for i in range(5):
     jobsList.append([rndTabNom(), rndTaskId(), date, rndTime(), f'comment {random.randrange(0, 1000)}'])
 
-date = config.dateGuiToDb('23.1.2023')
+date = dbCommon.dateToDbFormat('23.1.2023')
 for i in range(4):
     jobsList.append([rndTabNom(), rndTaskId(), date, rndTime(), f'comment {random.randrange(0, 1000)}'])
 
-date = config.dateGuiToDb('24.1.2023')
+date = dbCommon.dateToDbFormat('24.1.2023')
 for i in range(5):
     jobsList.append([rndTabNom(), rndTaskId(), date, rndTime(), f'comment {random.randrange(0, 1000)}'])
 

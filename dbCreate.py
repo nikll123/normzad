@@ -83,10 +83,13 @@ def create_db():
                         TaskId, 
                         strftime('%d.%m.%Y', Date) as Date,
                         TimeJob,
-                        Comment
+                        Comment,
+                        Date as DateOrder
                     FROM    
                         jobs
-                 """)      
+                    ORDER BY 
+                        DateOrder
+                        """)      
 
         cursor.execute("""CREATE VIEW IF NOT EXISTS 
                 vJobs2
@@ -110,7 +113,7 @@ def create_db():
                         j.WorkerId = w.id  AND
                         w.Positionid = p.id
                     ORDER BY 
-                        j.Date,
+                        j.DateOrder,
                         j.WorkerId
                         """)      
 

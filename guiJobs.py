@@ -101,7 +101,6 @@ class frmOneRow(guiCommon.subForm):
 
     def btnSaveClicked(self):
         date = self.txtDate.get()
-        date = config.dateGuiToDb(date)
         if date != None:
             timeJob = self.txtTime.get()
             taskId = self.cmbTask.getCurrentId()
