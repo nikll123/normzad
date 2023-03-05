@@ -11,8 +11,8 @@ class frameGrid(ttk.Frame):
         self.columnconfigure(index=0, weight=1)
         self.rowconfigure(index=0, weight=1)
         
-        names = [c['name'] for c in columns]
-        self.tree = ttk.Treeview(self, column=names, show='headings')
+        self.fldNames = [c['name'] for c in columns]
+        self.tree = ttk.Treeview(self, column=self.fldNames, show='headings')
         for c in columns:
             self.tree.column(c['name'], anchor=c['anchor'], width=c['width'], stretch=c['stretch'])
             self.tree.heading(c['name'], text=c['text'])

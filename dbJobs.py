@@ -2,15 +2,10 @@ import config
 import dbCommon
 
 tableName = "Jobs"
-viewName1 = "vJobs1"
-viewName2 = "vJobs2"
+viewName = "vJobs"
 
-def selectView2(flds=['*'], cond='', order=''):
-    err, data = _select(viewName2, flds, cond, order)
-    return err, data
-
-def selectView1(flds=['*'], cond='', order=''):
-    err, data = _select(viewName1, flds, cond, order)
+def selectView(flds=['*'], cond='', order=''):
+    err, data = _select(viewName, flds, cond, order)
     return err, data
 
 def select(flds=['*'], cond='', order=''):
@@ -41,4 +36,4 @@ def _select(tableName, fldsList, cond, order):
 
 
 if __name__ == "__main__":
-    print(selectView2())
+    print(selectView())

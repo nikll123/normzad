@@ -5,14 +5,15 @@ from tkinter.messagebox import showerror, askyesno
 
 def createFrame(parent):
     cols = []
-    cols.append({'name':'Id',       'text':'Id',        'anchor':W,'width':50, 'stretch':NO})
-    cols.append({'name':'Date',     'text':'Дата',      'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'TabNum',   'text':'Таб. №',    'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'FIO',      'text':'Ф.И.О.',    'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Level',    'text':'Разряд',    'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Position', 'text':'Должность', 'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Task',     'text':'Задание',   'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'TimeJob',  'text':'Время',     'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'Id',       'text':'Id',            'anchor':W,'width':50, 'stretch':NO})
+    cols.append({'name':'Date',     'text':'Дата',          'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'TabNum',   'text':'Таб. №',        'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'FIO',      'text':'Ф.И.О.',        'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'Level',    'text':'Разряд',        'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'Position', 'text':'Должность',     'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'Task',     'text':'Задание',       'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'TimeJob',  'text':'Время',         'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'Comment',  'text':'Комментарий',   'anchor':W,'width':100,'stretch':YES})
     dictJobs = guiGridButtons.frameDictionary(parent, cols)
     dictJobs.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
     dictJobs.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
@@ -23,18 +24,18 @@ def createFrame(parent):
     return dictJobs
 
 def btnAddPressed(e):
-    frameDict = e.widget.master.master
-    frm = frmOneRow(parent=frameDict,title='Новое заданиё')
+    dictJobs = e.widget.master.master
+    frm = frmOneRow(parent=dictJobs,title='Новое заданиё')
 
 def btnEditPressed(e):
-    frameDict = e.widget.master.master
-    id = frameDict.getSelectedId()
+    dictJobs = e.widget.master.master
+    id = dictJobs.getSelectedId()
     if id is not None:
-        frm = frmOneRow(parent=frameDict, rowId=id, title='Редактированиё задания')
+        frm = frmOneRow(parent=dictJobs, rowId=id, title='Редактированиё задания')
     
 def btnDeletePressed(e):
-    frameDict = e.widget.master.master
-    id = frameDict.getSelectedId()
+    dictJobs = e.widget.master.master
+    id = dictJobs.getSelectedId()
     if id != None:
         err, data = blJobs.get(id)
         if guiCommon.notError(err):
@@ -42,16 +43,16 @@ def btnDeletePressed(e):
             if result:
                 err = blJobs.delete(id)
                 if guiCommon.notError(err):
-                    dataRefresh(frameDict)
+                    dataRefresh(dictJobs)
 
 def btnRefreshPressed(e):
-    frameDict = e.widget.master.master
-    dataRefresh(frameDict)
+    dictJobs = e.widget.master.master
+    dataRefresh(dictJobs)
 
-def dataRefresh(frameDict):
-    err, data = blJobs.selectAll()
+def dataRefresh(dictJobs):
+    err, data = blJobs.select(dictJobs.frameGrid.fldNames)
     if guiCommon.notError(err):
-        frameDict.dataPut(data)
+        dictJobs.dataPut(data)
 
 class frmOneRow(guiCommon.subForm):
     Name='frmOneRow'
@@ -87,9 +88,8 @@ class frmOneRow(guiCommon.subForm):
             self.txtDate.set(date)
             self.txtTime.set('8')
         else:
-            err, data = blJobs.get(self.rowId)
+            err, row = blJobs.get(self.rowId)
             if guiCommon.notError(err):
-                row = data[0]
                 self.txtDate.set(row.Date)
                 self.txtTime.set(row.TimeJob)
                 self.cmbTask.setCurrentId(row.TaskId)

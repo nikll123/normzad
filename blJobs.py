@@ -1,7 +1,11 @@
 import dbJobs
 
 def selectAll():
-    err, data = dbJobs.selectView2()
+    err, data = dbJobs.selectView()
+    return err, data
+
+def select(flds):
+    err, data = dbJobs.selectView(flds)
     return err, data
 
 # def getJobListRow(id):
@@ -10,7 +14,7 @@ def selectAll():
 
 def get(id):
     res = None
-    err, data = dbJobs.selectView2(cond=f'id={id}')
+    err, data = dbJobs.selectView(cond=f'id={id}')
     if not err:
         res = data[0]
     return err, res
