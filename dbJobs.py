@@ -5,7 +5,7 @@ tableName = "Jobs"
 viewName1 = "vJobs1"
 viewName2 = "vJobs2"
 
-def selectView(flds=['*'], cond='', order=''):
+def selectView2(flds=['*'], cond='', order=''):
     err, data = _select(viewName2, flds, cond, order)
     return err, data
 
@@ -41,4 +41,4 @@ def _select(tableName, fldsList, cond, order):
 
 
 if __name__ == "__main__":
-    print(selectView())
+    print(selectView2())
