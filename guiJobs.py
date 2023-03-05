@@ -1,7 +1,7 @@
 from tkinter import *
 from datetime import datetime
-import blJobs, guiGridButtons, guiCommon, blTasks, blWorkers, config
-from tkinter.messagebox import showerror, askyesno
+import blJobs, guiGridButtons, guiCommon, blTasks, blWorkers
+from tkinter.messagebox import askyesno
 
 def createFrame(parent):
     cols = []

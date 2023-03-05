@@ -1,8 +1,6 @@
 from tkinter.messagebox import showerror, askyesno
 from tkinter import *
 from tkinter import ttk
-import blDepartments
-import blPositions
 
 class form(Tk):
     Name='formTk'
@@ -112,6 +110,9 @@ class frameCmb(ttk.Frame):
 
 
 if __name__ == '__main__':
+    import blDepartments
+    import blPositions
+
     root = form('Test')
     subform = subForm(root, 'subformTitle')
     relief=FLAT

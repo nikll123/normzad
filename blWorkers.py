@@ -8,23 +8,40 @@ def selectAll():
     err, data = dbWorkers.select()
     return err, data
 
+def select(flds):
+    err, data = dbWorkers.select(flds=flds)
+    return err, data
+
 def selectFioNumAll():
     err, data = dbWorkers.selectFioNum()
     return err, data
 
-# def getName(id):
-#     err, data = dbWorkers.select(flds=['Name'],cond=f'id={id}')
-#     if not err:
-#         name = data[0][0]
-#     else:
-#         name = None
-#     return err, name
+def get(id):
+    res = None
+    err, data = dbWorkers.select(cond=f'id={id}')
+    if not err:
+        res = data[0]
+    return err, res
 
-# def updName(id, name):
-#     err = dbWorkers.update(id, name)
-#     return err
+def add(tn,LastName,Name,SecondName,Level,PositionId,DepartmentId):
+    err, LastName, Name, SecondName= _checkNames(LastName,Name,SecondName)
+    if not err:
+        err, newId = dbWorkers.insert(tn, LastName, Name, SecondName, Level, PositionId, DepartmentId)
+    return err, newId
+    
+def save(id,tn,LastName,Name,SecondName,Level,PositionId,DepartmentId):
+    err, LastName, Name, SecondName= _checkNames(LastName,Name,SecondName)
+    if not err:
+        err = dbWorkers.update(id, tn, LastName, Name, SecondName, Level, PositionId, DepartmentId)
+    return err
 
-# def insName(name):
-#     err, newId = dbWorkers.insert(name)
-#     return err, newId
 
+def _checkNames(LastName,Name,SecondName):
+    LastName = LastName.strip()
+    Name = Name.strip()
+    SecondName = SecondName.strip()
+    if LastName and Name and SecondName:
+        err = ''
+    else:
+        err = "Нет полного имени"
+    return err, LastName, Name, SecondName

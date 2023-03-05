@@ -3,7 +3,7 @@ from tkinter import ttk
 import guiFrameGrid
 import guiFrame4buttons
 import dbPositions
-from tkinter.messagebox import showerror, askyesno
+# from tkinter.messagebox import showerror, askyesno
 debugMode = False
 
 class frameDictionary(ttk.Frame):
