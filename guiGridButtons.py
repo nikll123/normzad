@@ -53,7 +53,7 @@ if __name__ == '__main__':
     root.title("Dictionary test")
     root.geometry("400x500")
     cols = []
-    cols.append({'name':'Id','text':'Id','anchor':W,'width':50,'stretch':NO})
+    cols.append({'name':'Id','text':'Id','anchor':W,'width':50,'stretch':NO, 'display':1})    
     cols.append({'name':'Name','text':'Название','anchor':W,'width':100,'stretch':YES})
     root.frameDict = frameDictionary(root, cols)
     root.frameDict.pack(fill=BOTH, expand=True)

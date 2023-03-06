@@ -3,10 +3,10 @@ from tkinter import ttk
 import blPositions, guiGridButtons, guiCommon, guiEditName
 from tkinter.messagebox import showerror, askyesno
 
-def createFrame(parent):
+def createFrame(parent, showId):
     cols = []
-    cols.append({'name':'Id','text':'Id','anchor':W,'width':50,'stretch':NO})
-    cols.append({'name':'Name','text':'Название','anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'Id','text':'Id','anchor':W,'width':50,'stretch':NO, 'display':showId})
+    cols.append({'name':'Name','text':'Название','anchor':W,'width':100,'stretch':YES, 'display':1})
     dictPositions = guiGridButtons.frameDictionary(parent, cols)
     dictPositions.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
     dictPositions.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
@@ -70,7 +70,7 @@ class guiEditPosition(guiEditName.frmEditName):
 # ------- test -------------
 if __name__ == '__main__':
     root = guiCommon.form(title="Positions test")
-    root.dictPositions = createFrame(root)
+    root.dictPositions = createFrame(root, 1)
     root.dictPositions.pack(fill=BOTH, expand=True)
     root.mainloop()
 

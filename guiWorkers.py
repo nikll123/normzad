@@ -3,16 +3,16 @@ from datetime import datetime
 import blWorkers, guiGridButtons, guiCommon, blDepartments, blPositions
 from tkinter.messagebox import askyesno
 
-def createFrame(parent):
+def createFrame(parent, showId):
     cols = []
-    cols.append({'name':'Id',           'text':'Id',            'anchor':W,'width':50, 'stretch':NO})
-    cols.append({'name':'TabNum',       'text':'Таб.№',         'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'LastName',     'text':'Фамилия',       'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Name',         'text':'Имя',           'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'SecondName',   'text':'Отчество',      'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Level',        'text':'Разряд',        'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Department',   'text':'Подразделение', 'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Position',     'text':'Должность',     'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'Id',           'text':'Id',            'anchor':W,'width':50, 'stretch':NO, 'display':showId})
+    cols.append({'name':'TabNum',       'text':'Таб.№',         'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'LastName',     'text':'Фамилия',       'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'Name',         'text':'Имя',           'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'SecondName',   'text':'Отчество',      'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'Level',        'text':'Разряд',        'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'Department',   'text':'Подразделение', 'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'Position',     'text':'Должность',     'anchor':W,'width':100,'stretch':YES,'display':1})
     dictWorkers = guiGridButtons.frameDictionary(parent, cols)
     dictWorkers.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
     dictWorkers.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
@@ -128,7 +128,7 @@ class frmOneRow(guiCommon.subForm):
 # ------- test -------------
 if __name__ == '__main__':
     root = guiCommon.form(title="vWorkers test")
-    root.dictWorkers = createFrame(root)
+    root.dictWorkers = createFrame(root, 1)
     root.dictWorkers.pack(fill=BOTH, expand=True)
     root.mainloop()
 

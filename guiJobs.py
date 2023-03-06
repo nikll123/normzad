@@ -3,17 +3,17 @@ from datetime import datetime
 import blJobs, guiGridButtons, guiCommon, blTasks, blWorkers
 from tkinter.messagebox import askyesno
 
-def createFrame(parent):
+def createFrame(parent, showId):
     cols = []
-    cols.append({'name':'Id',       'text':'Id',            'anchor':W,'width':50, 'stretch':NO})
-    cols.append({'name':'Date',     'text':'Дата',          'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'TabNum',   'text':'Таб. №',        'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'FIO',      'text':'Ф.И.О.',        'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Level',    'text':'Разряд',        'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Position', 'text':'Должность',     'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Task',     'text':'Задание',       'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'TimeJob',  'text':'Время',         'anchor':W,'width':100,'stretch':YES})
-    cols.append({'name':'Comment',  'text':'Комментарий',   'anchor':W,'width':100,'stretch':YES})
+    cols.append({'name':'Id',       'text':'Id',            'anchor':W,'width':50, 'stretch':NO, 'display':showId})
+    cols.append({'name':'Date',     'text':'Дата',          'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'TabNum',   'text':'Таб. №',        'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'FIO',      'text':'Ф.И.О.',        'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'Level',    'text':'Разряд',        'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'Position', 'text':'Должность',     'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'Task',     'text':'Задание',       'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'TimeJob',  'text':'Время',         'anchor':W,'width':100,'stretch':YES,'display':1})
+    cols.append({'name':'Comment',  'text':'Комментарий',   'anchor':W,'width':100,'stretch':YES,'display':1})
     dictJobs = guiGridButtons.frameDictionary(parent, cols)
     dictJobs.frame4buttons.btnNew.bind('<ButtonRelease-1>', btnAddPressed)
     dictJobs.frame4buttons.btnEdit.bind('<ButtonRelease-1>', btnEditPressed)
@@ -119,7 +119,7 @@ class frmOneRow(guiCommon.subForm):
 # ------- test -------------
 if __name__ == '__main__':
     root = guiCommon.form(title="vJobs test")
-    root.dictTasks = createFrame(root)
+    root.dictTasks = createFrame(root, 1)
     root.dictTasks.pack(fill=BOTH, expand=True)
     root.mainloop()
 

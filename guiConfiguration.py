@@ -15,11 +15,11 @@ def createFrame(parent):
     frame.checked = IntVar()
     frame.checked.set(showId)
     frame.chkShowId = ttk.Checkbutton(master=frame, text='Показывать id', variable=frame.checked)
-    frame.chkShowId.pack(side=LEFT,padx=10,pady=10)
+    frame.chkShowId.pack(padx=10,pady=10)
 
     frame.btnSave = ttk.Button(master=frame, text='Сохранить')
     frame.btnSave.bind('<ButtonRelease-1>', btnSavePressed)
-    frame.btnSave.pack()
+    frame.btnSave.pack(padx=10,pady=10)
 
     return frame
 

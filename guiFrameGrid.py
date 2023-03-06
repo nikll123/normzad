@@ -13,10 +13,14 @@ class frameGrid(ttk.Frame):
         
         self.fldNames = [c['name'] for c in columns]
         self.tree = ttk.Treeview(self, column=self.fldNames, show='headings')
+        dispCols = []
         for c in columns:
             self.tree.column(c['name'], anchor=c['anchor'], width=c['width'], stretch=c['stretch'])
+            if c['display']:
+                dispCols.append(c['name'])
             self.tree.heading(c['name'], text=c['text'])
         # self.tree.bind('<<TreeviewSelect>>', self.rowSelected)
+        self.tree['displaycolumns'] = dispCols
         self.tree.pack(fill=BOTH, expand=True, side=LEFT)
 
         self.scrollbar = ttk.Scrollbar(self, orient=VERTICAL, command=self.tree.yview)
