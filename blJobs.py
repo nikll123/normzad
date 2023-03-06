@@ -8,9 +8,12 @@ def select(flds):
     err, data = dbJobs.selectView(flds)
     return err, data
 
-# def getJobListRow(id):
-#     err, data = dbJobs.selectView(cond=f'id={id}')
-#     return err, data
+def getJobListRow(id):
+    res = None
+    err, data = dbJobs.selectView(cond=f'id={id}')
+    if not err:
+        res = data[0]
+    return err, res
 
 def get(id):
     res = None

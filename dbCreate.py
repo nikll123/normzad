@@ -99,16 +99,19 @@ def create_db():
                             p.Name AS Position, 
                             t.Name AS Task, 
                             j.TimeJob,
-                            j.Comment
+                            j.Comment,
+                            d.Name AS Department
                         FROM    
-                            Jobs    AS j, 
-                            Tasks     AS t,
-                            vWorkers  AS w,
-                            Positions AS p
+                            Jobs        AS j, 
+                            Tasks       AS t,
+                            vWorkers    AS w,
+                            Positions   AS p,
+                            Departments AS d
                         WHERE   
-                            j.TaskId = t.id    AND
-                            j.WorkerId = w.id  AND
-                            w.Positionid = p.id
+                            j.TaskId = t.id     AND
+                            j.WorkerId = w.id   AND
+                            w.PositionId = p.id AND
+                            w.DepartmentId = d.id
                         ORDER BY 
                             j.Date,
                             j.WorkerId

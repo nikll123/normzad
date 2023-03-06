@@ -1,6 +1,7 @@
 from tkinter import *
+from tkinter import ttk
 from datetime import datetime
-import blJobs, guiGridButtons, guiCommon, blTasks, blWorkers
+import blJobs, guiGridButtons, guiCommon, blTasks, blWorkers, blReports
 from tkinter.messagebox import askyesno
 
 def createFrame(parent, showId):
@@ -21,7 +22,17 @@ def createFrame(parent, showId):
     dictJobs.frame4buttons.btnRefresh.bind('<ButtonRelease-1>', btnRefreshPressed)
     dictJobs.Refresh = dataRefresh
     dictJobs.Refresh(dictJobs)
+    dictJobs.btnNormZad = ttk.Button(master=dictJobs.frame4buttons, text='Задание')
+    dictJobs.btnNormZad.bind('<ButtonRelease-1>', btnNormZadPressed)
+    dictJobs.btnNormZad.pack(side=LEFT, padx=10, pady=10)
     return dictJobs
+
+def btnNormZadPressed(e):
+    dictJobs = e.widget.master.master
+    id = dictJobs.getSelectedId()
+    err, filename = blReports.repNormZad(id)
+    if guiCommon.notError(err):
+        blReports.openExcelFile(filename)
 
 def btnAddPressed(e):
     dictJobs = e.widget.master.master
