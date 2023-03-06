@@ -7,7 +7,7 @@ class form(Tk):
     def __init__(self,  title):
         super().__init__()
         _frmInit(self,  title)
-        self.geometry("800x400")
+        self.geometry("900x400")
 
 class subForm(Toplevel):
     Name='subForm'
