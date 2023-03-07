@@ -1,4 +1,4 @@
-from tkinter.messagebox import showerror, askyesno
+from tkinter.messagebox import showerror, askyesno, showinfo
 from tkinter import *
 from tkinter import ttk
 
@@ -30,6 +30,9 @@ def notError(err):
     if isError:
         showerror(title="Ошибка", message=err)
     return not isError
+
+def showMessage(txt):
+    showinfo('Информация', txt)
 
 class frameEmpty(ttk.Frame):
     Name='frameEmpty'

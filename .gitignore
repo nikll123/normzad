@@ -1,4 +1,7 @@
-venv_normzad/
-.vscode/
+venv_norm_zad
+dist
+build
+.vscode
 *.db
 __pycache__
+NormZad.spec

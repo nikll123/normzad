@@ -1,7 +1,6 @@
 import blJobs
 import os, sys
 import openpyxl
-import pythonnet
 
 def repNormZad(id):
     err, data = blJobs.getJobListRow(id)

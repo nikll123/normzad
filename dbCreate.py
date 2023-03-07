@@ -6,8 +6,8 @@ import os
 
 def create_db():
     res = False
-    if not os.path.exists('normzad.db'):
-        txt = 'Создание базы данных'
+    txt = ''
+    if not os.path.exists(config.dbFileName):
         with sqlite3.connect(config.dbFileName,
                              detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
             cursor = conn.cursor()
@@ -157,11 +157,12 @@ def create_db():
                         ORDER BY 
                                 FIO;
                             """)
+            txt = f'Файл {config.dbFileName} создан'
             res = True
     else:
         txt = "Файл уже существует"
     print (txt)
-    return res
+    return res, txt
 
 
 if __name__ == '__main__':
