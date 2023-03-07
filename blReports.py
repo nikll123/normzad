@@ -1,6 +1,7 @@
 import blJobs
 import os, sys
 import openpyxl
+import pythonnet
 
 def repNormZad(id):
     err, data = blJobs.getJobListRow(id)
@@ -28,10 +29,10 @@ def repNormZad(id):
     return err, repFileName
 
 def openExcelFile(filename):
-    # os.system(f'start /WAIT excel.exe "{filename}"')
+    os.system(f'start /WAIT excel.exe "{filename}"')
     # os.system(f"open -a 'path/Microsoft Excel.app' '{filename}'")
-    os.system(f'"{filename}"')
-    # os.startfile(filename)
+    # os.system(f'"{filename}"')
+    # os.startfile(f'"{filename}"','edit')
 
 def printExcelFile(filename):
     os.startfile(filename, 'print')
