@@ -1,6 +1,7 @@
 import sqlite3 
 import datetime
 import config
+import os
 from collections import namedtuple
 
 def getLastId(cursor):
@@ -15,28 +16,32 @@ def namedtuple_factory(cursor, row):
 def execute(sql, params=[]):
     err = config.dummyErr
     data = None
-    with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
-        # conn.row_factory = sqlite3.Row
-        conn.row_factory = namedtuple_factory  # row.field
-        cursor = conn.cursor()
-        cursor.execute("PRAGMA foreign_keys = ON")
-        try:
-            cursor.execute(sql, params)
-            err = ''
-            if 'INSERT' == sql[:6]:
-                data = getLastId(cursor)
-            elif 'SELECT' == sql[:6]:
-                data = cursor.fetchall()
-        except Exception as ex: 
-            err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {params}"
+    if os.path.exists(config.dbFileName):
+        with sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
+            # conn.row_factory = sqlite3.Row
+            conn.row_factory = namedtuple_factory  # row.field
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            try:
+                cursor.execute(sql, params)
+                err = ''
+                if 'INSERT' == sql[:6]:
+                    data = getLastId(cursor)
+                elif 'SELECT' == sql[:6]:
+                    data = cursor.fetchall()
+            except Exception as ex: 
+                err = f"SQL eror:\n   {sql}\n   {ex.args[0]}\n   data = {params}"
+    else:
+        err = f'Нет файла: {config.dbFileName}'
     return err, data
+
 
 # Эта функция (executeTry) - полный аналог функции execute, но без использования команды with 
 def executeTry(sql, data=[]):
     err = config.dummyErr
     newId = None
     try:
-        conn = sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+        conn = sqlite3.connect(config.dbFileName, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES, )
         cursor = conn.cursor()
         cursor.execute("PRAGMA foreign_keys = ON")
         cursor.execute(sql, data)
@@ -108,3 +113,8 @@ def dateToDbFormat(txt):
     except:
         date = None
     return date
+
+if __name__ == '__main__':
+    sql = 'select * from table'
+    err, data = execute(sql)
+    print(err)

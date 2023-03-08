@@ -3,6 +3,8 @@ from tkinter import ttk
 import guiCommon, guiDepartments, guiPositions, guiTasks, \
         guiJobs, guiWorkers, guiConfiguration, blConfiguration
 
+blConfiguration.checkConfig()
+
 _err, showId = blConfiguration.getShowId()
 root = guiCommon.form(title="Нормированные задания")
 

@@ -6,7 +6,7 @@ import os
 
 def create_db():
     res = False
-    txt = ''
+    err = ''
     if not os.path.exists(config.dbFileName):
         with sqlite3.connect(config.dbFileName,
                              detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES) as conn:
@@ -157,13 +157,10 @@ def create_db():
                         ORDER BY 
                                 FIO;
                             """)
-            txt = f'Файл {config.dbFileName} создан'
             res = True
     else:
-        txt = "Файл уже существует"
-    print (txt)
-    return res, txt
-
+        err = "Файл уже существует"
+    return err, res
 
 if __name__ == '__main__':
     if create_db():

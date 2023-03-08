@@ -28,10 +28,17 @@ def repNormZad(id):
     return err, repFileName
 
 def openExcelFile(filename):
-    os.system(f'start /WAIT excel.exe "{filename}"')
+    err = ''
+    if os.path.exists(filename):
+        os.system(f'start /WAIT excel.exe "{filename}"')
+    else:
+        err = f'Нет файла: {filename}'
+
     # os.system(f"open -a 'path/Microsoft Excel.app' '{filename}'")
     # os.system(f'"{filename}"')
     # os.startfile(f'"{filename}"','edit')
+
+    return err
 
 def printExcelFile(filename):
     os.startfile(filename, 'print')

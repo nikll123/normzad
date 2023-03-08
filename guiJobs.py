@@ -32,7 +32,8 @@ def btnNormZadPressed(e):
     id = dictJobs.getSelectedId()
     err, filename = blReports.repNormZad(id)
     if guiCommon.notError(err):
-        blReports.openExcelFile(filename)
+        err = blReports.openExcelFile(filename)
+        guiCommon.notError(err)
 
 def btnAddPressed(e):
     dictJobs = e.widget.master.master

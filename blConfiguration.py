@@ -1,4 +1,5 @@
-import dbConfiguration
+import os
+import dbConfiguration, config, guiCommon
 
 def getShowId():
     err, showId = dbConfiguration.getShowId()
@@ -10,12 +11,20 @@ def setShowId(val):   # val: 0 or 1
 
 def createDB():
     import dbCreate
-    res, txt = dbCreate.create_db()
-    return res, txt
+    err, res = dbCreate.create_db()
+    return err, res
 
 def createTestData():
     import dbTestData
     dbTestData.testData()
+
+def checkConfig():
+    if not os.path.exists(config.dbFileName):   # создать БД если ее нет
+        err, res = createDB()
+    
+    if guiCommon.notError(err):
+        if not os.path.exists(config.reportsDir):   # если нет папки для отчетов - то создать ее
+            os.makedirs(config.reportsDir)
 
 
 if __name__ == '__main__':
