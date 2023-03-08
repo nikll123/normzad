@@ -18,7 +18,7 @@ def repNormZad(id):
         ws['I11'].value = data.TimeJob
 
         repFileName = f'{data.TabNum}_{data.FIO}_{data.Date}.xlsx'
-        repFileName = os.path.join(sys.path[0], 'reports', repFileName)
+        repFileName = os.path.join('reports', repFileName)
         err = ''
         if os.path.exists(repFileName):
             err = deleteFile(repFileName) 
@@ -30,13 +30,10 @@ def repNormZad(id):
 def openExcelFile(filename):
     err = ''
     if os.path.exists(filename):
-        os.system(f'start /WAIT excel.exe "{filename}"')
+        os.system(f'start /MIN "excel" "{filename}"')
     else:
         err = f'Нет файла: {filename}'
 
-    # os.system(f"open -a 'path/Microsoft Excel.app' '{filename}'")
-    # os.system(f'"{filename}"')
-    # os.startfile(f'"{filename}"','edit')
 
     return err
 

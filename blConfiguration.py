@@ -19,6 +19,7 @@ def createTestData():
     dbTestData.testData()
 
 def checkConfig():
+    err = ''
     if not os.path.exists(config.dbFileName):   # создать БД если ее нет
         err, res = createDB()
     
